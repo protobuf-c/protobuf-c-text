@@ -265,8 +265,6 @@ main(int argc, char *argv[])
   }
 
   ab = read_addressbook(argv[1]);
-  printf("%lu %lu\n", (uint8_t *)&ab->person[0]->name - (uint8_t *)ab,
-      sizeof(ProtobufCMessage));
 
   text_format_to_string((ProtobufCMessage *)ab);
   return 0;
