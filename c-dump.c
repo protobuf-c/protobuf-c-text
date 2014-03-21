@@ -52,6 +52,7 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
 {
   int i;
   size_t j, quantifier_offset;
+  double float_var;
   const ProtobufCFieldDescriptor *f;
   ProtobufCEnumDescriptor *enumd;
   ProtobufCEnumValue *enumv;
@@ -144,27 +145,29 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
       case PROTOBUF_C_TYPE_FLOAT:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: %s\n",
+            float_var = STRUCT_MEMBER(float *, m, f[i].offset)[j];
+            printf("%*s%s: %g\n",
                 level, "", f[i].name,
-                "TODO - what type to use for floats?");
+                float_var);
           }
         } else {
-          printf("%*s%s: %s\n",
+          float_var = STRUCT_MEMBER(float, m, f[i].offset);
+          printf("%*s%s: %g\n",
               level, "", f[i].name,
-              "TODO - what type to use for floats?");
+              float_var);
         }
         break;
       case PROTOBUF_C_TYPE_DOUBLE:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: %s\n",
+            printf("%*s%s: %g\n",
                 level, "", f[i].name,
-                "TODO - what type to use for doubles?");
+                STRUCT_MEMBER(double *, m, f[i].offset)[j]);
           }
         } else {
-          printf("%*s%s: %s\n",
+          printf("%*s%s: %g\n",
               level, "", f[i].name,
-              "TODO - what type to use for doubles?");
+              STRUCT_MEMBER(double, m, f[i].offset));
         }
         break;
       case PROTOBUF_C_TYPE_BOOL:
@@ -214,10 +217,19 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
         }
         break;
       case PROTOBUF_C_TYPE_BYTES:
-        /* This isn't supported by protobuf-c. */
-        printf("%*s%s: %s\n",
-            level, "", f[i].name,
-            "TODO");
+        if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
+          for (j = 0; quantifier_offset; j++) {
+            printf("%*s%s: \"%.*s\"\n",
+                level, "", f[i].name,
+                (int)STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].len,
+                STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].data);
+          }
+        } else {
+          printf("%*s%s: \"%.*s\"\n",
+              level, "", f[i].name,
+              (int)STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).len,
+              STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).data);
+        }
         break;
 
       case PROTOBUF_C_TYPE_MESSAGE:
