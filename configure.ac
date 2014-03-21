@@ -7,7 +7,7 @@
 
 AC_PREREQ([2.68])
 AC_INIT([protobuf-c-text], [0.1], [https://github.com/lyda/protobuf-c-text/])
-AC_CONFIG_SRCDIR([protobuf-c-text/generate.c])
+AC_CONFIG_SRCDIR([protobuf-c-text/protobuf-c-text.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_HEADERS([build-aux/config.h])

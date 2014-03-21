@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <google/protobuf-c/protobuf-c.h>
-#include "addressbook.pb-c.h"
 
 /* These are lifted from the protobuf-c lib */
 
@@ -27,7 +26,7 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
   double float_var;
   const ProtobufCFieldDescriptor *f;
   ProtobufCEnumDescriptor *enumd;
-  ProtobufCEnumValue *enumv;
+  const ProtobufCEnumValue *enumv;
 
   f = d->fields;
   for (i = 0; i < d->n_fields; i++) {

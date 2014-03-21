@@ -400,6 +400,10 @@ t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.c
 t_list_people_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_list_people_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_list_people_LDFLAGS = -static
+t_c_dump_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/c-dump.c
+t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
+t_c_dump_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_c_dump_LDFLAGS = -static
 
 # Define macros to have quiet protoc-c statements.
 AM_V_PROTOC_C = $(AM_V_PROTOC_C_@AM_V@)

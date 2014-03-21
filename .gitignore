@@ -18,6 +18,9 @@ libtool
 *.pb-c.[ch]
 *.pb.h
 *.pb.cc
+*.lo
+*.o
+*.la
 
 # Address book data files.
 *.ab
