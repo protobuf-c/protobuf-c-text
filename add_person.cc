@@ -48,6 +48,95 @@ void PromptForAddress(tutorial::Person* person) {
       cout << "Unknown phone type.  Using default." << endl;
     }
   }
+
+  double double_var;
+  cout << "Enter double_var (0 to skip): ";
+  cin >> double_var;
+  person->set_double_var(double_var);
+  cin.ignore(256, '\n');
+
+  float float_var;
+  cout << "Enter float_var (0 to skip): ";
+  cin >> float_var;
+  person->set_float_var(float_var);
+  cin.ignore(256, '\n');
+
+  int64_t int64_var;
+  cout << "Enter int64_var (0 to skip): ";
+  cin >> int64_var;
+  person->set_int64_var(int64_var);
+  cin.ignore(256, '\n');
+
+  uint32_t uint32_var;
+  cout << "Enter uint32_var (0 to skip): ";
+  cin >> uint32_var;
+  person->set_uint32_var(uint32_var);
+  cin.ignore(256, '\n');
+
+  uint64_t uint64_var;
+  cout << "Enter uint64_var (0 to skip): ";
+  cin >> uint64_var;
+  person->set_uint64_var(uint64_var);
+  cin.ignore(256, '\n');
+
+  int32_t sint32_var;
+  cout << "Enter sint32_var (0 to skip): ";
+  cin >> sint32_var;
+  person->set_sint32_var(sint32_var);
+  cin.ignore(256, '\n');
+
+  int64_t sint64_var;
+  cout << "Enter sint64_var (0 to skip): ";
+  cin >> sint64_var;
+  person->set_sint64_var(sint64_var);
+  cin.ignore(256, '\n');
+
+  uint32_t fixed32_var;
+  cout << "Enter fixed32_var (0 to skip): ";
+  cin >> fixed32_var;
+  person->set_fixed32_var(fixed32_var);
+  cin.ignore(256, '\n');
+
+  uint64_t fixed64_var;
+  cout << "Enter fixed64_var (0 to skip): ";
+  cin >> fixed64_var;
+  person->set_fixed64_var(fixed64_var);
+  cin.ignore(256, '\n');
+
+  int32_t sfixed32_var;
+  cout << "Enter sfixed32_var (0 to skip): ";
+  cin >> sfixed32_var;
+  person->set_sfixed32_var(sfixed32_var);
+  cin.ignore(256, '\n');
+
+  int64_t sfixed64_var;
+  cout << "Enter sfixed64_var (0 to skip): ";
+  cin >> sfixed64_var;
+  person->set_sfixed64_var(sfixed64_var);
+  cin.ignore(256, '\n');
+
+  int bool_var;
+  cout << "Enter bool_var (-1 to skip): ";
+  cin >> bool_var;
+  if (bool_var >= 0) {
+    person->set_bool_var(bool_var > 0);
+  }
+  cin.ignore(256, '\n');
+
+  string string_var;
+  cout << "Enter string_var (return to skip): ";
+  getline(cin, string_var);
+  if (!string_var.empty()) {
+    person->set_string_var(string_var);
+  }
+
+  string bytes_var;
+  cout << "Enter bytes_var (0 to skip): ";
+  getline(cin, bytes_var);
+  if (!bytes_var.empty()) {
+    person->set_bytes_var(bytes_var);
+  }
+
 }
 
 // Main function:  Reads the entire address book from a file,
