@@ -6,7 +6,7 @@
 *.pb-c.[ch]
 *.pb.h
 *.pb.cc
-.pbc-stamp
+Makefile
 
 # Address book data files.
 *.ab

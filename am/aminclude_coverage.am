@@ -1,0 +1,34 @@
+# Coverage targets
+
+.PHONY: clean-gcda
+.PHONY: coverage-html generate-coverage-html clean-coverage-html
+
+clean-gcda:
+	@find -name '*.gcda' -print | xargs -r rm
+	@find -name '*.gcno' -print | xargs -r rm
+
+if HAVE_GCOV
+
+coverage-html: clean-gcda
+	@$(MAKE) $(AM_MAKEFLAGS) -k check
+	@$(MAKE) $(AM_MAKEFLAGS) generate-coverage-html
+
+generate-coverage-html:
+	@echo Collecting coverage data
+	$(LCOV) --directory $(top_builddir) -b $(top_builddir) --capture --output-file coverage.info --no-checksum --compat-libtool
+	LANG=C $(GENHTML) --prefix $(top_builddir) --output-directory htmlcov --title "Code Coverage" --legend --show-details coverage.info
+
+clean-coverage-html: clean-gcda
+	@$(LCOV) --directory $(top_builddir) -z
+
+else
+
+clean-coverage-html: clean-gcda
+	@rm -rf coverage.info htmlcov
+
+endif # HAVE_GCOV
+
+# Local Variables:
+# mode: automake
+# End:
+# vim: set filetype=automake:
