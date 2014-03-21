@@ -2,11 +2,22 @@
 *~
 .*.swp
 
+# Autoconf products.
+Makefile
+/autom4te.cache
+build-aux/config.h
+build-aux/stamp-h1
+config.log
+config.status
+libtool
+.deps/
+.dirstamp
+.libs/
+
 # Build products.
 *.pb-c.[ch]
 *.pb.h
 *.pb.cc
-Makefile
 
 # Address book data files.
 *.ab

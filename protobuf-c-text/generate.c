@@ -18,35 +18,7 @@
 #define STRUCT_MEMBER_PTR(member_type, struct_p, struct_offset) \
       ((member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))
 
-#define CHUNK 1024
-
-Tutorial__AddressBook *ab;
-
-Tutorial__AddressBook *
-read_addressbook(char *filename)
-{
-  FILE *f;
-  int bufsize = 0, bytes, bytes_total = 0;
-  char *buf = NULL;
-  Tutorial__AddressBook *ab;
-
-  f = fopen(filename, "r");
-  if (!f) {
-    printf("Can't open addressbook file '%s'.\n", filename);
-    exit(1);
-  }
-  do {
-    bufsize += CHUNK;
-    buf = realloc(buf, bufsize);
-    bytes = fread(buf + bytes_total, 1, CHUNK, f);
-    bytes_total += bytes;
-  } while (bytes == CHUNK);
-  ab = tutorial__address_book__unpack(NULL, bytes_total, buf);
-  free(buf);
-  return ab;
-}
-
-void
+static void
 text_format_to_string_int(int level, ProtobufCMessage *m,
     const ProtobufCMessageDescriptor *d)
 {
@@ -265,19 +237,4 @@ void
 text_format_to_string(ProtobufCMessage *m)
 {
   text_format_to_string_int(0, m, m->descriptor);
-}
-
-int
-main(int argc, char *argv[])
-{
-
-  if (argc != 2) {
-    printf("Must supply address book file.\n");
-    exit(1);
-  }
-
-  ab = read_addressbook(argv[1]);
-
-  text_format_to_string((ProtobufCMessage *)ab);
-  return 0;
 }
