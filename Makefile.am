@@ -3,13 +3,13 @@ AM_CFLAGS = -I@top_srcdir@/src -Iproto
 PROTOBUF_C_TEST_SRCS = t/addressbook.pb-c.c
 PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 				          $(PROTOBUF_C_TEST_SRCS))
-PROTOBUF_CXX_TEST_SRCS = t/addressbook.pb.c
-PROTOBUF_CXX_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_CXX_TEST_SRCS) \
+PROTOBUF_CXX_TEST_SRCS = t/addressbook.pb.cc
+PROTOBUF_CXX_TEST_HDRS = $(patsubst %.cc,%.h,$(PROTOBUF_CXX_TEST_SRCS) \
 				            $(PROTOBUF_CXX_TEST_SRCS))
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
 TESTS = t/test_generation.sh
-check_PROGRAMS = t/add_person t/dump_people t/list_people
+check_PROGRAMS = t/add_person t/dump_people t/list_people t/c-dump
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
 		$(PROTOBUF_CXX_TEST_SRCS) $(PROTOBUF_CXX_TEST_SRCS) 
@@ -50,17 +50,17 @@ analyze: all
 	done
 
 # Test programs.
-t_add_person_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/add_person.c
+t_add_person_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/add_person.cc
 t_add_person_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_add_person_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_add_person_LDFLAGS = -static
 
-t_dump_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/dump_people.c
+t_dump_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/dump_people.cc
 t_dump_people_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_dump_people_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_dump_people_LDFLAGS = -static
 
-t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.c
+t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.cc
 t_list_people_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_list_people_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_list_people_LDFLAGS = -static
@@ -81,7 +81,7 @@ AM_V_PROTOC_C_0 = @echo PBC_C $<;
 AM_V_PROTOC = $(AM_V_PROTOC_@AM_V@)
 AM_V_PROTOC_ = $(AM_V_PROTOC_@AM_DEFAULT_V@)
 AM_V_PROTOC_0 = @echo PBC $<;
-%.pb.c %.pb.h: %.proto
+%.pb.cc %.pb.h: %.proto
 	$(AM_V_PROTOC)$(PROTOC) --proto_path=$(dir $<) --cpp_out=$(dir $@) $<
 
 include am/aminclude_coverage.am

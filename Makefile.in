@@ -38,7 +38,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = t/add_person$(EXEEXT) t/dump_people$(EXEEXT) \
-	t/list_people$(EXEEXT)
+	t/list_people$(EXEEXT) t/c-dump$(EXEEXT)
 DIST_COMMON = README $(am__configure_deps) \
 	$(libprotobuf_c_text_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/am/aminclude_coverage.am \
@@ -106,31 +106,35 @@ protobuf_c_text_libprotobuf_c_text_la_LINK = $(LIBTOOL) $(AM_V_lt) \
 	$(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(protobuf_c_text_libprotobuf_c_text_la_LDFLAGS) $(LDFLAGS) -o \
 	$@
-am__objects_1 = t/t_add_person-addressbook.pb.$(OBJEXT)
-am_t_add_person_OBJECTS = $(am__objects_1) \
-	t/t_add_person-add_person.$(OBJEXT)
+am__objects_1 = t/addressbook.pb.$(OBJEXT)
+am_t_add_person_OBJECTS = $(am__objects_1) t/add_person.$(OBJEXT)
 t_add_person_OBJECTS = $(am_t_add_person_OBJECTS)
 am__DEPENDENCIES_1 =
 t_add_person_DEPENDENCIES = $(am__DEPENDENCIES_1)
-t_add_person_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_add_person_CFLAGS) \
-	$(CFLAGS) $(t_add_person_LDFLAGS) $(LDFLAGS) -o $@
-am__objects_2 = t/t_dump_people-addressbook.pb.$(OBJEXT)
-am_t_dump_people_OBJECTS = $(am__objects_2) \
-	t/t_dump_people-dump_people.$(OBJEXT)
+t_add_person_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(t_add_person_LDFLAGS) $(LDFLAGS) -o $@
+am_t_c_dump_OBJECTS = $(am__objects_1) t/t_c_dump-c-dump.$(OBJEXT)
+t_c_dump_OBJECTS = $(am_t_c_dump_OBJECTS)
+t_c_dump_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
+	$(am__DEPENDENCIES_1)
+t_c_dump_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(t_c_dump_LDFLAGS) $(LDFLAGS) -o $@
+am_t_dump_people_OBJECTS = $(am__objects_1) t/dump_people.$(OBJEXT)
 t_dump_people_OBJECTS = $(am_t_dump_people_OBJECTS)
 t_dump_people_DEPENDENCIES = $(am__DEPENDENCIES_1)
-t_dump_people_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_dump_people_CFLAGS) \
-	$(CFLAGS) $(t_dump_people_LDFLAGS) $(LDFLAGS) -o $@
-am__objects_3 = t/t_list_people-addressbook.pb.$(OBJEXT)
-am_t_list_people_OBJECTS = $(am__objects_3) \
-	t/t_list_people-list_people.$(OBJEXT)
+t_dump_people_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
+	$(AM_CXXFLAGS) $(CXXFLAGS) $(t_dump_people_LDFLAGS) $(LDFLAGS) \
+	-o $@
+am_t_list_people_OBJECTS = $(am__objects_1) t/list_people.$(OBJEXT)
 t_list_people_OBJECTS = $(am_t_list_people_OBJECTS)
 t_list_people_DEPENDENCIES = $(am__DEPENDENCIES_1)
-t_list_people_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_list_people_CFLAGS) \
-	$(CFLAGS) $(t_list_people_LDFLAGS) $(LDFLAGS) -o $@
+t_list_people_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
+	$(AM_CXXFLAGS) $(CXXFLAGS) $(t_list_people_LDFLAGS) $(LDFLAGS) \
+	-o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/build-aux
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
@@ -154,15 +158,31 @@ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD  " $@;
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
+AM_V_CXX = $(am__v_CXX_@AM_V@)
+am__v_CXX_ = $(am__v_CXX_@AM_DEFAULT_V@)
+am__v_CXX_0 = @echo "  CXX   " $@;
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
+am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
+am__v_CXXLD_0 = @echo "  CXXLD " $@;
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
-	$(t_add_person_SOURCES) $(t_dump_people_SOURCES) \
-	$(t_list_people_SOURCES)
+	$(t_add_person_SOURCES) $(t_c_dump_SOURCES) \
+	$(t_dump_people_SOURCES) $(t_list_people_SOURCES)
 DIST_SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
-	$(t_add_person_SOURCES) $(t_dump_people_SOURCES) \
-	$(t_list_people_SOURCES)
+	$(t_add_person_SOURCES) $(t_c_dump_SOURCES) \
+	$(t_dump_people_SOURCES) $(t_list_people_SOURCES)
 HEADERS = $(libprotobuf_c_text_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -214,6 +234,10 @@ COVERAGE_CXXFLAGS = @COVERAGE_CXXFLAGS@
 COVERAGE_LDFLAGS = @COVERAGE_LDFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXXDEPMODE = @CXXDEPMODE@
+CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
@@ -302,6 +326,7 @@ abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
+ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -355,8 +380,8 @@ PROTOBUF_C_TEST_SRCS = t/addressbook.pb-c.c
 PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 				          $(PROTOBUF_C_TEST_SRCS))
 
-PROTOBUF_CXX_TEST_SRCS = t/addressbook.pb.c
-PROTOBUF_CXX_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_CXX_TEST_SRCS) \
+PROTOBUF_CXX_TEST_SRCS = t/addressbook.pb.cc
+PROTOBUF_CXX_TEST_HDRS = $(patsubst %.cc,%.h,$(PROTOBUF_CXX_TEST_SRCS) \
 				            $(PROTOBUF_CXX_TEST_SRCS))
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
@@ -388,15 +413,15 @@ libprotobuf_c_text_HEADERS = protobuf-c-text/protobuf-c-text.h
 analyze_srcs = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES)
 
 # Test programs.
-t_add_person_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/add_person.c
+t_add_person_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/add_person.cc
 t_add_person_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_add_person_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_add_person_LDFLAGS = -static
-t_dump_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/dump_people.c
+t_dump_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/dump_people.cc
 t_dump_people_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_dump_people_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_dump_people_LDFLAGS = -static
-t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.c
+t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.cc
 t_list_people_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_list_people_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_list_people_LDFLAGS = -static
@@ -445,7 +470,7 @@ all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .lo .o .obj
+.SUFFIXES: .c .cc .lo .o .obj
 am--refresh: Makefile
 	@:
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/am/aminclude_coverage.am $(srcdir)/am/aminclude_doxygen.am $(am__configure_deps)
@@ -552,49 +577,45 @@ t/$(am__dirstamp):
 t/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) t/$(DEPDIR)
 	@: > t/$(DEPDIR)/$(am__dirstamp)
-t/t_add_person-addressbook.pb.$(OBJEXT): t/$(am__dirstamp) \
+t/addressbook.pb.$(OBJEXT): t/$(am__dirstamp) \
 	t/$(DEPDIR)/$(am__dirstamp)
-t/t_add_person-add_person.$(OBJEXT): t/$(am__dirstamp) \
-	t/$(DEPDIR)/$(am__dirstamp)
+t/add_person.$(OBJEXT): t/$(am__dirstamp) t/$(DEPDIR)/$(am__dirstamp)
 t/add_person$(EXEEXT): $(t_add_person_OBJECTS) $(t_add_person_DEPENDENCIES) $(EXTRA_t_add_person_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/add_person$(EXEEXT)
-	$(AM_V_CCLD)$(t_add_person_LINK) $(t_add_person_OBJECTS) $(t_add_person_LDADD) $(LIBS)
-t/t_dump_people-addressbook.pb.$(OBJEXT): t/$(am__dirstamp) \
+	$(AM_V_CXXLD)$(t_add_person_LINK) $(t_add_person_OBJECTS) $(t_add_person_LDADD) $(LIBS)
+t/t_c_dump-c-dump.$(OBJEXT): t/$(am__dirstamp) \
 	t/$(DEPDIR)/$(am__dirstamp)
-t/t_dump_people-dump_people.$(OBJEXT): t/$(am__dirstamp) \
-	t/$(DEPDIR)/$(am__dirstamp)
+t/c-dump$(EXEEXT): $(t_c_dump_OBJECTS) $(t_c_dump_DEPENDENCIES) $(EXTRA_t_c_dump_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/c-dump$(EXEEXT)
+	$(AM_V_CXXLD)$(t_c_dump_LINK) $(t_c_dump_OBJECTS) $(t_c_dump_LDADD) $(LIBS)
+t/dump_people.$(OBJEXT): t/$(am__dirstamp) t/$(DEPDIR)/$(am__dirstamp)
 t/dump_people$(EXEEXT): $(t_dump_people_OBJECTS) $(t_dump_people_DEPENDENCIES) $(EXTRA_t_dump_people_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/dump_people$(EXEEXT)
-	$(AM_V_CCLD)$(t_dump_people_LINK) $(t_dump_people_OBJECTS) $(t_dump_people_LDADD) $(LIBS)
-t/t_list_people-addressbook.pb.$(OBJEXT): t/$(am__dirstamp) \
-	t/$(DEPDIR)/$(am__dirstamp)
-t/t_list_people-list_people.$(OBJEXT): t/$(am__dirstamp) \
-	t/$(DEPDIR)/$(am__dirstamp)
+	$(AM_V_CXXLD)$(t_dump_people_LINK) $(t_dump_people_OBJECTS) $(t_dump_people_LDADD) $(LIBS)
+t/list_people.$(OBJEXT): t/$(am__dirstamp) t/$(DEPDIR)/$(am__dirstamp)
 t/list_people$(EXEEXT): $(t_list_people_OBJECTS) $(t_list_people_DEPENDENCIES) $(EXTRA_t_list_people_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/list_people$(EXEEXT)
-	$(AM_V_CCLD)$(t_list_people_LINK) $(t_list_people_OBJECTS) $(t_list_people_LDADD) $(LIBS)
+	$(AM_V_CXXLD)$(t_list_people_LINK) $(t_list_people_OBJECTS) $(t_list_people_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f protobuf-c-text/generate.$(OBJEXT)
 	-rm -f protobuf-c-text/generate.lo
-	-rm -f t/t_add_person-add_person.$(OBJEXT)
-	-rm -f t/t_add_person-addressbook.pb.$(OBJEXT)
-	-rm -f t/t_dump_people-addressbook.pb.$(OBJEXT)
-	-rm -f t/t_dump_people-dump_people.$(OBJEXT)
-	-rm -f t/t_list_people-addressbook.pb.$(OBJEXT)
-	-rm -f t/t_list_people-list_people.$(OBJEXT)
+	-rm -f t/add_person.$(OBJEXT)
+	-rm -f t/addressbook.pb.$(OBJEXT)
+	-rm -f t/dump_people.$(OBJEXT)
+	-rm -f t/list_people.$(OBJEXT)
+	-rm -f t/t_c_dump-c-dump.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/generate.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_add_person-add_person.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_add_person-addressbook.pb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_dump_people-addressbook.pb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_dump_people-dump_people.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_list_people-addressbook.pb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_list_people-list_people.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/add_person.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/addressbook.pb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/dump_people.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/list_people.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-c-dump.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -620,89 +641,43 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-t/t_add_person-addressbook.pb.o: t/addressbook.pb.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_add_person_CFLAGS) $(CFLAGS) -MT t/t_add_person-addressbook.pb.o -MD -MP -MF t/$(DEPDIR)/t_add_person-addressbook.pb.Tpo -c -o t/t_add_person-addressbook.pb.o `test -f 't/addressbook.pb.c' || echo '$(srcdir)/'`t/addressbook.pb.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_add_person-addressbook.pb.Tpo t/$(DEPDIR)/t_add_person-addressbook.pb.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb.c' object='t/t_add_person-addressbook.pb.o' libtool=no @AMDEPBACKSLASH@
+t/t_c_dump-c-dump.o: t/c-dump.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump_CFLAGS) $(CFLAGS) -MT t/t_c_dump-c-dump.o -MD -MP -MF t/$(DEPDIR)/t_c_dump-c-dump.Tpo -c -o t/t_c_dump-c-dump.o `test -f 't/c-dump.c' || echo '$(srcdir)/'`t/c-dump.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_dump-c-dump.Tpo t/$(DEPDIR)/t_c_dump-c-dump.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/c-dump.c' object='t/t_c_dump-c-dump.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_add_person_CFLAGS) $(CFLAGS) -c -o t/t_add_person-addressbook.pb.o `test -f 't/addressbook.pb.c' || echo '$(srcdir)/'`t/addressbook.pb.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump_CFLAGS) $(CFLAGS) -c -o t/t_c_dump-c-dump.o `test -f 't/c-dump.c' || echo '$(srcdir)/'`t/c-dump.c
 
-t/t_add_person-addressbook.pb.obj: t/addressbook.pb.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_add_person_CFLAGS) $(CFLAGS) -MT t/t_add_person-addressbook.pb.obj -MD -MP -MF t/$(DEPDIR)/t_add_person-addressbook.pb.Tpo -c -o t/t_add_person-addressbook.pb.obj `if test -f 't/addressbook.pb.c'; then $(CYGPATH_W) 't/addressbook.pb.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_add_person-addressbook.pb.Tpo t/$(DEPDIR)/t_add_person-addressbook.pb.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb.c' object='t/t_add_person-addressbook.pb.obj' libtool=no @AMDEPBACKSLASH@
+t/t_c_dump-c-dump.obj: t/c-dump.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump_CFLAGS) $(CFLAGS) -MT t/t_c_dump-c-dump.obj -MD -MP -MF t/$(DEPDIR)/t_c_dump-c-dump.Tpo -c -o t/t_c_dump-c-dump.obj `if test -f 't/c-dump.c'; then $(CYGPATH_W) 't/c-dump.c'; else $(CYGPATH_W) '$(srcdir)/t/c-dump.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_dump-c-dump.Tpo t/$(DEPDIR)/t_c_dump-c-dump.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/c-dump.c' object='t/t_c_dump-c-dump.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_add_person_CFLAGS) $(CFLAGS) -c -o t/t_add_person-addressbook.pb.obj `if test -f 't/addressbook.pb.c'; then $(CYGPATH_W) 't/addressbook.pb.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump_CFLAGS) $(CFLAGS) -c -o t/t_c_dump-c-dump.obj `if test -f 't/c-dump.c'; then $(CYGPATH_W) 't/c-dump.c'; else $(CYGPATH_W) '$(srcdir)/t/c-dump.c'; fi`
 
-t/t_add_person-add_person.o: t/add_person.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_add_person_CFLAGS) $(CFLAGS) -MT t/t_add_person-add_person.o -MD -MP -MF t/$(DEPDIR)/t_add_person-add_person.Tpo -c -o t/t_add_person-add_person.o `test -f 't/add_person.c' || echo '$(srcdir)/'`t/add_person.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_add_person-add_person.Tpo t/$(DEPDIR)/t_add_person-add_person.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/add_person.c' object='t/t_add_person-add_person.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_add_person_CFLAGS) $(CFLAGS) -c -o t/t_add_person-add_person.o `test -f 't/add_person.c' || echo '$(srcdir)/'`t/add_person.c
+.cc.o:
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ $<
 
-t/t_add_person-add_person.obj: t/add_person.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_add_person_CFLAGS) $(CFLAGS) -MT t/t_add_person-add_person.obj -MD -MP -MF t/$(DEPDIR)/t_add_person-add_person.Tpo -c -o t/t_add_person-add_person.obj `if test -f 't/add_person.c'; then $(CYGPATH_W) 't/add_person.c'; else $(CYGPATH_W) '$(srcdir)/t/add_person.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_add_person-add_person.Tpo t/$(DEPDIR)/t_add_person-add_person.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/add_person.c' object='t/t_add_person-add_person.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_add_person_CFLAGS) $(CFLAGS) -c -o t/t_add_person-add_person.obj `if test -f 't/add_person.c'; then $(CYGPATH_W) 't/add_person.c'; else $(CYGPATH_W) '$(srcdir)/t/add_person.c'; fi`
+.cc.obj:
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-t/t_dump_people-addressbook.pb.o: t/addressbook.pb.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dump_people_CFLAGS) $(CFLAGS) -MT t/t_dump_people-addressbook.pb.o -MD -MP -MF t/$(DEPDIR)/t_dump_people-addressbook.pb.Tpo -c -o t/t_dump_people-addressbook.pb.o `test -f 't/addressbook.pb.c' || echo '$(srcdir)/'`t/addressbook.pb.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_dump_people-addressbook.pb.Tpo t/$(DEPDIR)/t_dump_people-addressbook.pb.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb.c' object='t/t_dump_people-addressbook.pb.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dump_people_CFLAGS) $(CFLAGS) -c -o t/t_dump_people-addressbook.pb.o `test -f 't/addressbook.pb.c' || echo '$(srcdir)/'`t/addressbook.pb.c
-
-t/t_dump_people-addressbook.pb.obj: t/addressbook.pb.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dump_people_CFLAGS) $(CFLAGS) -MT t/t_dump_people-addressbook.pb.obj -MD -MP -MF t/$(DEPDIR)/t_dump_people-addressbook.pb.Tpo -c -o t/t_dump_people-addressbook.pb.obj `if test -f 't/addressbook.pb.c'; then $(CYGPATH_W) 't/addressbook.pb.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_dump_people-addressbook.pb.Tpo t/$(DEPDIR)/t_dump_people-addressbook.pb.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb.c' object='t/t_dump_people-addressbook.pb.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dump_people_CFLAGS) $(CFLAGS) -c -o t/t_dump_people-addressbook.pb.obj `if test -f 't/addressbook.pb.c'; then $(CYGPATH_W) 't/addressbook.pb.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb.c'; fi`
-
-t/t_dump_people-dump_people.o: t/dump_people.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dump_people_CFLAGS) $(CFLAGS) -MT t/t_dump_people-dump_people.o -MD -MP -MF t/$(DEPDIR)/t_dump_people-dump_people.Tpo -c -o t/t_dump_people-dump_people.o `test -f 't/dump_people.c' || echo '$(srcdir)/'`t/dump_people.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_dump_people-dump_people.Tpo t/$(DEPDIR)/t_dump_people-dump_people.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/dump_people.c' object='t/t_dump_people-dump_people.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dump_people_CFLAGS) $(CFLAGS) -c -o t/t_dump_people-dump_people.o `test -f 't/dump_people.c' || echo '$(srcdir)/'`t/dump_people.c
-
-t/t_dump_people-dump_people.obj: t/dump_people.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dump_people_CFLAGS) $(CFLAGS) -MT t/t_dump_people-dump_people.obj -MD -MP -MF t/$(DEPDIR)/t_dump_people-dump_people.Tpo -c -o t/t_dump_people-dump_people.obj `if test -f 't/dump_people.c'; then $(CYGPATH_W) 't/dump_people.c'; else $(CYGPATH_W) '$(srcdir)/t/dump_people.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_dump_people-dump_people.Tpo t/$(DEPDIR)/t_dump_people-dump_people.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/dump_people.c' object='t/t_dump_people-dump_people.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_dump_people_CFLAGS) $(CFLAGS) -c -o t/t_dump_people-dump_people.obj `if test -f 't/dump_people.c'; then $(CYGPATH_W) 't/dump_people.c'; else $(CYGPATH_W) '$(srcdir)/t/dump_people.c'; fi`
-
-t/t_list_people-addressbook.pb.o: t/addressbook.pb.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_list_people_CFLAGS) $(CFLAGS) -MT t/t_list_people-addressbook.pb.o -MD -MP -MF t/$(DEPDIR)/t_list_people-addressbook.pb.Tpo -c -o t/t_list_people-addressbook.pb.o `test -f 't/addressbook.pb.c' || echo '$(srcdir)/'`t/addressbook.pb.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_list_people-addressbook.pb.Tpo t/$(DEPDIR)/t_list_people-addressbook.pb.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb.c' object='t/t_list_people-addressbook.pb.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_list_people_CFLAGS) $(CFLAGS) -c -o t/t_list_people-addressbook.pb.o `test -f 't/addressbook.pb.c' || echo '$(srcdir)/'`t/addressbook.pb.c
-
-t/t_list_people-addressbook.pb.obj: t/addressbook.pb.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_list_people_CFLAGS) $(CFLAGS) -MT t/t_list_people-addressbook.pb.obj -MD -MP -MF t/$(DEPDIR)/t_list_people-addressbook.pb.Tpo -c -o t/t_list_people-addressbook.pb.obj `if test -f 't/addressbook.pb.c'; then $(CYGPATH_W) 't/addressbook.pb.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_list_people-addressbook.pb.Tpo t/$(DEPDIR)/t_list_people-addressbook.pb.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb.c' object='t/t_list_people-addressbook.pb.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_list_people_CFLAGS) $(CFLAGS) -c -o t/t_list_people-addressbook.pb.obj `if test -f 't/addressbook.pb.c'; then $(CYGPATH_W) 't/addressbook.pb.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb.c'; fi`
-
-t/t_list_people-list_people.o: t/list_people.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_list_people_CFLAGS) $(CFLAGS) -MT t/t_list_people-list_people.o -MD -MP -MF t/$(DEPDIR)/t_list_people-list_people.Tpo -c -o t/t_list_people-list_people.o `test -f 't/list_people.c' || echo '$(srcdir)/'`t/list_people.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_list_people-list_people.Tpo t/$(DEPDIR)/t_list_people-list_people.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/list_people.c' object='t/t_list_people-list_people.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_list_people_CFLAGS) $(CFLAGS) -c -o t/t_list_people-list_people.o `test -f 't/list_people.c' || echo '$(srcdir)/'`t/list_people.c
-
-t/t_list_people-list_people.obj: t/list_people.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_list_people_CFLAGS) $(CFLAGS) -MT t/t_list_people-list_people.obj -MD -MP -MF t/$(DEPDIR)/t_list_people-list_people.Tpo -c -o t/t_list_people-list_people.obj `if test -f 't/list_people.c'; then $(CYGPATH_W) 't/list_people.c'; else $(CYGPATH_W) '$(srcdir)/t/list_people.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_list_people-list_people.Tpo t/$(DEPDIR)/t_list_people-list_people.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/list_people.c' object='t/t_list_people-list_people.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_list_people_CFLAGS) $(CFLAGS) -c -o t/t_list_people-list_people.obj `if test -f 't/list_people.c'; then $(CYGPATH_W) 't/list_people.c'; else $(CYGPATH_W) '$(srcdir)/t/list_people.c'; fi`
+.cc.lo:
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
+@am__fastdepCXX_TRUE@	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1201,7 +1176,7 @@ analyze: all
 	done
 %.pb-c.c %.pb-c.h: %.proto
 	$(AM_V_PROTOC_C)$(PROTOC_C) --proto_path=$(dir $<) --c_out=$(dir $@) $<
-%.pb.c %.pb.h: %.proto
+%.pb.cc %.pb.h: %.proto
 	$(AM_V_PROTOC)$(PROTOC) --proto_path=$(dir $<) --cpp_out=$(dir $@) $<
 
 .PHONY: clean-gcda
