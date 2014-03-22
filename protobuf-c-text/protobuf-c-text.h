@@ -3,6 +3,6 @@
 
 #include <google/protobuf-c/protobuf-c.h>
 
-void text_format_to_string(ProtobufCMessage *m);
+extern char *text_format_to_string(ProtobufCMessage *m);
 
 #endif /* PROTOBUF_C_TEXT_H */

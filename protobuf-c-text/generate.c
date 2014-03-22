@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -17,8 +18,36 @@
 #define STRUCT_MEMBER_PTR(member_type, struct_p, struct_offset) \
       ((member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))
 
+typedef struct _ReturnString {
+  int allocated;
+  int pos;
+  char *s;
+} ReturnString;
+
 static void
-text_format_to_string_int(int level, ProtobufCMessage *m,
+rs_append(ReturnString *rs, int guess, const char *format, ...)
+  __attribute__((format(printf, 3, 4)));
+static void
+rs_append(ReturnString *rs, int guess, const char *format, ...)
+{
+  va_list args;
+  int added;
+
+  if (rs->allocated - rs->pos < guess * 2) {
+    rs->allocated += guess * 2;
+    rs->s = realloc(rs->s, rs->allocated);
+  }
+  va_start(args, format);
+  /* TODO: error check this. */
+  added = vsnprintf(rs->s + rs->pos, rs->allocated - rs->pos, format, args);
+  va_end(args);
+  rs->pos += added;
+}
+
+static void
+text_format_to_string_int(ReturnString *rs,
+    int level,
+    ProtobufCMessage *m,
     const ProtobufCMessageDescriptor *d)
 {
   int i;
@@ -60,12 +89,14 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
       case PROTOBUF_C_TYPE_FIXED32:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: %u\n",
+            rs_append(rs, level + strlen(f[i].name) + 20,
+                "%*s%s: %u\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(uint32_t *, m, f[i].offset)[j]);
           }
         } else {
-          printf("%*s%s: %u\n",
+          rs_append(rs, level + strlen(f[i].name) + 20,
+              "%*s%s: %u\n",
               level, "", f[i].name,
               STRUCT_MEMBER(uint32_t, m, f[i].offset));
         }
@@ -74,12 +105,14 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
       case PROTOBUF_C_TYPE_SFIXED32:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: %d\n",
+            rs_append(rs, level + strlen(f[i].name) + 20,
+                "%*s%s: %d\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(int32_t *, m, f[i].offset)[j]);
           }
         } else {
-          printf("%*s%s: %d\n",
+          rs_append(rs, level + strlen(f[i].name) + 20,
+              "%*s%s: %d\n",
               level, "", f[i].name,
               STRUCT_MEMBER(int32_t, m, f[i].offset));
         }
@@ -89,12 +122,14 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
       case PROTOBUF_C_TYPE_FIXED64:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: %lu\n",
+            rs_append(rs, level + strlen(f[i].name) + 20,
+                "%*s%s: %lu\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(uint64_t *, m, f[i].offset)[j]);
           }
         } else {
-          printf("%*s%s: %lu\n",
+          rs_append(rs, level + strlen(f[i].name) + 20,
+              "%*s%s: %lu\n",
               level, "", f[i].name,
               STRUCT_MEMBER(uint64_t, m, f[i].offset));
         }
@@ -103,12 +138,14 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
       case PROTOBUF_C_TYPE_SFIXED64:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: %ld\n",
+            rs_append(rs, level + strlen(f[i].name) + 20,
+                "%*s%s: %ld\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(int64_t *, m, f[i].offset)[j]);
           }
         } else {
-          printf("%*s%s: %ld\n",
+          rs_append(rs, level + strlen(f[i].name) + 20,
+              "%*s%s: %ld\n",
               level, "", f[i].name,
               STRUCT_MEMBER(int64_t, m, f[i].offset));
         }
@@ -117,13 +154,15 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
             float_var = STRUCT_MEMBER(float *, m, f[i].offset)[j];
-            printf("%*s%s: %g\n",
+            rs_append(rs, level + strlen(f[i].name) + 20,
+                "%*s%s: %g\n",
                 level, "", f[i].name,
                 float_var);
           }
         } else {
           float_var = STRUCT_MEMBER(float, m, f[i].offset);
-          printf("%*s%s: %g\n",
+          rs_append(rs, level + strlen(f[i].name) + 20,
+              "%*s%s: %g\n",
               level, "", f[i].name,
               float_var);
         }
@@ -131,12 +170,14 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
       case PROTOBUF_C_TYPE_DOUBLE:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: %g\n",
+            rs_append(rs, level + strlen(f[i].name) + 20,
+                "%*s%s: %g\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(double *, m, f[i].offset)[j]);
           }
         } else {
-          printf("%*s%s: %g\n",
+          rs_append(rs, level + strlen(f[i].name) + 20,
+              "%*s%s: %g\n",
               level, "", f[i].name,
               STRUCT_MEMBER(double, m, f[i].offset));
         }
@@ -144,13 +185,15 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
       case PROTOBUF_C_TYPE_BOOL:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: %s\n",
+            rs_append(rs, level + strlen(f[i].name) + 20,
+                "%*s%s: %s\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(protobuf_c_boolean *, m, f[i].offset)[j]?
                 "true": "false");
           }
         } else {
-          printf("%*s%s: %s\n",
+          rs_append(rs, level + strlen(f[i].name) + 20,
+              "%*s%s: %s\n",
               level, "", f[i].name,
               STRUCT_MEMBER(protobuf_c_boolean, m, f[i].offset)?
               "true": "false");
@@ -162,14 +205,16 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
           for (j = 0; quantifier_offset; j++) {
             enumv = protobuf_c_enum_descriptor_get_value(
                 enumd, STRUCT_MEMBER(int *, m, f[i].offset)[j]);
-            printf("%*s%s: %s\n",
+            rs_append(rs, level + strlen(f[i].name) + 20,
+                "%*s%s: %s\n",
                 level, "", f[i].name,
                 enumv? enumv->name: "unknown");
           }
         } else {
           enumv = protobuf_c_enum_descriptor_get_value(
               enumd, STRUCT_MEMBER(int, m, f[i].offset));
-          printf("%*s%s: %s\n",
+          rs_append(rs, level + strlen(f[i].name) + 20,
+              "%*s%s: %s\n",
               level, "", f[i].name,
               enumv? enumv->name: "unknown");
         }
@@ -177,12 +222,16 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
       case PROTOBUF_C_TYPE_STRING:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: \"%s\"\n",
+            rs_append(rs, level + strlen(f[i].name)
+                  + strlen(STRUCT_MEMBER(char **, m, f[i].offset)[j]) + 10,
+                "%*s%s: \"%s\"\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(char **, m, f[i].offset)[j]);
           }
         } else {
-          printf("%*s%s: \"%s\"\n",
+          rs_append(rs, level + strlen(f[i].name)
+                + strlen(STRUCT_MEMBER(char *, m, f[i].offset)) + 10,
+              "%*s%s: \"%s\"\n",
               level, "", f[i].name,
               STRUCT_MEMBER(char *, m, f[i].offset));
         }
@@ -190,13 +239,19 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
       case PROTOBUF_C_TYPE_BYTES:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            printf("%*s%s: \"%.*s\"\n",
+            rs_append(rs, level + strlen(f[i].name)
+                  + (int)STRUCT_MEMBER(ProtobufCBinaryData *, m,
+                                       f[i].offset)[j].len + 10,
+                "%*s%s: \"%.*s\"\n",
                 level, "", f[i].name,
                 (int)STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].len,
                 STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].data);
           }
         } else {
-          printf("%*s%s: \"%.*s\"\n",
+          rs_append(rs, level + strlen(f[i].name)
+                + (int)STRUCT_MEMBER(ProtobufCBinaryData, m,
+                                     f[i].offset).len + 10,
+              "%*s%s: \"%.*s\"\n",
               level, "", f[i].name,
               (int)STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).len,
               STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).data);
@@ -210,18 +265,22 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
           for (j = 0;
               j < STRUCT_MEMBER(size_t, m, f[i].quantifier_offset);
               j++) {
-            printf("%*s%s {\n", level, "", f[i].name);
-            text_format_to_string_int(level + 2,
+            rs_append(rs, level + strlen(f[i].name) + 10,
+                "%*s%s {\n", level, "", f[i].name);
+            text_format_to_string_int(rs, level + 2,
                 STRUCT_MEMBER(ProtobufCMessage **, m, f[i].offset)[j],
                 (ProtobufCMessageDescriptor *)f[i].descriptor);
-            printf("%*s}\n", level, "");
+            rs_append(rs, level + 10,
+                "%*s}\n", level, "");
           }
         } else {
-          printf("%*s%s {\n", level, "", f[i].name);
-          text_format_to_string_int(level + 2,
+          rs_append(rs, level + strlen(f[i].name) + 10,
+              "%*s%s {\n", level, "", f[i].name);
+          text_format_to_string_int(rs, level + 2,
               STRUCT_MEMBER(ProtobufCMessage *, m, f[i].offset),
               (ProtobufCMessageDescriptor *)f[i].descriptor);
-          printf("%*s}\n", level, "");
+          rs_append(rs, level + 10,
+              "%*s}\n", level, "");
         }
         break;
       default:
@@ -232,8 +291,12 @@ text_format_to_string_int(int level, ProtobufCMessage *m,
   }
 }
 
-void
+char *
 text_format_to_string(ProtobufCMessage *m)
 {
-  text_format_to_string_int(0, m, m->descriptor);
+  ReturnString rs = { 0, 0, NULL };
+
+  text_format_to_string_int(&rs, 0, m, m->descriptor);
+
+  return rs.s;
 }

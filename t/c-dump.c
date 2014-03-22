@@ -39,6 +39,7 @@ read_addressbook(char *filename)
 int
 main(int argc, char *argv[])
 {
+  char *s;
 
   if (argc != 2) {
     printf("Must supply address book file.\n");
@@ -47,6 +48,9 @@ main(int argc, char *argv[])
 
   ab = read_addressbook(argv[1]);
 
-  text_format_to_string((ProtobufCMessage *)ab);
+  s = text_format_to_string((ProtobufCMessage *)ab);
+  printf("%s\n", s);
+  free(s);
+
   return 0;
 }
