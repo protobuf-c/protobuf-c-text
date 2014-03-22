@@ -7,17 +7,23 @@ PROTOBUF_CXX_TEST_SRCS = t/addressbook.pb.cc
 PROTOBUF_CXX_TEST_HDRS = $(patsubst %.cc,%.h,$(PROTOBUF_CXX_TEST_SRCS) \
 				            $(PROTOBUF_CXX_TEST_SRCS))
 
+bin_PROGRAMS = intake
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
 TESTS = t/test_generation.sh
 check_PROGRAMS = t/add_person t/dump_people t/list_people t/c-dump
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
-		$(PROTOBUF_CXX_TEST_SRCS) $(PROTOBUF_CXX_TEST_SRCS) 
+		$(PROTOBUF_CXX_TEST_SRCS) $(PROTOBUF_CXX_TEST_SRCS) \
+		protobuf-c-text/lexer.c
 
 #dist_man3_MANS = man/protobuf-c-text.3
 
 valgrind: $(check_PROGRAMS)
 	@t/valgrind.test_generation.sh
+
+# Binaries.
+intake_SOURCES = protobuf-c-text/lexer.c protobuf-c-text/intake.c
+intake_LDADD = $(LEXLIB)
 
 # Libraries.
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
@@ -93,6 +99,14 @@ AM_V_LEMON_ = $(AM_V_LEMON_@AM_DEFAULT_V@)
 AM_V_LEMON_0 = @echo "  LEMON " $<;
 %.c %.h %.out: %.y
 	$(AM_V_LEMON)$(LEMON) $<
+
+protobuf-c-text/lexer.c: protobuf-c-text/lexer.l
+	@if test "$(AM_V)" = 1; then \
+	  echo $(LEX) -o $(patsubst %.l,%.c,$<) $<; \
+	else \
+	  echo "  FLEX  " $<; \
+	fi;
+	@$(LEX) -o $(patsubst %.l,%.c,$<) $<
 
 include am/aminclude_coverage.am
 include am/aminclude_doxygen.am
