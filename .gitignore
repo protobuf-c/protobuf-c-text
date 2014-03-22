@@ -27,14 +27,14 @@ libtool
 t/moo.c++.text
 t/moo.c.text
 
-# Binaries.
-add_person
-c-dump
-dump_people
-list_people
+# Test binaries.
+/t/add_person
+/t/c-dump
+/t/dump_people
+/t/list_people
+/t/c-intake
 
-# Test stuff.
-intake
+# Generated parsing code.
 protobuf-c-text/lexer.c
 protobuf-c-text/parser.c
 protobuf-c-text/parser.h

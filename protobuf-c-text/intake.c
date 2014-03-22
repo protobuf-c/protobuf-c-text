@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <google/protobuf-c/protobuf-c.h>
 #include "lexer-global.h"
 #include "parser.h"
 
@@ -16,13 +17,15 @@ YY_BUFFER_STATE yy_scan_string(const char *);
 void            yy_delete_buffer(YY_BUFFER_STATE);
 
 
-int main(int argc,char** argv)
+
+int
+text_format_from_file(ProtobufCMessage *m, FILE *msg_file)
 {
   int n;
   int yv;
-  char buf[BUFS+1];
+  char buf[BUFS + 1];
 
-  while ((n=read(fileno(stdin), buf, BUFS )) >  0) {
+  while ((n=read(fileno(msg_file), buf, BUFS )) >  0) {
     buf[n]='\0';
     yy_scan_string(buf);
     while ((yv = yylex()) != 0) { 
@@ -36,4 +39,9 @@ int main(int argc,char** argv)
 
   }
 
+}
+
+int
+text_format_from_string(ProtobufCMessage *m, char *msg)
+{
 }

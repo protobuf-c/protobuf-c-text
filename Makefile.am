@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I m4 --install
-AM_CFLAGS = -I@top_srcdir@/src -Iproto
 PROTOBUF_C_TEST_SRCS = t/addressbook.pb-c.c
 PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 				          $(PROTOBUF_C_TEST_SRCS))
@@ -7,10 +6,9 @@ PROTOBUF_CXX_TEST_SRCS = t/addressbook.pb.cc
 PROTOBUF_CXX_TEST_HDRS = $(patsubst %.cc,%.h,$(PROTOBUF_CXX_TEST_SRCS) \
 				            $(PROTOBUF_CXX_TEST_SRCS))
 
-bin_PROGRAMS = intake
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
-TESTS = t/test_generation.sh
-check_PROGRAMS = t/add_person t/dump_people t/list_people t/c-dump
+TESTS = t/test_generation.sh t/test_intake.sh
+check_PROGRAMS = t/add_person t/dump_people t/list_people t/c-dump t/c-intake
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
 		$(PROTOBUF_CXX_TEST_SRCS) $(PROTOBUF_CXX_TEST_SRCS) \
@@ -21,14 +19,12 @@ BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
 valgrind: $(check_PROGRAMS)
 	@t/valgrind.test_generation.sh
 
-# Binaries.
-intake_SOURCES = protobuf-c-text/lexer.c protobuf-c-text/intake.c
-intake_LDADD = $(LEXLIB)
-
 # Libraries.
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
-    protobuf-c-text/generate.c
-lib_libriakpbc_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
+    protobuf-c-text/generate.c \
+    protobuf-c-text/lexer.c \
+    protobuf-c-text/intake.c
+protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # Version updating rules:
 # 1. If the library source code has changed but interfaces are the same,
 #    then increment revision (c:r:a becomes c:r+1:a).
@@ -37,6 +33,7 @@ lib_libriakpbc_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # 3. If interfaces have only been added since the last release, set
 #    release to 0 and increment release and age (c:r:a becomes c+1:0:a+1).
 protobuf_c_text_libprotobuf_c_text_la_LDFLAGS = $(COVERAGE_LDFLAGS) -version-info 0:0:0
+protobuf_c_text_libprotobuf_c_text_la_LIBADD = $(LEXLIB)
 
 # Headers for libraries.
 libprotobuf_c_textdir = $(includedir)/google/protobuf-c
@@ -75,6 +72,11 @@ t_c_dump_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-dump.c
 t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_c_dump_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_dump_LDFLAGS = -static
+
+t_c_intake_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-intake.c
+t_c_intake_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
+t_c_intake_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_c_intake_LDFLAGS = -static
 
 # Define macros to have quiet protoc-c statements.
 AM_V_PROTOC_C = $(AM_V_PROTOC_C_@AM_V@)
