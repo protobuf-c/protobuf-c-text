@@ -24,9 +24,18 @@ libtool
 
 # Address book data files.
 *.ab
+t/moo.c++.text
+t/moo.c.text
 
 # Binaries.
 add_person
 c-dump
 dump_people
 list_people
+
+# Test stuff.
+intake
+protobuf-c-text/lexer.c
+protobuf-c-text/parser.c
+protobuf-c-text/parser.h
+protobuf-c-text/parser.out
