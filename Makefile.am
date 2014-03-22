@@ -51,21 +51,21 @@ analyze: all
 
 # Test programs.
 t_add_person_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/add_person.cc
-t_add_person_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_add_person_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_add_person_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
+t_add_person_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_add_person_LDFLAGS = -static
 
 t_dump_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/dump_people.cc
-t_dump_people_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_dump_people_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_dump_people_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
+t_dump_people_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_dump_people_LDFLAGS = -static
 
 t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.cc
-t_list_people_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_list_people_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_list_people_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
+t_list_people_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_list_people_LDFLAGS = -static
 
-t_c_dump_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/c-dump.c
+t_c_dump_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-dump.c
 t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_c_dump_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_dump_LDFLAGS = -static
@@ -76,6 +76,9 @@ AM_V_PROTOC_C_ = $(AM_V_PROTOC_C_@AM_DEFAULT_V@)
 AM_V_PROTOC_C_0 = @echo PBC_C $<;
 %.pb-c.c %.pb-c.h: %.proto
 	$(AM_V_PROTOC_C)$(PROTOC_C) --proto_path=$(dir $<) --c_out=$(dir $@) $<
+	@indent -kr -nut -i2 addressbook.pb-c.h
+	@indent -kr -nut -i2 addressbook.pb-c.c
+	@rm -f addressbook.pb-c.[ch]~
 
 # Define macros to have quiet protoc statements.
 AM_V_PROTOC = $(AM_V_PROTOC_@AM_V@)
