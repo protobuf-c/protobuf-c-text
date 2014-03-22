@@ -1,3 +1,0 @@
-lex example7.l
-yacc -d example7.y
-cc lex.yy.c y.tab.c -o example7 

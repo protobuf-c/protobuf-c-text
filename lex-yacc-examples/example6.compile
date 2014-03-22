@@ -1,3 +1,0 @@
-lex example6.l
-yacc --verbose --debug -d example6.y
-cc lex.yy.c y.tab.c -o example6 
