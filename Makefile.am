@@ -12,7 +12,10 @@ check_PROGRAMS = t/add_person t/dump_people t/list_people t/c-dump t/c-intake
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
 		$(PROTOBUF_CXX_TEST_SRCS) $(PROTOBUF_CXX_TEST_SRCS) \
-		protobuf-c-text/lexer.c
+		protobuf-c-text/lexer.c \
+		protobuf-c-text/parser.c \
+		protobuf-c-text/parser.h
+noinst_HEADERS = protobuf-c-text/lexer-global.h
 
 #dist_man3_MANS = man/protobuf-c-text.3
 
