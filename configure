@@ -21968,6 +21968,7 @@ fi
         LDFLAGS      : ${LDFLAGS}
         LIBS         : ${LIBS}
         PROTOC_C     : ${PROTOC_C}
+        PROTOC       : ${PROTOC}
         doxygen-doc  : ${have_doxygen}
 
         prefix       : ${prefix}
@@ -21984,6 +21985,7 @@ $as_echo "
         LDFLAGS      : ${LDFLAGS}
         LIBS         : ${LIBS}
         PROTOC_C     : ${PROTOC_C}
+        PROTOC       : ${PROTOC}
         doxygen-doc  : ${have_doxygen}
 
         prefix       : ${prefix}

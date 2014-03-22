@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 # To rebuild the configure and Makefile.in files (as well as some
-# supporting files mainly in build-aux/ and m4/) run the following
+# supporting files mainly in build-aux/ am/ and m4/) run the following
 # command:
 #     autoreconf -vif
 
@@ -93,6 +93,7 @@ AC_MSG_RESULT([
         LDFLAGS      : ${LDFLAGS}
         LIBS         : ${LIBS}
         PROTOC_C     : ${PROTOC_C}
+        PROTOC       : ${PROTOC}
         doxygen-doc  : ${have_doxygen}
 
         prefix       : ${prefix}

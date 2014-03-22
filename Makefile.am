@@ -73,17 +73,17 @@ t_c_dump_LDFLAGS = -static
 # Define macros to have quiet protoc-c statements.
 AM_V_PROTOC_C = $(AM_V_PROTOC_C_@AM_V@)
 AM_V_PROTOC_C_ = $(AM_V_PROTOC_C_@AM_DEFAULT_V@)
-AM_V_PROTOC_C_0 = @echo PBC_C $<;
+AM_V_PROTOC_C_0 = @echo "  PBC_C " $<;
 %.pb-c.c %.pb-c.h: %.proto
 	$(AM_V_PROTOC_C)$(PROTOC_C) --proto_path=$(dir $<) --c_out=$(dir $@) $<
-	@indent -kr -nut -i2 addressbook.pb-c.h
-	@indent -kr -nut -i2 addressbook.pb-c.c
-	@rm -f addressbook.pb-c.[ch]~
+	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.c,$<)
+	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.h,$<)
+	@rm -f $(patsubst %.proto,%.pb-c.c~,$<) $(patsubst %.proto,%.pb-c.h~,$<)
 
 # Define macros to have quiet protoc statements.
 AM_V_PROTOC = $(AM_V_PROTOC_@AM_V@)
 AM_V_PROTOC_ = $(AM_V_PROTOC_@AM_DEFAULT_V@)
-AM_V_PROTOC_0 = @echo PBC $<;
+AM_V_PROTOC_0 = @echo "  PBC   " $<;
 %.pb.cc %.pb.h: %.proto
 	$(AM_V_PROTOC)$(PROTOC) --proto_path=$(dir $<) --cpp_out=$(dir $@) $<
 
@@ -106,4 +106,6 @@ clean-local: clean-local-build-dirs clean-coverage-html
 clean-local-build-dirs:
 	@rm -rf bin lib tests
 MOSTLYCLEANFILES = $(DX_CLEANFILES) \
-		   $(BUILT_SOURCES)
+		   $(BUILT_SOURCES) \
+		   $(PROTOBUF_C_TEST_HDRS) \
+		   $(PROTOBUF_CXX_TEST_HDRS)
