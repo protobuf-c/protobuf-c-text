@@ -1,4 +1,4 @@
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 --install
 AM_CFLAGS = -I@top_srcdir@/src -Iproto
 PROTOBUF_C_TEST_SRCS = t/addressbook.pb-c.c
 PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
@@ -86,6 +86,13 @@ AM_V_PROTOC_ = $(AM_V_PROTOC_@AM_DEFAULT_V@)
 AM_V_PROTOC_0 = @echo "  PBC   " $<;
 %.pb.cc %.pb.h: %.proto
 	$(AM_V_PROTOC)$(PROTOC) --proto_path=$(dir $<) --cpp_out=$(dir $@) $<
+
+# Define macros to have quiet lemon statements.
+AM_V_LEMON = $(AM_V_LEMON_@AM_V@)
+AM_V_LEMON_ = $(AM_V_LEMON_@AM_DEFAULT_V@)
+AM_V_LEMON_0 = @echo "  LEMON " $<;
+%.c %.h %.out: %.y
+	$(AM_V_LEMON)$(LEMON) $<
 
 include am/aminclude_coverage.am
 include am/aminclude_doxygen.am

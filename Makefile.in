@@ -285,6 +285,10 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LCOV = @LCOV@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LEMON = @LEMON@
+LEX = @LEX@
+LEXLIB = @LEXLIB@
+LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -377,7 +381,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 --install
 AM_CFLAGS = -I@top_srcdir@/src -Iproto
 PROTOBUF_C_TEST_SRCS = t/addressbook.pb-c.c
 PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
@@ -442,6 +446,11 @@ AM_V_PROTOC_C_0 = @echo "  PBC_C " $<;
 AM_V_PROTOC = $(AM_V_PROTOC_@AM_V@)
 AM_V_PROTOC_ = $(AM_V_PROTOC_@AM_DEFAULT_V@)
 AM_V_PROTOC_0 = @echo "  PBC   " $<;
+
+# Define macros to have quiet lemon statements.
+AM_V_LEMON = $(AM_V_LEMON_@AM_V@)
+AM_V_LEMON_ = $(AM_V_LEMON_@AM_DEFAULT_V@)
+AM_V_LEMON_0 = @echo "  LEMON " $<;
 @DX_COND_doc_TRUE@@DX_COND_html_TRUE@DX_CLEAN_HTML = @DX_DOCDIR@/html
 @DX_COND_chm_TRUE@@DX_COND_doc_TRUE@DX_CLEAN_CHM = @DX_DOCDIR@/chm
 @DX_COND_chi_TRUE@@DX_COND_chm_TRUE@@DX_COND_doc_TRUE@DX_CLEAN_CHI = @DX_DOCDIR@/@PACKAGE@.chi
@@ -1204,6 +1213,8 @@ analyze: all
 	@rm -f $(patsubst %.proto,%.pb-c.c~,$<) $(patsubst %.proto,%.pb-c.h~,$<)
 %.pb.cc %.pb.h: %.proto
 	$(AM_V_PROTOC)$(PROTOC) --proto_path=$(dir $<) --cpp_out=$(dir $@) $<
+%.c %.h %.out: %.y
+	$(AM_V_LEMON)$(LEMON) $<
 
 .PHONY: clean-gcda
 .PHONY: coverage-html generate-coverage-html clean-coverage-html

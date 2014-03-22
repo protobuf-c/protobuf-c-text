@@ -21,10 +21,12 @@ AC_SUBST([LIBTOOL_DEPS])
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
+AC_PROG_LEX
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_CHECK_PROG(PROTOC, protoc, protoc)
 AC_CHECK_PROG(PROTOC_C, protoc-c, protoc-c)
+AC_CHECK_PROG(LEMON, lemon, lemon)
 AM_PROG_CC_C_O
 PKG_PROG_PKG_CONFIG
 if test -n "$PKG_CONFIG"; then
