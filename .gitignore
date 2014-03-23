@@ -39,3 +39,4 @@ protobuf-c-text/lexer.c
 protobuf-c-text/parser.c
 protobuf-c-text/parser.h
 protobuf-c-text/parser.out
+protobuf-c-text/lexer.re.c
