@@ -8,7 +8,7 @@ PROTOBUF_CXX_TEST_HDRS = $(patsubst %.cc,%.h,$(PROTOBUF_CXX_TEST_SRCS) \
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
 TESTS = t/test_generation.sh t/test_intake.sh
-check_PROGRAMS = t/add_person t/dump_people t/list_people t/c-dump t/c-intake
+check_PROGRAMS = t/add_person t/list_people t/c-dump t/c-intake
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
 		$(PROTOBUF_CXX_TEST_SRCS) $(PROTOBUF_CXX_TEST_SRCS) \
@@ -59,11 +59,6 @@ t_add_person_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/add_person.cc
 t_add_person_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_add_person_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_add_person_LDFLAGS = -static
-
-t_dump_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/dump_people.cc
-t_dump_people_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_dump_people_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
-t_dump_people_LDFLAGS = -static
 
 t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.cc
 t_list_people_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@

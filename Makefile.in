@@ -37,8 +37,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = t/add_person$(EXEEXT) t/dump_people$(EXEEXT) \
-	t/list_people$(EXEEXT) t/c-dump$(EXEEXT) t/c-intake$(EXEEXT)
+check_PROGRAMS = t/add_person$(EXEEXT) t/list_people$(EXEEXT) \
+	t/c-dump$(EXEEXT) t/c-intake$(EXEEXT)
 DIST_COMMON = README $(am__configure_deps) \
 	$(libprotobuf_c_text_HEADERS) $(noinst_HEADERS) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
@@ -133,13 +133,6 @@ t_c_intake_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
 t_c_intake_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_c_intake_CFLAGS) \
 	$(CFLAGS) $(t_c_intake_LDFLAGS) $(LDFLAGS) -o $@
-am_t_dump_people_OBJECTS = $(am__objects_1) t/dump_people.$(OBJEXT)
-t_dump_people_OBJECTS = $(am_t_dump_people_OBJECTS)
-t_dump_people_DEPENDENCIES = $(am__DEPENDENCIES_1)
-t_dump_people_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(t_dump_people_LDFLAGS) $(LDFLAGS) \
-	-o $@
 am_t_list_people_OBJECTS = $(am__objects_1) t/list_people.$(OBJEXT)
 t_list_people_OBJECTS = $(am_t_list_people_OBJECTS)
 t_list_people_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -191,12 +184,10 @@ am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(t_add_person_SOURCES) $(t_c_dump_SOURCES) \
-	$(t_c_intake_SOURCES) $(t_dump_people_SOURCES) \
-	$(t_list_people_SOURCES)
+	$(t_c_intake_SOURCES) $(t_list_people_SOURCES)
 DIST_SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(t_add_person_SOURCES) $(t_c_dump_SOURCES) \
-	$(t_c_intake_SOURCES) $(t_dump_people_SOURCES) \
-	$(t_list_people_SOURCES)
+	$(t_c_intake_SOURCES) $(t_list_people_SOURCES)
 HEADERS = $(libprotobuf_c_text_HEADERS) $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -440,10 +431,6 @@ t_add_person_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/add_person.cc
 t_add_person_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_add_person_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_add_person_LDFLAGS = -static
-t_dump_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/dump_people.cc
-t_dump_people_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_dump_people_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
-t_dump_people_LDFLAGS = -static
 t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.cc
 t_list_people_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_list_people_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
@@ -643,10 +630,6 @@ t/t_c_intake-c-intake.$(OBJEXT): t/$(am__dirstamp) \
 t/c-intake$(EXEEXT): $(t_c_intake_OBJECTS) $(t_c_intake_DEPENDENCIES) $(EXTRA_t_c_intake_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/c-intake$(EXEEXT)
 	$(AM_V_CCLD)$(t_c_intake_LINK) $(t_c_intake_OBJECTS) $(t_c_intake_LDADD) $(LIBS)
-t/dump_people.$(OBJEXT): t/$(am__dirstamp) t/$(DEPDIR)/$(am__dirstamp)
-t/dump_people$(EXEEXT): $(t_dump_people_OBJECTS) $(t_dump_people_DEPENDENCIES) $(EXTRA_t_dump_people_DEPENDENCIES) t/$(am__dirstamp)
-	@rm -f t/dump_people$(EXEEXT)
-	$(AM_V_CXXLD)$(t_dump_people_LINK) $(t_dump_people_OBJECTS) $(t_dump_people_LDADD) $(LIBS)
 t/list_people.$(OBJEXT): t/$(am__dirstamp) t/$(DEPDIR)/$(am__dirstamp)
 t/list_people$(EXEEXT): $(t_list_people_OBJECTS) $(t_list_people_DEPENDENCIES) $(EXTRA_t_list_people_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/list_people$(EXEEXT)
@@ -662,7 +645,6 @@ mostlyclean-compile:
 	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.lo
 	-rm -f t/add_person.$(OBJEXT)
 	-rm -f t/addressbook.pb.$(OBJEXT)
-	-rm -f t/dump_people.$(OBJEXT)
 	-rm -f t/list_people.$(OBJEXT)
 	-rm -f t/t_c_dump-addressbook.pb-c.$(OBJEXT)
 	-rm -f t/t_c_dump-c-dump.$(OBJEXT)
@@ -677,7 +659,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-lexer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/add_person.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/addressbook.pb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/dump_people.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/list_people.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-addressbook.pb-c.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-c-dump.Po@am__quote@

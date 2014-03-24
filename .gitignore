@@ -30,7 +30,6 @@ t/moo.c.text
 # Test binaries.
 /t/add_person
 /t/c-dump
-/t/dump_people
 /t/list_people
 /t/c-intake
 
