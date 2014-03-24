@@ -102,7 +102,7 @@ AM_V_LEMON = $(AM_V_LEMON_@AM_V@)
 AM_V_LEMON_ = $(AM_V_LEMON_@AM_DEFAULT_V@)
 AM_V_LEMON_0 = @echo "  LEMON " $<;
 %.c %.h %.out: %.y
-	$(AM_V_LEMON)$(LEMON) $<
+	$(AM_V_LEMON)$(LEMON) -q $<
 
 # Define macros to have quiet re2c statements.
 AM_V_RE2C = $(AM_V_RE2C_@AM_V@)

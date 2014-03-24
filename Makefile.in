@@ -1312,7 +1312,7 @@ analyze: all
 %.pb.cc %.pb.h: %.proto
 	$(AM_V_PROTOC)$(PROTOC) --proto_path=$(dir $<) --cpp_out=$(dir $@) $<
 %.c %.h %.out: %.y
-	$(AM_V_LEMON)$(LEMON) $<
+	$(AM_V_LEMON)$(LEMON) -q $<
 %.c: %.re
 	$(AM_V_RE2C)$(RE2C) -s -o $(patsubst %.re,%.c,$<) $<
 
