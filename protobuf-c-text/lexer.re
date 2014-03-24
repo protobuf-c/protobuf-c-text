@@ -13,7 +13,7 @@
 #define CHUNK 4096
 
 int
-fill(Scanner *s, unsigned char **cursor)
+fill(Scanner *s)
 {
   char *buf;
   int len, oldlen, nmemb;
@@ -33,32 +33,28 @@ fill(Scanner *s, unsigned char **cursor)
       buf[len] = '\0';
     }
     /* Reset the world to use buf. */
-    s->cursor = &buf[*cursor - s->token];
-    *cursor = s->cursor;
+    s->cursor = &buf[s->cursor - s->token];
     s->limit = buf + len;
     s->token = buf;
     free(s->buffer);
     s->buffer = buf;
   }
 
-  return s->limit >= *cursor;
+  return s->limit >= s->cursor;
 }
 
-#define YYFILL(n) { if (!fill(s, &cursor)) return 0; }
-#define RETURN(t) { s->cursor = cursor; return t; }
+#define YYFILL(n) { if (!fill(s)) return 0; }
+#define RETURN(t) { return t; }
 
 int
 scan(Scanner *s)
 {
-  unsigned char *cursor;
-
-  cursor = s->cursor;
 token_start:
-  s->token = cursor;
+  s->token = s->cursor;
 
   /*!re2c
   re2c:define:YYCTYPE   = "unsigned char";
-  re2c:define:YYCURSOR  = cursor;
+  re2c:define:YYCURSOR  = s->cursor;
   re2c:define:YYLIMIT   = s->limit;
   re2c:define:YYMARKER  = s->buffer;
 
