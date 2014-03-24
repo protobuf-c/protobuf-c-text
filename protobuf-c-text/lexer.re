@@ -41,7 +41,7 @@ fill(Scanner *s, unsigned char **cursor)
     s->buffer = buf;
   }
 
-  return s->limit >= cursor;
+  return s->limit >= *cursor;
 }
 
 #define YYFILL(n) { if (!fill(s, &cursor)) return 0; }
