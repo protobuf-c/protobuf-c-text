@@ -15,7 +15,7 @@ BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
 		protobuf-c-text/lexer.c \
 		protobuf-c-text/parser.c \
 		protobuf-c-text/parser.h
-noinst_HEADERS = protobuf-c-text/lexer-global.h
+noinst_HEADERS = protobuf-c-text/lexer.h
 
 #dist_man3_MANS = man/protobuf-c-text.3
 
@@ -36,7 +36,6 @@ protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # 3. If interfaces have only been added since the last release, set
 #    release to 0 and increment release and age (c:r:a becomes c+1:0:a+1).
 protobuf_c_text_libprotobuf_c_text_la_LDFLAGS = $(COVERAGE_LDFLAGS) -version-info 0:0:0
-protobuf_c_text_libprotobuf_c_text_la_LIBADD = $(LEXLIB)
 
 # Headers for libraries.
 libprotobuf_c_textdir = $(includedir)/google/protobuf-c
@@ -105,13 +104,12 @@ AM_V_LEMON_0 = @echo "  LEMON " $<;
 %.c %.h %.out: %.y
 	$(AM_V_LEMON)$(LEMON) $<
 
-protobuf-c-text/lexer.c: protobuf-c-text/lexer.l
-	@if test "$(AM_V)" = 1; then \
-	  echo $(LEX) -o $(patsubst %.l,%.c,$<) $<; \
-	else \
-	  echo "  FLEX  " $<; \
-	fi;
-	@$(LEX) -o $(patsubst %.l,%.c,$<) $<
+# Define macros to have quiet re2c statements.
+AM_V_RE2C = $(AM_V_RE2C_@AM_V@)
+AM_V_RE2C_ = $(AM_V_RE2C_@AM_DEFAULT_V@)
+AM_V_RE2C_0 = @echo "  RE2C  " $<;
+%.c: %.re
+	$(AM_V_RE2C)$(RE2C) -s -o $(patsubst %.re,%.c,$<) $<
 
 include am/aminclude_coverage.am
 include am/aminclude_doxygen.am

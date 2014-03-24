@@ -5,43 +5,38 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <google/protobuf-c/protobuf-c.h>
-#include "lexer-global.h"
+#include "lexer.h"
 #include "parser.h"
 
-#define BUFS 1024
+static int
+text_format_parse(ProtobufCMessage *m, Scanner *s)
+{
+  int t;
 
+  while (t = scan(s)) {
+    printf("%d: %.*s\n", t, (int)(s->cursor - s->token), s->token);
+  }
+  if (s->token[0] != '\0')
+    printf("Syntax error. \"%s\"\n", s->token);
+  exit(0);
 
-typedef struct yy_buffer_state *YY_BUFFER_STATE;
-int             yylex(void);
-YY_BUFFER_STATE yy_scan_string(const char *);
-void            yy_delete_buffer(YY_BUFFER_STATE);
-
-
+  return 0;
+}
 
 int
 text_format_from_file(ProtobufCMessage *m, FILE *msg_file)
 {
-  int n;
-  int yv;
-  char buf[BUFS + 1];
+  Scanner scanner;
 
-  while ((n=read(fileno(msg_file), buf, BUFS )) >  0) {
-    buf[n]='\0';
-    yy_scan_string(buf);
-    while ((yv = yylex()) != 0) { 
-      printf(" yylex(): %d ", yv);
-      if (yv == BOOLEAN) {
-        printf("yylval.boolean = %s\n", yylval.boolean? "true": "false");
-      } else {
-        printf("yylval.string = \"%s\"\n", yylval.string);
-      }
-    }
-
-  }
-
+  scanner_init_file(&scanner, msg_file);
+  return text_format_parse(m, &scanner);
 }
 
 int
 text_format_from_string(ProtobufCMessage *m, char *msg)
 {
+  Scanner scanner;
+
+  scanner_init_string(&scanner, msg);
+  return text_format_parse(m, &scanner);
 }

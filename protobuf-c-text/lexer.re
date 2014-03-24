@@ -4,28 +4,47 @@
  * Compile with: re2c -s -o protobuf-c-text/lexer.re.c protobuf-c-text/lexer.re
  */
 
-#include <stdbool.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "lexer-global.h"
+#include "lexer.h"
 #include "parser.h"
 
-typedef struct _Scanner {
-  unsigned char *cursor;
-  unsigned char *buffer;
-  unsigned char *limit;
-  unsigned char *token;
-  bool boolean;
-  FILE *f;
-} Scanner;
+#define CHUNK 4096
 
 int
-fill(Scanner *s, unsigned char *cursor)
+fill(Scanner *s, unsigned char **cursor)
 {
+  char *buf;
+  int len, oldlen, nmemb;
+
+  if (s->token > s->limit) {
+    /* this shouldn't happen */
+    return 0;
+  }
+  if (s->f && !feof(s->f)) {
+    oldlen = s->limit - s->token;
+    buf = malloc(CHUNK + oldlen);
+    memcpy(buf, s->token, oldlen);
+    nmemb = fread(buf + oldlen, 1, CHUNK, s->f);
+    if (nmemb != CHUNK) {
+      /* Short read.  eof.  Append nul. */
+      len = oldlen + nmemb;
+      buf[len] = '\0';
+    }
+    /* Reset the world to use buf. */
+    s->cursor = &buf[*cursor - s->token];
+    *cursor = s->cursor;
+    s->limit = buf + len;
+    s->token = buf;
+    free(s->buffer);
+    s->buffer = buf;
+  }
+
   return s->limit >= cursor;
 }
 
-#define YYFILL(n) { if (!fill(s, cursor)) return 0; }
+#define YYFILL(n) { if (!fill(s, &cursor)) return 0; }
 #define RETURN(t) { s->cursor = cursor; return t; }
 
 int
@@ -64,19 +83,18 @@ token_start:
   */
 }
 
-int main() {
-  Scanner in;
-  int t;
+void
+scanner_init_file(Scanner *s, FILE *f)
+{
+  memset(s, 0, sizeof(Scanner));
+  s->f = f;
+}
 
-  in.buffer = "x { moo: true boo: 5 bob: \"moo cow\" }\n\"moo";
-  in.cursor = in.buffer;
-  in.limit = &in.buffer[strlen(in.buffer)];
-  while (t = scan(&in)) {
-    printf("%d: %.*s\n", t, (int)(in.cursor - in.token), in.token);
-  }
-  if (in.token[0] != '\0')
-    printf("Syntax error. \"%s\"\n", in.token);
-  exit(0);
-
-  return 0;
+void
+scanner_init_string(Scanner *s, char *buf)
+{
+  memset(s, 0, sizeof(Scanner));
+  s->buffer = buf;
+  s->cursor = buf;
+  s->limit = &buf[strlen(buf)];
 }
