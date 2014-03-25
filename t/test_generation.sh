@@ -1,8 +1,7 @@
 #!/bin/bash
 
-test -f t/moo.ab || ./t/add_person t/moo.ab
-./t/c-dump t/moo.ab > t/moo.c.text
+./t/c-dump t/addressbook.data > t/addressbook.c.text
 protoc-c --decode=tutorial.AddressBook t/addressbook.proto \
-  < t/moo.ab > t/moo.c++.text
+  < t/addressbook.data > t/addressbook.c++.text
 
-cmp t/moo.c.text t/moo.c++.text
+cmp t/addressbook.c.text t/addressbook.c++.text

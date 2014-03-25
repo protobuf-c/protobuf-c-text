@@ -2,16 +2,12 @@ ACLOCAL_AMFLAGS = -I m4 --install
 PROTOBUF_C_TEST_SRCS = t/addressbook.pb-c.c
 PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 				          $(PROTOBUF_C_TEST_SRCS))
-PROTOBUF_CXX_TEST_SRCS = t/addressbook.pb.cc
-PROTOBUF_CXX_TEST_HDRS = $(patsubst %.cc,%.h,$(PROTOBUF_CXX_TEST_SRCS) \
-				            $(PROTOBUF_CXX_TEST_SRCS))
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
 TESTS = t/test_generation.sh t/test_intake.sh
-check_PROGRAMS = t/add_person t/list_people t/c-dump t/c-intake
+check_PROGRAMS = t/c-dump t/c-intake
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
-		$(PROTOBUF_CXX_TEST_SRCS) $(PROTOBUF_CXX_TEST_SRCS) \
 		protobuf-c-text/lexer.c \
 		protobuf-c-text/parser.c \
 		protobuf-c-text/parser.h
@@ -55,16 +51,6 @@ analyze: all
 	done
 
 # Test programs.
-t_add_person_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/add_person.cc
-t_add_person_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_add_person_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
-t_add_person_LDFLAGS = -static
-
-t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.cc
-t_list_people_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_list_people_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
-t_list_people_LDFLAGS = -static
-
 t_c_dump_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-dump.c
 t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_c_dump_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
@@ -75,6 +61,8 @@ t_c_intake_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_c_intake_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_intake_LDFLAGS = -static
 
+EXTRA_DIST = t/addressbook.proto t/addressbook.data
+
 # Define macros to have quiet protoc-c statements.
 AM_V_PROTOC_C = $(AM_V_PROTOC_C_@AM_V@)
 AM_V_PROTOC_C_ = $(AM_V_PROTOC_C_@AM_DEFAULT_V@)
@@ -84,13 +72,6 @@ AM_V_PROTOC_C_0 = @echo "  PBC_C " $<;
 	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.c,$<)
 	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.h,$<)
 	@rm -f $(patsubst %.proto,%.pb-c.c~,$<) $(patsubst %.proto,%.pb-c.h~,$<)
-
-# Define macros to have quiet protoc statements.
-AM_V_PROTOC = $(AM_V_PROTOC_@AM_V@)
-AM_V_PROTOC_ = $(AM_V_PROTOC_@AM_DEFAULT_V@)
-AM_V_PROTOC_0 = @echo "  PBC   " $<;
-%.pb.cc %.pb.h: %.proto
-	$(AM_V_PROTOC)$(PROTOC) --proto_path=$(dir $<) --cpp_out=$(dir $@) $<
 
 # Define macros to have quiet lemon statements.
 AM_V_LEMON = $(AM_V_LEMON_@AM_V@)
@@ -127,4 +108,5 @@ clean-local-build-dirs:
 MOSTLYCLEANFILES = $(DX_CLEANFILES) \
 		   $(BUILT_SOURCES) \
 		   $(PROTOBUF_C_TEST_HDRS) \
-		   $(PROTOBUF_CXX_TEST_HDRS)
+		   t/addressbook.c.text \
+		   t/addressbook.c++.text

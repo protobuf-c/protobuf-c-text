@@ -23,9 +23,8 @@ libtool
 *.la
 
 # Address book data files.
-*.ab
-t/moo.c++.text
-t/moo.c.text
+t/addressbook.c++.text
+t/addressbook.c.text
 
 # Test binaries.
 /t/add_person

@@ -37,8 +37,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = t/add_person$(EXEEXT) t/list_people$(EXEEXT) \
-	t/c-dump$(EXEEXT) t/c-intake$(EXEEXT)
+check_PROGRAMS = t/c-dump$(EXEEXT) t/c-intake$(EXEEXT)
 DIST_COMMON = README $(am__configure_deps) \
 	$(libprotobuf_c_text_HEADERS) $(noinst_HEADERS) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
@@ -108,24 +107,17 @@ protobuf_c_text_libprotobuf_c_text_la_LINK = $(LIBTOOL) $(AM_V_lt) \
 	$(CCLD) $(protobuf_c_text_libprotobuf_c_text_la_CFLAGS) \
 	$(CFLAGS) $(protobuf_c_text_libprotobuf_c_text_la_LDFLAGS) \
 	$(LDFLAGS) -o $@
-am__objects_1 = t/addressbook.pb.$(OBJEXT)
-am_t_add_person_OBJECTS = $(am__objects_1) t/add_person.$(OBJEXT)
-t_add_person_OBJECTS = $(am_t_add_person_OBJECTS)
-am__DEPENDENCIES_1 =
-t_add_person_DEPENDENCIES = $(am__DEPENDENCIES_1)
-t_add_person_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(t_add_person_LDFLAGS) $(LDFLAGS) -o $@
-am__objects_2 = t/t_c_dump-addressbook.pb-c.$(OBJEXT)
-am_t_c_dump_OBJECTS = $(am__objects_2) t/t_c_dump-c-dump.$(OBJEXT)
+am__objects_1 = t/t_c_dump-addressbook.pb-c.$(OBJEXT)
+am_t_c_dump_OBJECTS = $(am__objects_1) t/t_c_dump-c-dump.$(OBJEXT)
 t_c_dump_OBJECTS = $(am_t_c_dump_OBJECTS)
+am__DEPENDENCIES_1 =
 t_c_dump_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
 	$(am__DEPENDENCIES_1)
 t_c_dump_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_c_dump_CFLAGS) \
 	$(CFLAGS) $(t_c_dump_LDFLAGS) $(LDFLAGS) -o $@
-am__objects_3 = t/t_c_intake-addressbook.pb-c.$(OBJEXT)
-am_t_c_intake_OBJECTS = $(am__objects_3) \
+am__objects_2 = t/t_c_intake-addressbook.pb-c.$(OBJEXT)
+am_t_c_intake_OBJECTS = $(am__objects_2) \
 	t/t_c_intake-c-intake.$(OBJEXT)
 t_c_intake_OBJECTS = $(am_t_c_intake_OBJECTS)
 t_c_intake_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
@@ -133,13 +125,6 @@ t_c_intake_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
 t_c_intake_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_c_intake_CFLAGS) \
 	$(CFLAGS) $(t_c_intake_LDFLAGS) $(LDFLAGS) -o $@
-am_t_list_people_OBJECTS = $(am__objects_1) t/list_people.$(OBJEXT)
-t_list_people_OBJECTS = $(am_t_list_people_OBJECTS)
-t_list_people_DEPENDENCIES = $(am__DEPENDENCIES_1)
-t_list_people_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(t_list_people_LDFLAGS) $(LDFLAGS) \
-	-o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/build-aux
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
@@ -163,31 +148,13 @@ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD  " $@;
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CXXFLAGS) $(CXXFLAGS)
-AM_V_CXX = $(am__v_CXX_@AM_V@)
-am__v_CXX_ = $(am__v_CXX_@AM_DEFAULT_V@)
-am__v_CXX_0 = @echo "  CXX   " $@;
-CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
-am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
-am__v_CXXLD_0 = @echo "  CXXLD " $@;
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
-	$(t_add_person_SOURCES) $(t_c_dump_SOURCES) \
-	$(t_c_intake_SOURCES) $(t_list_people_SOURCES)
+	$(t_c_dump_SOURCES) $(t_c_intake_SOURCES)
 DIST_SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
-	$(t_add_person_SOURCES) $(t_c_dump_SOURCES) \
-	$(t_c_intake_SOURCES) $(t_list_people_SOURCES)
+	$(t_c_dump_SOURCES) $(t_c_intake_SOURCES)
 HEADERS = $(libprotobuf_c_text_HEADERS) $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -319,7 +286,6 @@ PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PROTOBUF_CFLAGS = @PROTOBUF_CFLAGS@
 PROTOBUF_LIBS = @PROTOBUF_LIBS@
-PROTOC = @PROTOC@
 PROTOC_C = @PROTOC_C@
 RANLIB = @RANLIB@
 RE2C = @RE2C@
@@ -388,15 +354,10 @@ PROTOBUF_C_TEST_SRCS = t/addressbook.pb-c.c
 PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 				          $(PROTOBUF_C_TEST_SRCS))
 
-PROTOBUF_CXX_TEST_SRCS = t/addressbook.pb.cc
-PROTOBUF_CXX_TEST_HDRS = $(patsubst %.cc,%.h,$(PROTOBUF_CXX_TEST_SRCS) \
-				            $(PROTOBUF_CXX_TEST_SRCS))
-
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
 TESTS = t/test_generation.sh t/test_intake.sh
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
-		$(PROTOBUF_CXX_TEST_SRCS) $(PROTOBUF_CXX_TEST_SRCS) \
 		protobuf-c-text/lexer.c \
 		protobuf-c-text/parser.c \
 		protobuf-c-text/parser.h
@@ -427,14 +388,6 @@ libprotobuf_c_text_HEADERS = protobuf-c-text/protobuf-c-text.h
 analyze_srcs = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES)
 
 # Test programs.
-t_add_person_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/add_person.cc
-t_add_person_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_add_person_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
-t_add_person_LDFLAGS = -static
-t_list_people_SOURCES = $(PROTOBUF_CXX_TEST_SRCS) t/list_people.cc
-t_list_people_CFLAGS = @PROTOBUF_CFLAGS@ $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_list_people_LDADD = @PROTOBUF_LIBS@ $(COVERAGE_LDFLAGS) @CHECK_LIBS@
-t_list_people_LDFLAGS = -static
 t_c_dump_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-dump.c
 t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_c_dump_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
@@ -443,16 +396,12 @@ t_c_intake_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-intake.c
 t_c_intake_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_c_intake_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_intake_LDFLAGS = -static
+EXTRA_DIST = t/addressbook.proto t/addressbook.data
 
 # Define macros to have quiet protoc-c statements.
 AM_V_PROTOC_C = $(AM_V_PROTOC_C_@AM_V@)
 AM_V_PROTOC_C_ = $(AM_V_PROTOC_C_@AM_DEFAULT_V@)
 AM_V_PROTOC_C_0 = @echo "  PBC_C " $<;
-
-# Define macros to have quiet protoc statements.
-AM_V_PROTOC = $(AM_V_PROTOC_@AM_V@)
-AM_V_PROTOC_ = $(AM_V_PROTOC_@AM_DEFAULT_V@)
-AM_V_PROTOC_0 = @echo "  PBC   " $<;
 
 # Define macros to have quiet lemon statements.
 AM_V_LEMON = $(AM_V_LEMON_@AM_V@)
@@ -490,13 +439,14 @@ AM_V_RE2C_0 = @echo "  RE2C  " $<;
 MOSTLYCLEANFILES = $(DX_CLEANFILES) \
 		   $(BUILT_SOURCES) \
 		   $(PROTOBUF_C_TEST_HDRS) \
-		   $(PROTOBUF_CXX_TEST_HDRS)
+		   t/addressbook.c.text \
+		   t/addressbook.c++.text
 
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .cc .lo .o .obj
+.SUFFIXES: .c .lo .o .obj
 am--refresh: Makefile
 	@:
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/am/aminclude_coverage.am $(srcdir)/am/aminclude_doxygen.am $(am__configure_deps)
@@ -610,12 +560,6 @@ t/$(am__dirstamp):
 t/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) t/$(DEPDIR)
 	@: > t/$(DEPDIR)/$(am__dirstamp)
-t/addressbook.pb.$(OBJEXT): t/$(am__dirstamp) \
-	t/$(DEPDIR)/$(am__dirstamp)
-t/add_person.$(OBJEXT): t/$(am__dirstamp) t/$(DEPDIR)/$(am__dirstamp)
-t/add_person$(EXEEXT): $(t_add_person_OBJECTS) $(t_add_person_DEPENDENCIES) $(EXTRA_t_add_person_DEPENDENCIES) t/$(am__dirstamp)
-	@rm -f t/add_person$(EXEEXT)
-	$(AM_V_CXXLD)$(t_add_person_LINK) $(t_add_person_OBJECTS) $(t_add_person_LDADD) $(LIBS)
 t/t_c_dump-addressbook.pb-c.$(OBJEXT): t/$(am__dirstamp) \
 	t/$(DEPDIR)/$(am__dirstamp)
 t/t_c_dump-c-dump.$(OBJEXT): t/$(am__dirstamp) \
@@ -630,10 +574,6 @@ t/t_c_intake-c-intake.$(OBJEXT): t/$(am__dirstamp) \
 t/c-intake$(EXEEXT): $(t_c_intake_OBJECTS) $(t_c_intake_DEPENDENCIES) $(EXTRA_t_c_intake_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/c-intake$(EXEEXT)
 	$(AM_V_CCLD)$(t_c_intake_LINK) $(t_c_intake_OBJECTS) $(t_c_intake_LDADD) $(LIBS)
-t/list_people.$(OBJEXT): t/$(am__dirstamp) t/$(DEPDIR)/$(am__dirstamp)
-t/list_people$(EXEEXT): $(t_list_people_OBJECTS) $(t_list_people_DEPENDENCIES) $(EXTRA_t_list_people_DEPENDENCIES) t/$(am__dirstamp)
-	@rm -f t/list_people$(EXEEXT)
-	$(AM_V_CXXLD)$(t_list_people_LINK) $(t_list_people_OBJECTS) $(t_list_people_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -643,9 +583,6 @@ mostlyclean-compile:
 	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-intake.lo
 	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.$(OBJEXT)
 	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.lo
-	-rm -f t/add_person.$(OBJEXT)
-	-rm -f t/addressbook.pb.$(OBJEXT)
-	-rm -f t/list_people.$(OBJEXT)
 	-rm -f t/t_c_dump-addressbook.pb-c.$(OBJEXT)
 	-rm -f t/t_c_dump-c-dump.$(OBJEXT)
 	-rm -f t/t_c_intake-addressbook.pb-c.$(OBJEXT)
@@ -657,9 +594,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-generate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-intake.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-lexer.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/add_person.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/addressbook.pb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/list_people.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-addressbook.pb-c.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-c-dump.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_intake-addressbook.pb-c.Po@am__quote@
@@ -765,30 +699,6 @@ t/t_c_intake-c-intake.obj: t/c-intake.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/c-intake.c' object='t/t_c_intake-c-intake.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_intake_CFLAGS) $(CFLAGS) -c -o t/t_c_intake-c-intake.obj `if test -f 't/c-intake.c'; then $(CYGPATH_W) 't/c-intake.c'; else $(CYGPATH_W) '$(srcdir)/t/c-intake.c'; fi`
-
-.cc.o:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
-@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ $<
-
-.cc.obj:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
-@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.cc.lo:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
-@am__fastdepCXX_TRUE@	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
-@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1290,8 +1200,6 @@ analyze: all
 	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.c,$<)
 	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.h,$<)
 	@rm -f $(patsubst %.proto,%.pb-c.c~,$<) $(patsubst %.proto,%.pb-c.h~,$<)
-%.pb.cc %.pb.h: %.proto
-	$(AM_V_PROTOC)$(PROTOC) --proto_path=$(dir $<) --cpp_out=$(dir $@) $<
 %.c %.h %.out: %.y
 	$(AM_V_LEMON)$(LEMON) -q $<
 %.c: %.re

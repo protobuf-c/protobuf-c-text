@@ -23,7 +23,6 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
-AC_CHECK_PROG(PROTOC, protoc, protoc)
 AC_CHECK_PROG(PROTOC_C, protoc-c, protoc-c)
 AC_CHECK_PROG(LEMON, lemon, lemon)
 AC_CHECK_PROG(RE2C, re2c, re2c)
@@ -95,7 +94,6 @@ AC_MSG_RESULT([
         LDFLAGS      : ${LDFLAGS}
         LIBS         : ${LIBS}
         PROTOC_C     : ${PROTOC_C}
-        PROTOC       : ${PROTOC}
         LEMON        : ${LEMON}
         RE2C         : ${RE2C}
         doxygen-doc  : ${have_doxygen}
