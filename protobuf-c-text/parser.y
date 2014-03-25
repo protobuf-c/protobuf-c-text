@@ -1,8 +1,8 @@
-%token_type {int}
-
 %include {
-/* #include ".h" */
+#include "lexer.h"
 }
+
+%token_type {int}
 
 %syntax_error {
   printf("Syntax error!\n");
