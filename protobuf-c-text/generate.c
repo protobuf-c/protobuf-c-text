@@ -44,6 +44,65 @@ rs_append(ReturnString *rs, int guess, const char *format, ...)
   rs->pos += added;
 }
 
+static char *
+escape_pbbd(char *src, int len)
+{
+  int i, escapes = 0, dst_len = 0;
+  unsigned char *dst;
+
+  for (i = 0; i < len; i++) {
+    if (!isprint(src[i])) {
+      escapes++;
+    }
+  }
+  dst = malloc((escapes * 4) + ((len - escapes) * 2) + 1);
+  if (!dst) {
+    return NULL;
+  }
+
+  for (i = 0; i < len; i++) {
+    switch (src[i]) {
+      /* Special cases. */
+      case '\'':
+        dst[dst_len++] = '\\';
+        dst[dst_len++] = '\'';
+        break;
+      case '\"':
+        dst[dst_len++] = '\\';
+        dst[dst_len++] = '\"';
+        break;
+      case '\\':
+        dst[dst_len++] = '\\';
+        dst[dst_len++] = '\\';
+        break;
+      case '\n':
+        dst[dst_len++] = '\\';
+        dst[dst_len++] = 'n';
+        break;
+      case '\r':
+        dst[dst_len++] = '\\';
+        dst[dst_len++] = 'r';
+        break;
+      case '\t':
+        dst[dst_len++] = '\\';
+        dst[dst_len++] = 't';
+        break;
+
+      /* Escape with octal if !isprint. */
+      default:
+        if (!isprint(src[i])) {
+          dst_len += sprintf(dst + dst_len, "\\%03o", src[i]);
+        } else {
+          dst[dst_len++] = src[i];
+        }
+        break;
+    }
+  }
+  dst[dst_len] = '\0';
+
+  return dst;
+}
+
 static void
 text_format_to_string_int(ReturnString *rs,
     int level,
@@ -222,39 +281,46 @@ text_format_to_string_int(ReturnString *rs,
       case PROTOBUF_C_TYPE_STRING:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            rs_append(rs, level + strlen(f[i].name)
-                  + strlen(STRUCT_MEMBER(char **, m, f[i].offset)[j]) + 10,
-                "%*s%s: \"%s\"\n",
-                level, "", f[i].name,
-                STRUCT_MEMBER(char **, m, f[i].offset)[j]);
+            unsigned char *escaped;
+
+            escaped = escape_pbbd(
+                STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j],
+                strlen(STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j]));
+            rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
+                "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
+            free(escaped);
           }
         } else {
-          rs_append(rs, level + strlen(f[i].name)
-                + strlen(STRUCT_MEMBER(char *, m, f[i].offset)) + 10,
-              "%*s%s: \"%s\"\n",
-              level, "", f[i].name,
-              STRUCT_MEMBER(char *, m, f[i].offset));
+          unsigned char *escaped;
+
+          escaped = escape_pbbd(STRUCT_MEMBER(unsigned char *, m, f[i].offset),
+              strlen(STRUCT_MEMBER(unsigned char *, m, f[i].offset)));
+          rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
+              "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
+          free(escaped);
         }
         break;
       case PROTOBUF_C_TYPE_BYTES:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
-            rs_append(rs, level + strlen(f[i].name)
-                  + (int)STRUCT_MEMBER(ProtobufCBinaryData *, m,
-                                       f[i].offset)[j].len + 10,
-                "%*s%s: \"%.*s\"\n",
-                level, "", f[i].name,
-                (int)STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].len,
-                STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].data);
+            unsigned char *escaped;
+
+            escaped = escape_pbbd(
+                STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].data,
+                STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].len);
+            rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
+                "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
+            free(escaped);
           }
         } else {
-          rs_append(rs, level + strlen(f[i].name)
-                + (int)STRUCT_MEMBER(ProtobufCBinaryData, m,
-                                     f[i].offset).len + 10,
-              "%*s%s: \"%.*s\"\n",
-              level, "", f[i].name,
-              (int)STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).len,
-              STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).data);
+          unsigned char *escaped;
+
+          escaped = escape_pbbd(
+              STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).data,
+              STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).len);
+          rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
+              "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
+          free(escaped);
         }
         break;
 
