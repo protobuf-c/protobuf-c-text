@@ -45,7 +45,7 @@ rs_append(ReturnString *rs, int guess, const char *format, ...)
 }
 
 static char *
-escape_pbbd(char *src, int len)
+esc_str(char *src, int len)
 {
   int i, escapes = 0, dst_len = 0;
   unsigned char *dst;
@@ -283,7 +283,7 @@ text_format_to_string_int(ReturnString *rs,
           for (j = 0; quantifier_offset; j++) {
             unsigned char *escaped;
 
-            escaped = escape_pbbd(
+            escaped = esc_str(
                 STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j],
                 strlen(STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j]));
             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
@@ -293,7 +293,7 @@ text_format_to_string_int(ReturnString *rs,
         } else {
           unsigned char *escaped;
 
-          escaped = escape_pbbd(STRUCT_MEMBER(unsigned char *, m, f[i].offset),
+          escaped = esc_str(STRUCT_MEMBER(unsigned char *, m, f[i].offset),
               strlen(STRUCT_MEMBER(unsigned char *, m, f[i].offset)));
           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
               "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
@@ -305,7 +305,7 @@ text_format_to_string_int(ReturnString *rs,
           for (j = 0; quantifier_offset; j++) {
             unsigned char *escaped;
 
-            escaped = escape_pbbd(
+            escaped = esc_str(
                 STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].data,
                 STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].len);
             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
@@ -315,7 +315,7 @@ text_format_to_string_int(ReturnString *rs,
         } else {
           unsigned char *escaped;
 
-          escaped = escape_pbbd(
+          escaped = esc_str(
               STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).data,
               STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).len);
           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
