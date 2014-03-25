@@ -10,9 +10,77 @@
 #include "lexer.h"
 #include "parser.h"
 
+static ProtobufCBinaryData *
+unesc_str(unsigned char *src)
+{
+  ProtobufCBinaryData *dst_pbbd;
+  unsigned char *dst;
+  int i = 0, dst_len = 0;
+  unsigned char oct[4];
+
+  dst_pbbd = malloc(sizeof(ProtobufCBinaryData));
+  dst = malloc(strlen(src) + 1);
+  if (!dst_pbbd || !dst) {
+    goto unesc_str_error;
+  }
+  oct[3] = '\0';
+
+  while (src[i]) {
+    if (src[i] != '\\') {
+      dst[dst_len++] = src[i++];
+    } else {
+      i++;
+      switch (src[i]) {
+        case '0':
+          if ((src[i+1] >= '0' && src[i+1] <= '7')
+              && (src[i+2] >= '0' && src[i+2] <= '7')) {
+            memcpy(oct, src + i, 3);
+            printf("x: '%s'\n", oct);
+            dst[dst_len++] = (unsigned char)strtoul(oct, NULL, 8);
+            i += 2;  /* Gets incremented again down below. */
+          } else {
+            goto unesc_str_error;
+          }
+          break;
+        case '\'':
+          dst[dst_len++] = '\'';
+          break;
+        case '\"':
+          dst[dst_len++] = '\"';
+          break;
+        case '\\':
+          dst[dst_len++] = '\\';
+          break;
+        case 'n':
+          dst[dst_len++] = '\n';
+          break;
+        case 'r':
+          dst[dst_len++] = '\r';
+          break;
+        case 't':
+          dst[dst_len++] = '\t';
+          break;
+        default:
+          goto unesc_str_error;
+          break;
+      }
+      i++;
+    }
+  }
+
+  dst_pbbd->data = dst;
+  dst_pbbd->len = dst_len;
+  return dst_pbbd;
+
+unesc_str_error:
+  free(dst);
+  free(dst_pbbd);
+  return NULL;
+}
+
 #define CHUNK 4096
 
-int
+static int
 fill(Scanner *s)
 {
   char *buf;
