@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <google/protobuf-c/protobuf-c.h>
 #include "lexer.h"
 #include "parser.h"
 
