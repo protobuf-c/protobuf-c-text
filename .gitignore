@@ -22,6 +22,12 @@ libtool
 *.o
 *.la
 
+# Code coverage files.
+/coverage.info
+/htmlcov/
+*.gcda
+*.gcno
+
 # Address book data files.
 t/addressbook.c++.text
 t/addressbook.c.text
