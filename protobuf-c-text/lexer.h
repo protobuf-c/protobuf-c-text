@@ -2,13 +2,19 @@
 #define LEXER_H
 
 #include <stdbool.h>
+#include <google/protobuf-c/protobuf-c.h>
 
 typedef struct _Scanner {
   unsigned char *cursor;
   unsigned char *buffer;
   unsigned char *limit;
   unsigned char *token;
-  bool boolean;
+  union {
+    char *number;
+    char *bareword;
+    ProtobufCBinaryData *qs;
+    bool boolean;
+  };
   FILE *f;
 } Scanner;
 

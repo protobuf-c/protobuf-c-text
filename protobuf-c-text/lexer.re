@@ -12,7 +12,7 @@
 #include "parser.h"
 
 static ProtobufCBinaryData *
-unesc_str(unsigned char *src)
+unesc_str(unsigned char *src, int len)
 {
   ProtobufCBinaryData *dst_pbbd;
   unsigned char *dst;
@@ -20,26 +20,31 @@ unesc_str(unsigned char *src)
   unsigned char oct[4];
 
   dst_pbbd = malloc(sizeof(ProtobufCBinaryData));
-  dst = malloc(strlen(src) + 1);
+  dst = malloc(len + 1);
   if (!dst_pbbd || !dst) {
     goto unesc_str_error;
   }
   oct[3] = '\0';
 
-  while (src[i]) {
+  while (i < len) {
     if (src[i] != '\\') {
       dst[dst_len++] = src[i++];
     } else {
       i++;
+      if (i == len) {
+        /* Fell off the end of the string after \. */
+        goto unesc_str_error;
+      }
       switch (src[i]) {
         case '0':
-          if ((src[i+1] >= '0' && src[i+1] <= '7')
+          if (i + 2 < len
+              && (src[i+1] >= '0' && src[i+1] <= '7')
               && (src[i+2] >= '0' && src[i+2] <= '7')) {
             memcpy(oct, src + i, 3);
-            printf("x: '%s'\n", oct);
             dst[dst_len++] = (unsigned char)strtoul(oct, NULL, 8);
             i += 2;  /* Gets incremented again down below. */
           } else {
+            /* Decoding a \0 failed or was cut off.. */
             goto unesc_str_error;
           }
           break;
@@ -113,7 +118,6 @@ fill(Scanner *s)
 }
 
 #define YYFILL(n) { if (!fill(s)) return 0; }
-#define RETURN(t) { return t; }
 
 int
 scan(Scanner *s)
@@ -135,14 +139,27 @@ token_start:
   QS = ["] (EQ|[^"]|NL)* ["];
   WS = [ \t\n];
 
-  I | F           { RETURN(NUMBER); }
-  "true"          { s->boolean=true; RETURN(BOOLEAN); }
-  "false"         { s->boolean=false; RETURN(BOOLEAN); }
-  BW              { RETURN(BAREWORD); }
-  QS              { RETURN(QUOTED); }
-  "{"             { RETURN(OBRACE); }
-  "}"             { RETURN(CBRACE); }
-  ":"             { RETURN(COLON); }
+  I | F           {
+                    s->number = malloc((s->cursor - s->token) + 1);
+                    memcpy(s->number, s->token, s->cursor - s->token);
+                    s->number[s->cursor - s->token] = '\0';
+                    return NUMBER;
+                  }
+  "true"          { s->boolean=true; return BOOLEAN; }
+  "false"         { s->boolean=false; return BOOLEAN; }
+  BW              {
+                    s->bareword = malloc((s->cursor - s->token) + 1);
+                    memcpy(s->bareword, s->token, s->cursor - s->token);
+                    s->bareword[s->cursor - s->token] = '\0';
+                    return BAREWORD;
+                  }
+  QS              {
+                    s->qs = unesc_str(s->token + 1, s->cursor - s->token - 2);
+                    return QUOTED;
+                  }
+  "{"             { return OBRACE; }
+  "}"             { return CBRACE; }
+  ":"             { return COLON; }
   WS              { goto token_start; }
   "\000"          { return 0; }
   */
