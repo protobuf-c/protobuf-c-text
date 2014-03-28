@@ -1,30 +1,54 @@
 %include {
+#include <stdlib.h>
+#include <google/protobuf-c/protobuf-c.h>
 #include "lexer.h"
+#include "parser.h"
 }
 
-%token_type {int}
+%token_type {Token *}
+%token_destructor {
+  if ($$) {
+    switch ($$->token_type) {
+      case NUMBER:
+        free($$->number);
+        break;
+      case BAREWORD:
+        free($$->bareword);
+        break;
+      case QUOTED:
+        free($$->qs->data);
+        free($$->qs);
+        break;
+    }
+    free($$);
+  }
+}
 
 %syntax_error {
   printf("Syntax error!\n");
 }
 
-state ::= message.
-message ::= BAREWORD OBRACE statements CBRACE. {
-        printf("Got a message.\n");
+state ::= messages.
+messages ::= messages message.
+messages ::= .
+message ::= BAREWORD(A) OBRACE statements CBRACE. {
+        printf("Got a message for (%s).\n", A->bareword);
         }
 
-statements ::= BAREWORD COLON BAREWORD. {
+statement ::= BAREWORD COLON BAREWORD. {
            printf("Got a enum statement.\n");
            }
-statements ::= BAREWORD COLON QUOTED. {
+statement ::= BAREWORD COLON QUOTED. {
            printf("Got a string statement.\n");
            }
-statements ::= BAREWORD COLON NUMBER. {
+statement ::= BAREWORD COLON NUMBER. {
            printf("Got a number statement.\n");
            }
-statements ::= BAREWORD COLON BOOLEAN. {
+statement ::= BAREWORD COLON BOOLEAN. {
            printf("Got a boolean statement.\n");
            }
-statements ::= BAREWORD COLON message. {
+statement ::= message. {
            printf("Got a message statement.\n");
            }
+statements ::= statements statement.
+statements ::= .

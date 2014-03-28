@@ -118,10 +118,15 @@ fill(Scanner *s)
 }
 
 #define YYFILL(n) { if (!fill(s)) return 0; }
+#define RETURN(tt) { (*t)->token_type = tt; return tt; }
 
 int
-scan(Scanner *s)
+scan(Scanner *s, Token **t)
 {
+  *t = malloc(sizeof(Token *));
+  if (!*t) {
+    return 0;
+  }
 token_start:
   s->token = s->cursor;
 
@@ -140,28 +145,29 @@ token_start:
   WS = [ \t\n];
 
   I | F           {
-                    s->number = malloc((s->cursor - s->token) + 1);
-                    memcpy(s->number, s->token, s->cursor - s->token);
-                    s->number[s->cursor - s->token] = '\0';
-                    return NUMBER;
+                    (*t)->number = malloc((s->cursor - s->token) + 1);
+                    memcpy((*t)->number, s->token, s->cursor - s->token);
+                    (*t)->number[s->cursor - s->token] = '\0';
+                    RETURN(NUMBER);
                   }
-  "true"          { s->boolean=true; return BOOLEAN; }
-  "false"         { s->boolean=false; return BOOLEAN; }
+  "true"          { (*t)->boolean=true; RETURN(BOOLEAN); }
+  "false"         { (*t)->boolean=false; RETURN(BOOLEAN); }
   BW              {
-                    s->bareword = malloc((s->cursor - s->token) + 1);
-                    memcpy(s->bareword, s->token, s->cursor - s->token);
-                    s->bareword[s->cursor - s->token] = '\0';
-                    return BAREWORD;
+                    (*t)->bareword = malloc((s->cursor - s->token) + 1);
+                    memcpy((*t)->bareword, s->token, s->cursor - s->token);
+                    (*t)->bareword[s->cursor - s->token] = '\0';
+                    RETURN(BAREWORD);
                   }
   QS              {
-                    s->qs = unesc_str(s->token + 1, s->cursor - s->token - 2);
-                    return QUOTED;
+                    (*t)->qs = unesc_str(s->token + 1,
+                                         s->cursor - s->token - 2);
+                    RETURN(QUOTED);
                   }
-  "{"             { return OBRACE; }
-  "}"             { return CBRACE; }
-  ":"             { return COLON; }
+  "{"             { (*t)->symbol = '{'; RETURN(OBRACE); }
+  "}"             { (*t)->symbol = '}'; RETURN(CBRACE); }
+  ":"             { (*t)->symbol = ':'; RETURN(COLON); }
   WS              { goto token_start; }
-  "\000"          { return 0; }
+  "\000"          { free(*t); *t = NULL; return 0; }
   */
 }
 

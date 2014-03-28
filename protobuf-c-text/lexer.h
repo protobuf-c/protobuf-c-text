@@ -4,22 +4,31 @@
 #include <stdbool.h>
 #include <google/protobuf-c/protobuf-c.h>
 
-typedef struct _Scanner {
-  unsigned char *cursor;
-  unsigned char *buffer;
-  unsigned char *limit;
-  unsigned char *token;
+typedef struct _Token {
+  int token_type;
   union {
     char *number;
     char *bareword;
     ProtobufCBinaryData *qs;
     bool boolean;
+    char symbol;
   };
+} Token;
+
+typedef struct _Scanner {
+  unsigned char *cursor;
+  unsigned char *buffer;
+  unsigned char *limit;
+  unsigned char *token;
   FILE *f;
 } Scanner;
 
 extern void scanner_init_file(Scanner *s, FILE *f);
 extern void scanner_init_string(Scanner *s, char *buf);
-extern int scan(Scanner *s);
+extern int scan(Scanner *s, Token **t);
+
+extern void *ParseAlloc(void *(*)(size_t));
+extern void Parse(void *, int, Token *);
+extern void ParseFree(void *, void (*)(void*));
 
 #endif /* LEXER_H */

@@ -97,6 +97,7 @@ protobuf_c_text_libprotobuf_c_text_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_protobuf_c_text_libprotobuf_c_text_la_OBJECTS = protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.lo \
 	protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.lo \
+	protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parser.lo \
 	protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-intake.lo
 protobuf_c_text_libprotobuf_c_text_la_OBJECTS =  \
 	$(am_protobuf_c_text_libprotobuf_c_text_la_OBJECTS)
@@ -369,6 +370,7 @@ noinst_HEADERS = protobuf-c-text/lexer.h
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
     protobuf-c-text/generate.c \
     protobuf-c-text/lexer.c \
+    protobuf-c-text/parser.c \
     protobuf-c-text/intake.c
 
 protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
@@ -541,6 +543,9 @@ protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.lo:  \
 protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.lo:  \
 	protobuf-c-text/$(am__dirstamp) \
 	protobuf-c-text/$(DEPDIR)/$(am__dirstamp)
+protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parser.lo:  \
+	protobuf-c-text/$(am__dirstamp) \
+	protobuf-c-text/$(DEPDIR)/$(am__dirstamp)
 protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-intake.lo:  \
 	protobuf-c-text/$(am__dirstamp) \
 	protobuf-c-text/$(DEPDIR)/$(am__dirstamp)
@@ -584,6 +589,8 @@ mostlyclean-compile:
 	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-intake.lo
 	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.$(OBJEXT)
 	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.lo
+	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parser.$(OBJEXT)
+	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parser.lo
 	-rm -f t/t_c_dump-addressbook.pb-c.$(OBJEXT)
 	-rm -f t/t_c_dump-c-dump.$(OBJEXT)
 	-rm -f t/t_c_intake-addressbook.pb-c.$(OBJEXT)
@@ -595,6 +602,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-generate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-intake.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-lexer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-parser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-addressbook.pb-c.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-c-dump.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_intake-addressbook.pb-c.Po@am__quote@
@@ -637,6 +645,13 @@ protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.lo: protobuf-c-text/
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='protobuf-c-text/lexer.c' object='protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(protobuf_c_text_libprotobuf_c_text_la_CFLAGS) $(CFLAGS) -c -o protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-lexer.lo `test -f 'protobuf-c-text/lexer.c' || echo '$(srcdir)/'`protobuf-c-text/lexer.c
+
+protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parser.lo: protobuf-c-text/parser.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(protobuf_c_text_libprotobuf_c_text_la_CFLAGS) $(CFLAGS) -MT protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parser.lo -MD -MP -MF protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-parser.Tpo -c -o protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parser.lo `test -f 'protobuf-c-text/parser.c' || echo '$(srcdir)/'`protobuf-c-text/parser.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-parser.Tpo protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-parser.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='protobuf-c-text/parser.c' object='protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parser.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(protobuf_c_text_libprotobuf_c_text_la_CFLAGS) $(CFLAGS) -c -o protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parser.lo `test -f 'protobuf-c-text/parser.c' || echo '$(srcdir)/'`protobuf-c-text/parser.c
 
 protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-intake.lo: protobuf-c-text/intake.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(protobuf_c_text_libprotobuf_c_text_la_CFLAGS) $(CFLAGS) -MT protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-intake.lo -MD -MP -MF protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-intake.Tpo -c -o protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-intake.lo `test -f 'protobuf-c-text/intake.c' || echo '$(srcdir)/'`protobuf-c-text/intake.c

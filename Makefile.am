@@ -22,6 +22,7 @@ valgrind: $(check_PROGRAMS)
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
     protobuf-c-text/generate.c \
     protobuf-c-text/lexer.c \
+    protobuf-c-text/parser.c \
     protobuf-c-text/intake.c
 protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # Version updating rules:

@@ -70,32 +70,38 @@ esc_str(char *src, int len)
 static int
 text_format_parse(ProtobufCMessage *m, Scanner *s)
 {
-  int t;
+  int token_type;
+  Token *t;
+  void *p;
 
-  while (t = scan(s)) {
-    switch (t) {
+  p = ParseAlloc(malloc);
+  while (token_type = scan(s, &t)) {
+    switch (token_type) {
       case NUMBER:
-        printf("NUMBER: %s\n", s->number);
+        printf("NUMBER: %s\n", t->number);
         break;
       case BOOLEAN:
-        printf("BOOLEAN: %s\n", s->boolean? "true": "false");
+        printf("BOOLEAN: %s\n", t->boolean? "true": "false");
         break;
       case BAREWORD:
-        printf("BAREWORD: %s\n", s->bareword);
+        printf("BAREWORD: %s\n", t->bareword);
         break;
       case QUOTED:
         printf("QUOTED: \"%s\"\n",
-            esc_str(s->qs->data, (int)s->qs->len)
+            esc_str(t->qs->data, (int)t->qs->len)
             );
         break;
       default:
-        printf("%d: %.*s\n", t, (int)(s->cursor - s->token), s->token);
+        printf("%d: %.*s\n", token_type,
+            (int)(s->cursor - s->token), s->token);
         break;
     }
+    Parse(p, token_type, t);
   }
+  Parse(p, 0, NULL);
   if (s->token[0] != '\0')
     printf("Syntax error. \"%s\"\n", s->token);
-  exit(0);
+  ParseFree(p, free);
 
   return 0;
 }
