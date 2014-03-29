@@ -8,6 +8,7 @@
 #include <google/protobuf-c/protobuf-c.h>
 #include "protobuf-c-text.h"
 #include "protobuf-c-util.h"
+#include "config.h"
 
 typedef struct _ReturnString {
   int allocated;

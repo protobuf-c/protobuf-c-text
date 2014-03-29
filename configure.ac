@@ -62,7 +62,7 @@ AC_CHECK_LIB([protobuf-c], [protobuf_c_message_get_packed_size],
 PKG_CHECK_MODULES([PROTOBUF], [protobuf >= 2.4.1])
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h inttypes.h limits.h stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h stdint.h stdlib.h string.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -78,8 +78,7 @@ AC_TYPE_UINT8_T
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
-AC_FUNC_MMAP
-AC_CHECK_FUNCS([gettimeofday memmove memset select strchr strtol])
+AC_CHECK_FUNCS([memset strtoull strtod])
 
 # Generate files.
 AC_CONFIG_FILES([Makefile])

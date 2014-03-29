@@ -1,9 +1,8 @@
 /*
  * vim: set filetype=c:
  *
- * Compile with: re2c -s -o protobuf-c-text/lexer.re.c protobuf-c-text/lexer.re
+ * Compile with: re2c -s -o protobuf-c-text/parse.c protobuf-c-text/parse.re
  */
-
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -18,6 +17,7 @@
 #include <google/protobuf-c/protobuf-c.h>
 #include "protobuf-c-text.h"
 #include "protobuf-c-util.h"
+#include "config.h"
 
 typedef enum {
   TOK_EOF,
