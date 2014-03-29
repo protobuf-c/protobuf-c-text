@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -348,6 +349,10 @@ state_open(State *state, Token *t)
       return STATE_OPEN;
       break;
     case TOK_EOF:
+      if (state->current_msg > 0) {
+        return state_error(state, t, "Missing '%d' closing braces.",
+            state->current_msg);
+      }
       return STATE_DONE;
       break;
     default:
@@ -369,7 +374,11 @@ state_assignment(State *state, Token *t)
   msg = state->msgs[state->current_msg];
   switch (t->id) {
     case TOK_COLON:
-      printf("Assign scalar.\n");
+      if (state->field->type == PROTOBUF_C_TYPE_MESSAGE) {
+        return state_error(state, t,
+            "Expected a '{', got a ':' - '%s' is a message type field.",
+            state->field->name);
+      }
       return STATE_VALUE;
       break;
     case TOK_OBRACE:
@@ -454,12 +463,26 @@ state_value(State *state, Token *t)
 {
   ProtobufCMessage *msg;
   size_t n_members;
+  char *end;
 
   msg = state->msgs[state->current_msg];
+  if (state->field->type != PROTOBUF_C_TYPE_STRING) {
+    if (state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
+      /* Do optional member accounting. */
+      if (STRUCT_MEMBER(protobuf_c_boolean, msg,
+            state->field->quantifier_offset)) {
+        return state_error(state, t,
+            "'%s' has already been assigned.", state->field->name);
+      }
+      STRUCT_MEMBER(protobuf_c_boolean, msg,
+            state->field->quantifier_offset) = 1;
+    }
+  }
   switch (t->id) {
     case TOK_BAREWORD:
-      printf("Assign enum.\n");
-      return STATE_OPEN;
+      if (state->field->type == PROTOBUF_C_TYPE_ENUM) {
+      }
+
       break;
 
     case TOK_BOOLEAN:
@@ -471,6 +494,8 @@ state_value(State *state, Token *t)
             return state_error(state, t,
                 "'%s' has already been assigned.", state->field->name);
           }
+          STRUCT_MEMBER(protobuf_c_boolean, msg,
+                state->field->quantifier_offset) = 1;
         }
         if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
             || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
@@ -510,6 +535,8 @@ state_value(State *state, Token *t)
             return state_error(state, t,
                 "'%s' has already been assigned.", state->field->name);
           }
+          STRUCT_MEMBER(protobuf_c_boolean, msg,
+                state->field->quantifier_offset) = 1;
         }
         if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
             || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
@@ -583,8 +610,242 @@ state_value(State *state, Token *t)
       break;
 
     case TOK_NUMBER:
-      printf("Assign number.\n");
-      return STATE_OPEN;
+      if (state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
+        /* Do optional member accounting. */
+        if (STRUCT_MEMBER(protobuf_c_boolean, msg,
+              state->field->quantifier_offset)) {
+          return state_error(state, t,
+              "'%s' has already been assigned.", state->field->name);
+        }
+        STRUCT_MEMBER(protobuf_c_boolean, msg,
+              state->field->quantifier_offset) = 1;
+      }
+      switch (state->field->type) {
+        case PROTOBUF_C_TYPE_INT32:
+        case PROTOBUF_C_TYPE_UINT32:
+        case PROTOBUF_C_TYPE_FIXED32:
+          if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
+              || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
+            uint64_t val;
+
+            val = strtoul(t->number, &end, 10);
+            if (*end != '\0' || val > UINT32_MAX) {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            STRUCT_MEMBER(uint32_t, msg, state->field->offset) = (uint32_t)val;
+            return STATE_OPEN;
+          }
+          if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+            uint32_t *vals;
+            uint64_t val;
+
+            STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
+            n_members = STRUCT_MEMBER(size_t, msg,
+                                      state->field->quantifier_offset);
+            vals = realloc(
+                STRUCT_MEMBER(uint32_t *, msg, state->field->offset),
+                n_members * sizeof(uint32_t));
+            /* TODO: error out if vals is NULL. */
+            STRUCT_MEMBER(uint32_t *, msg, state->field->offset) = vals;
+            val = strtoul(t->number, &end, 10);
+            if (*end != '\0' || val > UINT32_MAX) {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            vals[n_members - 1] = (uint32_t)val;
+            return STATE_OPEN;
+          }
+          break;
+
+        case PROTOBUF_C_TYPE_SINT32:
+        case PROTOBUF_C_TYPE_SFIXED32:
+          if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
+              || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
+            int32_t val;
+
+            val = strtol(t->number, &end, 10);
+            if (*end != '\0' || val < INT32_MIN || val > INT32_MAX) {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            STRUCT_MEMBER(int32_t, msg, state->field->offset) = val;
+            return STATE_OPEN;
+          }
+          if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+            int32_t *vals;
+            int64_t val;
+
+            STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
+            n_members = STRUCT_MEMBER(size_t, msg,
+                                      state->field->quantifier_offset);
+            vals = realloc(
+                STRUCT_MEMBER(int32_t *, msg, state->field->offset),
+                n_members * sizeof(int32_t));
+            /* TODO: error out if vals is NULL. */
+            STRUCT_MEMBER(int32_t *, msg, state->field->offset) = vals;
+            val = strtol(t->number, &end, 10);
+            if (*end != '\0' || val < INT32_MIN || val > INT32_MAX) {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            vals[n_members - 1] = (uint32_t)val;
+            return STATE_OPEN;
+          }
+          break;
+
+        case PROTOBUF_C_TYPE_INT64:
+        case PROTOBUF_C_TYPE_UINT64:
+        case PROTOBUF_C_TYPE_FIXED64:
+          if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
+              || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
+            uint64_t val;
+
+            val = strtoull(t->number, &end, 10);
+            if (*end != '\0') {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            STRUCT_MEMBER(uint64_t, msg, state->field->offset) = val;
+            return STATE_OPEN;
+          }
+          if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+            uint64_t *vals;
+
+            STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
+            n_members = STRUCT_MEMBER(size_t, msg,
+                                      state->field->quantifier_offset);
+            vals = realloc(
+                STRUCT_MEMBER(uint64_t *, msg, state->field->offset),
+                n_members * sizeof(uint64_t));
+            /* TODO: error out if vals is NULL. */
+            STRUCT_MEMBER(uint64_t *, msg, state->field->offset) = vals;
+            vals[n_members - 1] = strtoull(t->number, &end, 10);
+            if (*end != '\0') {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            return STATE_OPEN;
+          }
+          break;
+
+        case PROTOBUF_C_TYPE_SINT64:
+        case PROTOBUF_C_TYPE_SFIXED64:
+          if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
+              || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
+            int64_t val;
+
+            val = strtoll(t->number, &end, 10);
+            if (*end != '\0') {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            STRUCT_MEMBER(int64_t, msg, state->field->offset) = val;
+            return STATE_OPEN;
+          }
+          if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+            int64_t *vals;
+
+            STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
+            n_members = STRUCT_MEMBER(size_t, msg,
+                                      state->field->quantifier_offset);
+            vals = realloc(
+                STRUCT_MEMBER(int64_t *, msg, state->field->offset),
+                n_members * sizeof(int64_t));
+            /* TODO: error out if vals is NULL. */
+            STRUCT_MEMBER(int64_t *, msg, state->field->offset) = vals;
+            vals[n_members - 1] = strtol(t->number, &end, 10);
+            if (*end != '\0') {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            return STATE_OPEN;
+          }
+          break;
+
+        case PROTOBUF_C_TYPE_FLOAT:
+          if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
+              || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
+            float val;
+
+            val = strtof(t->number, &end);
+            if (*end != '\0') {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            STRUCT_MEMBER(float, msg, state->field->offset) = val;
+            return STATE_OPEN;
+          }
+          if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+            float *vals;
+
+            STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
+            n_members = STRUCT_MEMBER(size_t, msg,
+                                      state->field->quantifier_offset);
+            vals = realloc(
+                STRUCT_MEMBER(float *, msg, state->field->offset),
+                n_members * sizeof(float));
+            /* TODO: error out if vals is NULL. */
+            STRUCT_MEMBER(float *, msg, state->field->offset) = vals;
+            vals[n_members - 1] = strtof(t->number, &end);
+            if (*end != '\0') {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            return STATE_OPEN;
+          }
+          break;
+
+        case PROTOBUF_C_TYPE_DOUBLE:
+          if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
+              || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
+            double val;
+
+            val = strtod(t->number, &end);
+            if (*end != '\0') {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            STRUCT_MEMBER(double, msg, state->field->offset) = val;
+            return STATE_OPEN;
+          }
+          if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+            double *vals;
+
+            STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
+            n_members = STRUCT_MEMBER(size_t, msg,
+                                      state->field->quantifier_offset);
+            vals = realloc(
+                STRUCT_MEMBER(double *, msg, state->field->offset),
+                n_members * sizeof(double));
+            /* TODO: error out if vals is NULL. */
+            STRUCT_MEMBER(double *, msg, state->field->offset) = vals;
+            vals[n_members - 1] = strtod(t->number, &end);
+            if (*end != '\0') {
+              return state_error(state, t,
+                  "Unable to convert '%s' for field '%s'.",
+                  t->number, state->field->name);
+            }
+            return STATE_OPEN;
+          }
+          break;
+
+        default:
+          return state_error(state, t,
+              "'%s' is not a numeric field.", state->field->name);
+          break;
+      }
       break;
 
     default:
