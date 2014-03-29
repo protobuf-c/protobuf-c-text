@@ -8,7 +8,7 @@ TESTS = t/test_generation.sh t/test_intake.sh
 check_PROGRAMS = t/c-dump t/c-intake
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
-		protobuf-c-text/lexer.c
+		protobuf-c-text/parse.c
 
 #dist_man3_MANS = man/protobuf-c-text.3
 
@@ -18,8 +18,8 @@ valgrind: $(check_PROGRAMS)
 # Libraries.
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
     protobuf-c-text/generate.c \
-    protobuf-c-text/lexer.re \
-    protobuf-c-text/lexer.c
+    protobuf-c-text/parse.re \
+    protobuf-c-text/parse.c
 protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # Version updating rules:
 # 1. If the library source code has changed but interfaces are the same,
