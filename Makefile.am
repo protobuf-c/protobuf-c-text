@@ -4,8 +4,8 @@ PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 				          $(PROTOBUF_C_TEST_SRCS))
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
-TESTS = t/test_generation.sh t/test_intake.sh
-check_PROGRAMS = t/c-dump t/c-intake
+TESTS = t/test_generation.sh t/test_parse.sh
+check_PROGRAMS = t/c-dump t/c-parse
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
 		protobuf-c-text/parse.c
@@ -54,10 +54,10 @@ t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_c_dump_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_dump_LDFLAGS = -static
 
-t_c_intake_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-intake.c
-t_c_intake_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_c_intake_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
-t_c_intake_LDFLAGS = -static
+t_c_parse_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-parse.c
+t_c_parse_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
+t_c_parse_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_c_parse_LDFLAGS = -static
 
 EXTRA_DIST = t/addressbook.proto t/addressbook.data
 
@@ -92,7 +92,7 @@ distclean-local-ac:
 	@rm -rf autom4te.cache build-aux/*~ m4/*~
 
 # Add things to remove for the "clean" target.
-clean-local: clean-local-build-dirs clean-coverage-html
+clean-local: clean-local-build-dirs clean-coverage-html clean-gcno
 .PHONY: clean-local-build-dirs
 clean-local-build-dirs:
 	@rm -rf bin lib tests
@@ -100,4 +100,5 @@ MOSTLYCLEANFILES = $(DX_CLEANFILES) \
 		   $(BUILT_SOURCES) \
 		   $(PROTOBUF_C_TEST_HDRS) \
 		   t/addressbook.c.text \
-		   t/addressbook.c++.text
+		   t/addressbook.protoc-c.text \
+		   t/addressbook.c.data

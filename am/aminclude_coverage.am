@@ -1,10 +1,12 @@
 # Coverage targets
 
-.PHONY: clean-gcda
+.PHONY: clean-gcda clean-gcno
 .PHONY: coverage-html generate-coverage-html clean-coverage-html
 
 clean-gcda:
 	@find -name '*.gcda' -print | xargs -r rm
+
+clean-gcno:
 	@find -name '*.gcno' -print | xargs -r rm
 
 if HAVE_GCOV
