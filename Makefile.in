@@ -39,8 +39,9 @@ build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = t/c-dump$(EXEEXT) t/c-intake$(EXEEXT)
 DIST_COMMON = README $(am__configure_deps) \
-	$(libprotobuf_c_text_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/am/aminclude_coverage.am \
+	$(libprotobuf_c_text_HEADERS) $(noinst_HEADERS) \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(srcdir)/am/aminclude_coverage.am \
 	$(srcdir)/am/aminclude_doxygen.am \
 	$(top_srcdir)/build-aux/config.h.in $(top_srcdir)/configure \
 	AUTHORS COPYING ChangeLog INSTALL NEWS build-aux/compile \
@@ -154,7 +155,7 @@ SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(t_c_dump_SOURCES) $(t_c_intake_SOURCES)
 DIST_SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(t_c_dump_SOURCES) $(t_c_intake_SOURCES)
-HEADERS = $(libprotobuf_c_text_HEADERS)
+HEADERS = $(libprotobuf_c_text_HEADERS) $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -358,6 +359,7 @@ check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
 		protobuf-c-text/parse.c
 
+noinst_HEADERS = protobuf-c-text/protobuf-c-util.h
 
 # Libraries.
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \

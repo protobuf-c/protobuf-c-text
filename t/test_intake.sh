@@ -3,4 +3,4 @@
 if [[ ! -f t/addressbook.c.text ]]; then
   exit 77
 fi
-./t/c-intake < t/addressbook.c.text
+./t/c-intake t/addressbook.c.data < t/addressbook.c.text

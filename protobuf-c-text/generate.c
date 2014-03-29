@@ -7,17 +7,7 @@
 #include <stdlib.h>
 #include <google/protobuf-c/protobuf-c.h>
 #include "protobuf-c-text.h"
-
-/* These are lifted from the protobuf-c lib */
-
-#define STRUCT_MEMBER_P(struct_p, struct_offset) \
-      ((void *) ((uint8_t *) (struct_p) + (struct_offset)))
-
-#define STRUCT_MEMBER(member_type, struct_p, struct_offset) \
-      (*(member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))
-
-#define STRUCT_MEMBER_PTR(member_type, struct_p, struct_offset) \
-      ((member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))
+#include "protobuf-c-util.h"
 
 typedef struct _ReturnString {
   int allocated;
@@ -25,8 +15,7 @@ typedef struct _ReturnString {
   char *s;
 } ReturnString;
 
-static void
-rs_append(ReturnString *rs, int guess, const char *format, ...)
+static void rs_append(ReturnString *rs, int guess, const char *format, ...)
   __attribute__((format(printf, 3, 4)));
 static void
 rs_append(ReturnString *rs, int guess, const char *format, ...)

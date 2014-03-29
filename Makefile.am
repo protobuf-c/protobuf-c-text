@@ -9,6 +9,7 @@ check_PROGRAMS = t/c-dump t/c-intake
 check_SCRIPTS = t/test_generation.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
 		protobuf-c-text/parse.c
+noinst_HEADERS = protobuf-c-text/protobuf-c-util.h
 
 #dist_man3_MANS = man/protobuf-c-text.3
 
