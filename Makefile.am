@@ -19,8 +19,7 @@ valgrind: $(check_PROGRAMS)
 # Libraries.
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
     protobuf-c-text/generate.c \
-    protobuf-c-text/parse.re \
-    protobuf-c-text/parse.c
+    protobuf-c-text/parse.re
 protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # Version updating rules:
 # 1. If the library source code has changed but interfaces are the same,
@@ -34,6 +33,7 @@ protobuf_c_text_libprotobuf_c_text_la_LDFLAGS = $(COVERAGE_LDFLAGS) -version-inf
 # Headers for libraries.
 libprotobuf_c_textdir = $(includedir)/google/protobuf-c
 libprotobuf_c_text_HEADERS = protobuf-c-text/protobuf-c-text.h
+pkgconfig_DATA = protobuf-c-text/libprotobuf-c-text.pc
 
 # Static analysis.
 analyze_srcs = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES)
@@ -59,7 +59,9 @@ t_c_parse_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_c_parse_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_parse_LDFLAGS = -static
 
-EXTRA_DIST = t/addressbook.proto t/addressbook.data
+EXTRA_DIST = t/addressbook.proto \
+	     t/addressbook.data \
+	     protobuf-c-text/libprotobuf-c-text.pc.in
 
 # Define macros to have quiet protoc-c statements.
 AM_V_PROTOC_C = $(AM_V_PROTOC_C_@AM_V@)
@@ -96,6 +98,7 @@ clean-local: clean-local-build-dirs clean-coverage-html clean-gcno
 .PHONY: clean-local-build-dirs
 clean-local-build-dirs:
 	@rm -rf bin lib tests
+CLEANFILES = protobuf-c-text/libprotobuf-c-text.pc
 MOSTLYCLEANFILES = $(DX_CLEANFILES) \
 		   $(BUILT_SOURCES) \
 		   $(PROTOBUF_C_TEST_HDRS) \

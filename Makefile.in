@@ -18,6 +18,7 @@
 # Coverage targets
 
 
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -44,7 +45,8 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/am/aminclude_coverage.am \
 	$(srcdir)/am/aminclude_doxygen.am \
 	$(top_srcdir)/build-aux/config.h.in $(top_srcdir)/configure \
-	AUTHORS COPYING ChangeLog INSTALL NEWS build-aux/compile \
+	$(top_srcdir)/protobuf-c-text/libprotobuf-c-text.pc.in AUTHORS \
+	COPYING ChangeLog INSTALL NEWS build-aux/compile \
 	build-aux/config.guess build-aux/config.sub build-aux/depcomp \
 	build-aux/install-sh build-aux/ltmain.sh build-aux/missing
 subdir = .
@@ -61,7 +63,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/build-aux/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = protobuf-c-text/libprotobuf-c-text.pc
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -90,13 +92,12 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(libdir)" \
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" \
 	"$(DESTDIR)$(libprotobuf_c_textdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 protobuf_c_text_libprotobuf_c_text_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
-am_protobuf_c_text_libprotobuf_c_text_la_OBJECTS = protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.lo \
-	protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parse.lo
+am_protobuf_c_text_libprotobuf_c_text_la_OBJECTS = protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.lo
 protobuf_c_text_libprotobuf_c_text_la_OBJECTS =  \
 	$(am_protobuf_c_text_libprotobuf_c_text_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -154,6 +155,7 @@ SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(t_c_dump_SOURCES) $(t_c_parse_SOURCES)
 DIST_SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(t_c_dump_SOURCES) $(t_c_parse_SOURCES)
+DATA = $(pkgconfig_DATA)
 HEADERS = $(libprotobuf_c_text_HEADERS) $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -363,8 +365,7 @@ noinst_HEADERS = protobuf-c-text/protobuf-c-util.h
 # Libraries.
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
     protobuf-c-text/generate.c \
-    protobuf-c-text/parse.re \
-    protobuf-c-text/parse.c
+    protobuf-c-text/parse.re
 
 protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # Version updating rules:
@@ -379,6 +380,7 @@ protobuf_c_text_libprotobuf_c_text_la_LDFLAGS = $(COVERAGE_LDFLAGS) -version-inf
 # Headers for libraries.
 libprotobuf_c_textdir = $(includedir)/google/protobuf-c
 libprotobuf_c_text_HEADERS = protobuf-c-text/protobuf-c-text.h
+pkgconfig_DATA = protobuf-c-text/libprotobuf-c-text.pc
 
 # Static analysis.
 analyze_srcs = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES)
@@ -392,7 +394,10 @@ t_c_parse_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-parse.c
 t_c_parse_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
 t_c_parse_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_parse_LDFLAGS = -static
-EXTRA_DIST = t/addressbook.proto t/addressbook.data
+EXTRA_DIST = t/addressbook.proto \
+	     t/addressbook.data \
+	     protobuf-c-text/libprotobuf-c-text.pc.in
+
 
 # Define macros to have quiet protoc-c statements.
 AM_V_PROTOC_C = $(AM_V_PROTOC_C_@AM_V@)
@@ -427,6 +432,7 @@ AM_V_RE2C_0 = @echo "  RE2C  " $<;
 @DX_COND_doc_TRUE@	$(DX_CLEAN_PDF) \
 @DX_COND_doc_TRUE@	$(DX_CLEAN_LATEX)
 
+CLEANFILES = protobuf-c-text/libprotobuf-c-text.pc
 MOSTLYCLEANFILES = $(DX_CLEANFILES) \
 		   $(BUILT_SOURCES) \
 		   $(PROTOBUF_C_TEST_HDRS) \
@@ -489,6 +495,8 @@ $(top_srcdir)/build-aux/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f build-aux/config.h build-aux/stamp-h1
+protobuf-c-text/libprotobuf-c-text.pc: $(top_builddir)/config.status $(top_srcdir)/protobuf-c-text/libprotobuf-c-text.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
@@ -529,9 +537,6 @@ protobuf-c-text/$(DEPDIR)/$(am__dirstamp):
 protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.lo:  \
 	protobuf-c-text/$(am__dirstamp) \
 	protobuf-c-text/$(DEPDIR)/$(am__dirstamp)
-protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parse.lo:  \
-	protobuf-c-text/$(am__dirstamp) \
-	protobuf-c-text/$(DEPDIR)/$(am__dirstamp)
 protobuf-c-text/libprotobuf-c-text.la: $(protobuf_c_text_libprotobuf_c_text_la_OBJECTS) $(protobuf_c_text_libprotobuf_c_text_la_DEPENDENCIES) $(EXTRA_protobuf_c_text_libprotobuf_c_text_la_DEPENDENCIES) protobuf-c-text/$(am__dirstamp)
 	$(AM_V_CCLD)$(protobuf_c_text_libprotobuf_c_text_la_LINK) -rpath $(libdir) $(protobuf_c_text_libprotobuf_c_text_la_OBJECTS) $(protobuf_c_text_libprotobuf_c_text_la_LIBADD) $(LIBS)
 
@@ -568,8 +573,6 @@ mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.$(OBJEXT)
 	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.lo
-	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parse.$(OBJEXT)
-	-rm -f protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parse.lo
 	-rm -f t/t_c_dump-addressbook.pb-c.$(OBJEXT)
 	-rm -f t/t_c_dump-c-dump.$(OBJEXT)
 	-rm -f t/t_c_parse-addressbook.pb-c.$(OBJEXT)
@@ -579,7 +582,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-generate.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-parse.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-addressbook.pb-c.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-c-dump.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse-addressbook.pb-c.Po@am__quote@
@@ -615,13 +617,6 @@ protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.lo: protobuf-c-te
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='protobuf-c-text/generate.c' object='protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(protobuf_c_text_libprotobuf_c_text_la_CFLAGS) $(CFLAGS) -c -o protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-generate.lo `test -f 'protobuf-c-text/generate.c' || echo '$(srcdir)/'`protobuf-c-text/generate.c
-
-protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parse.lo: protobuf-c-text/parse.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(protobuf_c_text_libprotobuf_c_text_la_CFLAGS) $(CFLAGS) -MT protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parse.lo -MD -MP -MF protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-parse.Tpo -c -o protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parse.lo `test -f 'protobuf-c-text/parse.c' || echo '$(srcdir)/'`protobuf-c-text/parse.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-parse.Tpo protobuf-c-text/$(DEPDIR)/protobuf_c_text_libprotobuf_c_text_la-parse.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='protobuf-c-text/parse.c' object='protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parse.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(protobuf_c_text_libprotobuf_c_text_la_CFLAGS) $(CFLAGS) -c -o protobuf-c-text/protobuf_c_text_libprotobuf_c_text_la-parse.lo `test -f 'protobuf-c-text/parse.c' || echo '$(srcdir)/'`protobuf-c-text/parse.c
 
 t/t_c_dump-addressbook.pb-c.o: t/addressbook.pb-c.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump_CFLAGS) $(CFLAGS) -MT t/t_c_dump-addressbook.pb-c.o -MD -MP -MF t/$(DEPDIR)/t_c_dump-addressbook.pb-c.Tpo -c -o t/t_c_dump-addressbook.pb-c.o `test -f 't/addressbook.pb-c.c' || echo '$(srcdir)/'`t/addressbook.pb-c.c
@@ -689,6 +684,24 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool config.lt
+install-pkgconfigDATA: $(pkgconfig_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(pkgconfigdir)" || $(MKDIR_P) "$(DESTDIR)$(pkgconfigdir)"
+	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgconfigdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgconfigdir)" || exit $$?; \
+	done
+
+uninstall-pkgconfigDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(pkgconfigdir)'; $(am__uninstall_files_from_dir)
 install-libprotobuf_c_textHEADERS: $(libprotobuf_c_text_HEADERS)
 	@$(NORMAL_INSTALL)
 	test -z "$(libprotobuf_c_textdir)" || $(MKDIR_P) "$(DESTDIR)$(libprotobuf_c_textdir)"
@@ -1020,9 +1033,9 @@ check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libprotobuf_c_textdir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(libprotobuf_c_textdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: $(BUILT_SOURCES)
@@ -1049,6 +1062,7 @@ mostlyclean-generic:
 	-test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -1086,7 +1100,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-libprotobuf_c_textHEADERS
+install-data-am: install-libprotobuf_c_textHEADERS \
+	install-pkgconfigDATA
 
 install-dvi: install-dvi-am
 
@@ -1135,7 +1150,7 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-libLTLIBRARIES \
-	uninstall-libprotobuf_c_textHEADERS
+	uninstall-libprotobuf_c_textHEADERS uninstall-pkgconfigDATA
 
 .MAKE: all check check-am install install-am install-strip
 
@@ -1151,13 +1166,13 @@ uninstall-am: uninstall-libLTLIBRARIES \
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am \
 	install-libLTLIBRARIES install-libprotobuf_c_textHEADERS \
-	install-man install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-libLTLIBRARIES \
-	uninstall-libprotobuf_c_textHEADERS
+	install-man install-pdf install-pdf-am install-pkgconfigDATA \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-libLTLIBRARIES \
+	uninstall-libprotobuf_c_textHEADERS uninstall-pkgconfigDATA
 
 
 #dist_man3_MANS = man/protobuf-c-text.3

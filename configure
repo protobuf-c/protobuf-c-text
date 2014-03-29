@@ -2645,7 +2645,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 ac_config_headers="$ac_config_headers build-aux/config.h"
 
 # The -Wno-portability is here to tell automake not to complain about
-# $@ and $< which are used to define protobuf-c build rules.
+# $@ and $< which are used to define protoc-c and re2c build rules.
 am__api_version='1.11'
 
 # Find a good install program.  We prefer a C program (faster),
@@ -19069,7 +19069,7 @@ done
 
 
 # Generate files.
-ac_config_files="$ac_config_files Makefile"
+ac_config_files="$ac_config_files Makefile protobuf-c-text/libprotobuf-c-text.pc"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -20235,6 +20235,7 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "protobuf-c-text/libprotobuf-c-text.pc") CONFIG_FILES="$CONFIG_FILES protobuf-c-text/libprotobuf-c-text.pc" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

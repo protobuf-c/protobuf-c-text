@@ -12,7 +12,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_HEADERS([build-aux/config.h])
 # The -Wno-portability is here to tell automake not to complain about
-# $@ and $< which are used to define protobuf-c build rules.
+# $@ and $< which are used to define protoc-c and re2c build rules.
 AM_INIT_AUTOMAKE([1.11 subdir-objects -Wno-portability color-tests])
 AM_SILENT_RULES([yes])
 LT_INIT
@@ -81,7 +81,7 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([memset strtoull strtod])
 
 # Generate files.
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile protobuf-c-text/libprotobuf-c-text.pc])
 AC_OUTPUT
 
 AC_MSG_RESULT([
