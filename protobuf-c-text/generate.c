@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <google/protobuf-c/protobuf-c.h>
+#include "protobuf-c-text.h"
 
 /* These are lifted from the protobuf-c lib */
 
