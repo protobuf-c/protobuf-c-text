@@ -401,7 +401,7 @@ state_assignment(State *state, Token *t)
               state->field->quantifier_offset) = 1;
         }
         if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
-          ProtobufCMessage *tmp_msg;
+          ProtobufCMessage **tmp;
           size_t n_members;
 
           /* Create new message and assign it to the message stack. */
@@ -414,18 +414,19 @@ state_assignment(State *state, Token *t)
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          tmp_msg
+          tmp
             = realloc(STRUCT_MEMBER(ProtobufCMessage *, msg,
                                     state->field->offset),
-                      n_members *
-                      ((ProtobufCMessageDescriptor *)
-                       state->field->descriptor)->sizeof_message);
-          /* TODO: error out if tmp_msg is NULL. */
-          STRUCT_MEMBER(ProtobufCMessage *, msg, state->field->offset)
-            = tmp_msg;
-          state->msgs[state->current_msg] = &tmp_msg[n_members - 1];
+                      n_members * sizeof(ProtobufCMessage *));
+          /* TODO: error out if tmp is NULL. */
+          STRUCT_MEMBER(ProtobufCMessage **, msg, state->field->offset)
+            = tmp;
+          tmp[n_members - 1] = malloc(((ProtobufCMessageDescriptor *)
+                state->field->descriptor)->sizeof_message);
+          /* TODO: error out if tmp[n_members - 1] is NULL. */
+          state->msgs[state->current_msg] = tmp[n_members - 1];
           ((ProtobufCMessageDescriptor *)state->field->descriptor)
-            ->message_init(&tmp_msg[n_members - 1]);
+            ->message_init(tmp[n_members - 1]);
           return STATE_OPEN;
         } else {
           /* Create new message and assign it to the message stack. */

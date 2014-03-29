@@ -28,14 +28,13 @@ libtool
 *.gcda
 *.gcno
 
-# Address book data files.
+# Test generated AddressBook data files.
 t/addressbook.c++.text
 t/addressbook.c.text
+t/addressbook.c.data
 
 # Test binaries.
-/t/add_person
 /t/c-dump
-/t/list_people
 /t/c-intake
 
 # Generated parsing code.
