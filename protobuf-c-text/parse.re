@@ -195,7 +195,8 @@ fill(Scanner *scanner)
   }
   if (scanner->f && !feof(scanner->f)) {
     oldlen = scanner->limit - scanner->token;
-    buf = malloc(CHUNK + oldlen);
+    len = CHUNK + oldlen;
+    buf = malloc(len);
     memcpy(buf, scanner->token, oldlen);
     nmemb = fread(buf + oldlen, 1, CHUNK, scanner->f);
     if (nmemb != CHUNK) {

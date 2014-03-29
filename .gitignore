@@ -13,6 +13,7 @@ libtool
 .deps/
 .dirstamp
 .libs/
+protobuf-c-text/libprotobuf-c-text.pc
 
 # Build products.
 *.pb-c.[ch]

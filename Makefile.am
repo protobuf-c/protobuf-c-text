@@ -19,7 +19,8 @@ valgrind: $(check_PROGRAMS)
 # Libraries.
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
     protobuf-c-text/generate.c \
-    protobuf-c-text/parse.re
+    protobuf-c-text/parse.re \
+    protobuf-c-text/parse.c
 protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # Version updating rules:
 # 1. If the library source code has changed but interfaces are the same,
@@ -41,11 +42,11 @@ analyze_srcs = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES)
 analyze: all
 	@for f in $(analyze_srcs); do \
 	  if test "$(AM_V)" = 1; then \
-	    echo clang --analyze -I proto -I src $$f -o /dev/null; \
+	    echo clang --analyze -I build-aux $$f -o /dev/null; \
 	  else \
 	    echo "  CCSA  " $$f; \
 	  fi; \
-	  clang --analyze -I proto -I src $$f -o /dev/null; \
+	  clang --analyze -I build-aux $$f -o /dev/null; \
 	done
 
 # Test programs.
