@@ -17,8 +17,16 @@ main(int argc, char *argv[])
   size_t len;
   uint8_t *buf;
   FILE *out;
+  char *errors;
 
-  text_format_from_file((ProtobufCMessage *)&ab, stdin);
+  errors = text_format_from_file((ProtobufCMessage *)&ab, stdin);
+  if (errors) {
+    printf("ERROR on import:\n%s", errors);
+    free(errors);
+    exit(1);
+  } else {
+    printf("Import successful\n");
+  }
 
   len = tutorial__address_book__get_packed_size(&ab);
   buf = malloc(len);

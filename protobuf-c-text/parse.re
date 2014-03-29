@@ -332,6 +332,13 @@ state_open(State *state, Token *t)
       state->field = protobuf_c_message_descriptor_get_field_by_name(
           state->msgs[state->current_msg]->descriptor, t->bareword);
       if (state->field) {
+        if (state->field->label != PROTOBUF_C_LABEL_REQUIRED
+            && state->field->label != PROTOBUF_C_LABEL_OPTIONAL
+            && state->field->label != PROTOBUF_C_LABEL_REPEATED) {
+          return state_error(state, t,
+              "Internal error: unknown label type %d for '%s'.",
+              state->field->label, state->field->name);
+        }
         return STATE_ASSIGNMENT;
       } else {
         return state_error(state, t, "Can't find field '%s' in message '%s'.",
@@ -393,24 +400,6 @@ state_assignment(State *state, Token *t)
           STRUCT_MEMBER(protobuf_c_boolean, msg,
               state->field->quantifier_offset) = 1;
         }
-        if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
-            || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
-          /* Create new message and assign it to the message stack. */
-          state->current_msg++;
-          if (state->current_msg == state->max_msg) {
-            /* TODO: Dynamically increase msgs. */
-            return state_error(state, t,
-                "'%s' is too many messages deep.", state->field->name);
-          }
-          state->msgs[state->current_msg]
-            = malloc(((ProtobufCMessageDescriptor *)
-                      state->field->descriptor)->sizeof_message);
-          STRUCT_MEMBER(ProtobufCMessage *, msg, state->field->offset)
-            = state->msgs[state->current_msg];
-          ((ProtobufCMessageDescriptor *)state->field->descriptor)
-            ->message_init(state->msgs[state->current_msg]);
-          return STATE_OPEN;
-        }
         if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
           ProtobufCMessage *tmp_msg;
           size_t n_members;
@@ -438,10 +427,24 @@ state_assignment(State *state, Token *t)
           ((ProtobufCMessageDescriptor *)state->field->descriptor)
             ->message_init(&tmp_msg[n_members - 1]);
           return STATE_OPEN;
+        } else {
+          /* Create new message and assign it to the message stack. */
+          state->current_msg++;
+          if (state->current_msg == state->max_msg) {
+            /* TODO: Dynamically increase msgs. */
+            return state_error(state, t,
+                "'%s' is too many messages deep.", state->field->name);
+          }
+          state->msgs[state->current_msg]
+            = malloc(((ProtobufCMessageDescriptor *)
+                      state->field->descriptor)->sizeof_message);
+          STRUCT_MEMBER(ProtobufCMessage *, msg, state->field->offset)
+            = state->msgs[state->current_msg];
+          ((ProtobufCMessageDescriptor *)state->field->descriptor)
+            ->message_init(state->msgs[state->current_msg]);
+          return STATE_OPEN;
         }
-        return state_error(state, t,
-            "Unknown label type %d for '%s'.",
-            state->field->label, state->field->name);
+
       } else {
         return state_error(state, t,
             "'%s' is not a message field.", state->field->name);
@@ -481,43 +484,58 @@ state_value(State *state, Token *t)
   switch (t->id) {
     case TOK_BAREWORD:
       if (state->field->type == PROTOBUF_C_TYPE_ENUM) {
-      }
+        ProtobufCEnumDescriptor *enumd;
+        const ProtobufCEnumValue *enumv;
 
+        enumd = (ProtobufCEnumDescriptor *)state->field->descriptor;
+        enumv = protobuf_c_enum_descriptor_get_value_by_name(enumd,
+            t->bareword);
+        if (enumv) {
+          if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+            int *tmp;
+
+            STRUCT_MEMBER(int *, msg, state->field->quantifier_offset) += 1;
+            n_members = STRUCT_MEMBER(int *, msg,
+                state->field->quantifier_offset);
+            tmp = realloc(STRUCT_MEMBER(int *, msg, state->field->offset),
+                n_members * sizeof(int));
+            /* TODO: error out if tmp is NULL. */
+            STRUCT_MEMBER(int *, msg, state->field->offset) = tmp;
+            tmp[n_members - 1] = enumv->value;
+            return STATE_OPEN;
+          } else {
+            STRUCT_MEMBER(int, msg, state->field->offset) = enumv->value;
+            return STATE_OPEN;
+          }
+        } else {
+          return state_error(state, t,
+              "Invalid enum '%s' for field '%s'.",
+              t->bareword, state->field->name);
+        }
+      }
       break;
 
     case TOK_BOOLEAN:
       if (state->field->type == PROTOBUF_C_TYPE_BOOL) {
-        if (state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
-          /* Do optional member accounting. */
-          if (STRUCT_MEMBER(protobuf_c_boolean, msg,
-                state->field->quantifier_offset)) {
-            return state_error(state, t,
-                "'%s' has already been assigned.", state->field->name);
-          }
-          STRUCT_MEMBER(protobuf_c_boolean, msg,
-                state->field->quantifier_offset) = 1;
-        }
-        if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
-            || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
-          STRUCT_MEMBER(protobuf_c_boolean, msg, state->field->offset)
-            = t->boolean;
-          return STATE_OPEN;
-        }
         if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
-          protobuf_c_boolean *tmp_bools;
+          protobuf_c_boolean *tmp;
 
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          tmp_bools = realloc(
+          tmp = realloc(
               STRUCT_MEMBER(protobuf_c_boolean *, msg, state->field->offset),
               n_members * sizeof(protobuf_c_boolean));
-          /* TODO: error out if tmp_msg is NULL. */
-          STRUCT_MEMBER(protobuf_c_boolean *, msg, state->field->offset)
-            = tmp_bools;
-          tmp_bools[n_members - 1] = t->boolean;
+          /* TODO: error out if tmp is NULL. */
+          STRUCT_MEMBER(protobuf_c_boolean *, msg, state->field->offset) = tmp;
+          tmp[n_members - 1] = t->boolean;
+          return STATE_OPEN;
+        } else {
+          STRUCT_MEMBER(protobuf_c_boolean, msg, state->field->offset)
+            = t->boolean;
           return STATE_OPEN;
         }
+
       } else {
         return state_error(state, t,
             "'%s' is not a boolean field.", state->field->name);
@@ -528,16 +546,6 @@ state_value(State *state, Token *t)
       if (state->field->type == PROTOBUF_C_TYPE_BYTES) {
         ProtobufCBinaryData *pbbd;
 
-        if (state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
-          /* Do optional member accounting. */
-          if (STRUCT_MEMBER(protobuf_c_boolean, msg,
-                state->field->quantifier_offset)) {
-            return state_error(state, t,
-                "'%s' has already been assigned.", state->field->name);
-          }
-          STRUCT_MEMBER(protobuf_c_boolean, msg,
-                state->field->quantifier_offset) = 1;
-        }
         if (state->field->label == PROTOBUF_C_LABEL_REQUIRED
             || state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
           pbbd = STRUCT_MEMBER_PTR(ProtobufCBinaryData, msg,
@@ -610,16 +618,6 @@ state_value(State *state, Token *t)
       break;
 
     case TOK_NUMBER:
-      if (state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
-        /* Do optional member accounting. */
-        if (STRUCT_MEMBER(protobuf_c_boolean, msg,
-              state->field->quantifier_offset)) {
-          return state_error(state, t,
-              "'%s' has already been assigned.", state->field->name);
-        }
-        STRUCT_MEMBER(protobuf_c_boolean, msg,
-              state->field->quantifier_offset) = 1;
-      }
       switch (state->field->type) {
         case PROTOBUF_C_TYPE_INT32:
         case PROTOBUF_C_TYPE_UINT32:
@@ -862,7 +860,7 @@ static StateId(* states[])(State *, Token *) = {
   [STATE_VALUE] = state_value
 };
 
-static int
+static char *
 text_format_parse(ProtobufCMessage *msg, Scanner *scanner)
 {
   Token token;
@@ -878,14 +876,10 @@ text_format_parse(ProtobufCMessage *msg, Scanner *scanner)
     tokenfree(&token);
   }
 
-  if (state.error) {
-    printf("ERROR: %s\n", state.error);
-  }
-
-  return 0;
+  return state.error;
 }
 
-int
+char *
 text_format_from_file(ProtobufCMessage *m, FILE *msg_file)
 {
   Scanner scanner;
@@ -894,7 +888,7 @@ text_format_from_file(ProtobufCMessage *m, FILE *msg_file)
   return text_format_parse(m, &scanner);
 }
 
-int
+char *
 text_format_from_string(ProtobufCMessage *m, char *msg)
 {
   Scanner scanner;
