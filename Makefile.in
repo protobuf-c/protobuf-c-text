@@ -1240,7 +1240,7 @@ clean-gcno:
 @HAVE_GCOV_TRUE@clean-coverage-html: clean-gcda
 @HAVE_GCOV_TRUE@	@$(LCOV) --directory $(top_builddir) -z
 
-@HAVE_GCOV_FALSE@clean-coverage-html: clean-gcda
+@HAVE_GCOV_FALSE@clean-coverage-html: clean-gcda clean-gcno
 @HAVE_GCOV_FALSE@	@rm -rf coverage.info htmlcov
 
 # Local Variables:
