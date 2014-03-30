@@ -48,7 +48,7 @@ main(int argc, char *argv[])
 
   ab = read_addressbook(argv[1]);
 
-  s = text_format_to_string((ProtobufCMessage *)ab);
+  s = text_format_to_string((ProtobufCMessage *)ab, NULL);
   printf("%s", s);
   free(s);
 

@@ -283,18 +283,26 @@ typedef struct {
   int current_msg;
   int max_msg;
   ProtobufCMessage **msgs;
+  ProtobufCAllocator *allocator;
   char *error;
 } State;
 
 void
-state_init(State *state, Scanner *scanner, ProtobufCMessage *msg)
+state_init(State *state,
+    Scanner *scanner,
+    const ProtobufCMessageDescriptor *descriptor,
+    ProtobufCAllocator *allocator)
 {
+  ProtobufCMessage *msg;
+
   memset(state, 0, sizeof(State));
   state->scanner = scanner;
   state->msgs = malloc(10 * sizeof(ProtobufCMessage *));
   state->max_msg = 10;
-  protobuf_c_message_init(msg->descriptor, msg);
+  msg = malloc(descriptor->sizeof_message);
+  protobuf_c_message_init(descriptor, msg);
   state->msgs[0] = msg;
+  state->allocator = allocator;
 }
 
 /*
@@ -846,15 +854,23 @@ static StateId(* states[])(State *, Token *) = {
   [STATE_VALUE] = state_value
 };
 
-static char *
-text_format_parse(ProtobufCMessage *msg, Scanner *scanner)
+static ProtobufCMessage *
+text_format_parse(const ProtobufCMessageDescriptor *descriptor,
+    Scanner *scanner,
+    char **error_txt,
+    ProtobufCAllocator *allocator)
 {
   Token token;
   State state;
   StateId state_id;
 
+  if (!allocator) {
+    allocator = &protobuf_c_default_allocator;
+  }
+  *error_txt = NULL;
+
   state_id = STATE_OPEN;
-  state_init(&state, scanner, msg);
+  state_init(&state, scanner, descriptor, allocator);
 
   while (state_id != STATE_DONE) {
     token = scan(scanner);
@@ -862,23 +878,30 @@ text_format_parse(ProtobufCMessage *msg, Scanner *scanner)
     tokenfree(&token);
   }
 
-  return state.error;
+  *error_txt = state.error;
+  return state.msgs[0];
 }
 
-char *
-text_format_from_file(ProtobufCMessage *m, FILE *msg_file)
+ProtobufCMessage *
+text_format_from_file(const ProtobufCMessageDescriptor *descriptor,
+    FILE *msg_file,
+    char **error_txt,
+    ProtobufCAllocator *allocator)
 {
   Scanner scanner;
 
   scanner_init_file(&scanner, msg_file);
-  return text_format_parse(m, &scanner);
+  return text_format_parse(descriptor, &scanner, error_txt, allocator);
 }
 
-char *
-text_format_from_string(ProtobufCMessage *m, char *msg)
+ProtobufCMessage *
+text_format_from_string(const ProtobufCMessageDescriptor *descriptor,
+    char *msg,
+    char **error_txt,
+    ProtobufCAllocator *allocator)
 {
   Scanner scanner;
 
   scanner_init_string(&scanner, msg);
-  return text_format_parse(m, &scanner);
+  return text_format_parse(descriptor, &scanner, error_txt, allocator);
 }

@@ -1,10 +1,5 @@
 Memory allocation:
-  * Change functions to take ProtobufCMessageDescriptor instead of
-    ProtobufCMessage. Allocate complete message - it can then be freed
-    via protobuf_c_message_free_unpacked()
-  * Change functions to take ProtobufCAllocator * and change all
-    realloc/malloc/free calls to use it.
-  * Make sure protobuf_c_message_free_unpacked() works.
+  * Use ProtobufCAllocator * instead of realloc/malloc/free.
 
 Tests:
   * Add malloc hooks to enable deterministic failues.  Come up with a

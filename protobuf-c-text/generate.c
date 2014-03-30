@@ -16,10 +16,14 @@ typedef struct _ReturnString {
   char *s;
 } ReturnString;
 
-static void rs_append(ReturnString *rs, int guess, const char *format, ...)
-  __attribute__((format(printf, 3, 4)));
+static void rs_append(ReturnString *rs, int guess,
+    ProtobufCAllocator *allocator,
+    const char *format, ...)
+  __attribute__((format(printf, 4, 5)));
 static void
-rs_append(ReturnString *rs, int guess, const char *format, ...)
+rs_append(ReturnString *rs, int guess,
+    ProtobufCAllocator *allocator,
+    const char *format, ...)
 {
   va_list args;
   int added;
@@ -36,7 +40,7 @@ rs_append(ReturnString *rs, int guess, const char *format, ...)
 }
 
 static char *
-esc_str(char *src, int len)
+esc_str(char *src, int len, ProtobufCAllocator *allocator)
 {
   int i, escapes = 0, dst_len = 0;
   unsigned char *dst;
@@ -95,10 +99,11 @@ esc_str(char *src, int len)
 }
 
 static void
-text_format_to_string_int(ReturnString *rs,
+text_format_to_string_internal(ReturnString *rs,
     int level,
     ProtobufCMessage *m,
-    const ProtobufCMessageDescriptor *d)
+    const ProtobufCMessageDescriptor *d,
+    ProtobufCAllocator *allocator)
 {
   int i;
   size_t j, quantifier_offset;
@@ -140,12 +145,14 @@ text_format_to_string_int(ReturnString *rs,
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
+                allocator,
                 "%*s%s: %u\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(uint32_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
+              allocator,
               "%*s%s: %u\n",
               level, "", f[i].name,
               STRUCT_MEMBER(uint32_t, m, f[i].offset));
@@ -156,12 +163,14 @@ text_format_to_string_int(ReturnString *rs,
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
+                allocator,
                 "%*s%s: %d\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(int32_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
+              allocator,
               "%*s%s: %d\n",
               level, "", f[i].name,
               STRUCT_MEMBER(int32_t, m, f[i].offset));
@@ -173,12 +182,14 @@ text_format_to_string_int(ReturnString *rs,
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
+                allocator,
                 "%*s%s: %lu\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(uint64_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
+              allocator,
               "%*s%s: %lu\n",
               level, "", f[i].name,
               STRUCT_MEMBER(uint64_t, m, f[i].offset));
@@ -189,12 +200,14 @@ text_format_to_string_int(ReturnString *rs,
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
+                allocator,
                 "%*s%s: %ld\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(int64_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
+              allocator,
               "%*s%s: %ld\n",
               level, "", f[i].name,
               STRUCT_MEMBER(int64_t, m, f[i].offset));
@@ -205,6 +218,7 @@ text_format_to_string_int(ReturnString *rs,
           for (j = 0; quantifier_offset; j++) {
             float_var = STRUCT_MEMBER(float *, m, f[i].offset)[j];
             rs_append(rs, level + strlen(f[i].name) + 20,
+                allocator,
                 "%*s%s: %g\n",
                 level, "", f[i].name,
                 float_var);
@@ -212,6 +226,7 @@ text_format_to_string_int(ReturnString *rs,
         } else {
           float_var = STRUCT_MEMBER(float, m, f[i].offset);
           rs_append(rs, level + strlen(f[i].name) + 20,
+              allocator,
               "%*s%s: %g\n",
               level, "", f[i].name,
               float_var);
@@ -221,12 +236,14 @@ text_format_to_string_int(ReturnString *rs,
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
+                allocator,
                 "%*s%s: %g\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(double *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
+              allocator,
               "%*s%s: %g\n",
               level, "", f[i].name,
               STRUCT_MEMBER(double, m, f[i].offset));
@@ -236,6 +253,7 @@ text_format_to_string_int(ReturnString *rs,
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0; quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
+                allocator,
                 "%*s%s: %s\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(protobuf_c_boolean *, m, f[i].offset)[j]?
@@ -243,6 +261,7 @@ text_format_to_string_int(ReturnString *rs,
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
+              allocator,
               "%*s%s: %s\n",
               level, "", f[i].name,
               STRUCT_MEMBER(protobuf_c_boolean, m, f[i].offset)?
@@ -256,6 +275,7 @@ text_format_to_string_int(ReturnString *rs,
             enumv = protobuf_c_enum_descriptor_get_value(
                 enumd, STRUCT_MEMBER(int *, m, f[i].offset)[j]);
             rs_append(rs, level + strlen(f[i].name) + 20,
+                allocator,
                 "%*s%s: %s\n",
                 level, "", f[i].name,
                 enumv? enumv->name: "unknown");
@@ -264,6 +284,7 @@ text_format_to_string_int(ReturnString *rs,
           enumv = protobuf_c_enum_descriptor_get_value(
               enumd, STRUCT_MEMBER(int, m, f[i].offset));
           rs_append(rs, level + strlen(f[i].name) + 20,
+              allocator,
               "%*s%s: %s\n",
               level, "", f[i].name,
               enumv? enumv->name: "unknown");
@@ -276,8 +297,10 @@ text_format_to_string_int(ReturnString *rs,
 
             escaped = esc_str(
                 STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j],
-                strlen(STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j]));
+                strlen(STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j]),
+                allocator);
             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
+                allocator,
                 "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
             free(escaped);
           }
@@ -285,8 +308,10 @@ text_format_to_string_int(ReturnString *rs,
           unsigned char *escaped;
 
           escaped = esc_str(STRUCT_MEMBER(unsigned char *, m, f[i].offset),
-              strlen(STRUCT_MEMBER(unsigned char *, m, f[i].offset)));
+              strlen(STRUCT_MEMBER(unsigned char *, m, f[i].offset)),
+              allocator);
           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
+              allocator,
               "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
           free(escaped);
         }
@@ -298,8 +323,10 @@ text_format_to_string_int(ReturnString *rs,
 
             escaped = esc_str(
                 STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].data,
-                STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].len);
+                STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].len,
+                allocator);
             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
+                allocator,
                 "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
             free(escaped);
           }
@@ -308,8 +335,10 @@ text_format_to_string_int(ReturnString *rs,
 
           escaped = esc_str(
               STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).data,
-              STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).len);
+              STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).len,
+              allocator);
           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
+              allocator,
               "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
           free(escaped);
         }
@@ -323,20 +352,26 @@ text_format_to_string_int(ReturnString *rs,
               j < STRUCT_MEMBER(size_t, m, f[i].quantifier_offset);
               j++) {
             rs_append(rs, level + strlen(f[i].name) + 10,
+                allocator,
                 "%*s%s {\n", level, "", f[i].name);
-            text_format_to_string_int(rs, level + 2,
+            text_format_to_string_internal(rs, level + 2,
                 STRUCT_MEMBER(ProtobufCMessage **, m, f[i].offset)[j],
-                (ProtobufCMessageDescriptor *)f[i].descriptor);
+                (ProtobufCMessageDescriptor *)f[i].descriptor,
+                allocator);
             rs_append(rs, level + 10,
+                allocator,
                 "%*s}\n", level, "");
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 10,
+              allocator,
               "%*s%s {\n", level, "", f[i].name);
-          text_format_to_string_int(rs, level + 2,
+          text_format_to_string_internal(rs, level + 2,
               STRUCT_MEMBER(ProtobufCMessage *, m, f[i].offset),
-              (ProtobufCMessageDescriptor *)f[i].descriptor);
+              (ProtobufCMessageDescriptor *)f[i].descriptor,
+              allocator);
           rs_append(rs, level + 10,
+              allocator,
               "%*s}\n", level, "");
         }
         break;
@@ -349,11 +384,15 @@ text_format_to_string_int(ReturnString *rs,
 }
 
 char *
-text_format_to_string(ProtobufCMessage *m)
+text_format_to_string(ProtobufCMessage *m,
+    ProtobufCAllocator *allocator)
 {
   ReturnString rs = { 0, 0, NULL };
 
-  text_format_to_string_int(&rs, 0, m, m->descriptor);
+  if (!allocator) {
+    allocator = &protobuf_c_default_allocator;
+  }
+  text_format_to_string_internal(&rs, 0, m, m->descriptor, allocator);
 
   return rs.s;
 }

@@ -13,13 +13,15 @@
 int
 main(int argc, char *argv[])
 {
-  Tutorial__AddressBook ab = TUTORIAL__ADDRESS_BOOK__INIT;
+  Tutorial__AddressBook *ab;
   size_t len;
   uint8_t *buf;
   FILE *out;
   char *errors;
 
-  errors = text_format_from_file((ProtobufCMessage *)&ab, stdin);
+  ab = (Tutorial__AddressBook *)text_format_from_file(
+      &tutorial__address_book__descriptor,
+      stdin, &errors, NULL);
   if (errors) {
     printf("ERROR on import:\n%s", errors);
     free(errors);
@@ -28,9 +30,9 @@ main(int argc, char *argv[])
     printf("Import successful\n");
   }
 
-  len = tutorial__address_book__get_packed_size(&ab);
+  len = tutorial__address_book__get_packed_size(ab);
   buf = malloc(len);
-  tutorial__address_book__pack(&ab, buf);
+  tutorial__address_book__pack(ab, buf);
   if (argv[1]) {
     out = fopen(argv[1], "w");
     if (len != fwrite(buf, 1, len, out)) {
@@ -42,4 +44,6 @@ main(int argc, char *argv[])
     printf("ERROR: Name for protobuf output file not provided.");
     exit(1);
   }
+
+  tutorial__address_book__free_unpacked(ab, NULL);
 }
