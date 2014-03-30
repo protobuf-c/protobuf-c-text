@@ -10,17 +10,20 @@
 #include "protobuf-c-util.h"
 #include "config.h"
 
+#define PBC_FREE(ptr) allocator->free(allocator->allocator_data, ptr)
+
 typedef struct _ReturnString {
+  int malloc_err;
   int allocated;
   int pos;
   char *s;
 } ReturnString;
 
-static void rs_append(ReturnString *rs, int guess,
+static int rs_append(ReturnString *rs, int guess,
     ProtobufCAllocator *allocator,
     const char *format, ...)
   __attribute__((format(printf, 4, 5)));
-static void
+static int
 rs_append(ReturnString *rs, int guess,
     ProtobufCAllocator *allocator,
     const char *format, ...)
@@ -28,15 +31,32 @@ rs_append(ReturnString *rs, int guess,
   va_list args;
   int added;
 
+  if (rs->malloc_err) {
+    return 0;
+  }
+
   if (rs->allocated - rs->pos < guess * 2) {
+    char *tmp;
+
+    tmp = allocator->alloc(allocator->allocator_data,
+        rs->allocated + guess * 2);
+    if (!tmp) {
+      PBC_FREE(rs->s);
+      rs->s = NULL;
+      rs->malloc_err = 1;
+      return 0;
+    }
+    memcpy(tmp, rs->s, rs->allocated);
+    PBC_FREE(rs->s);
+    rs->s = tmp;
     rs->allocated += guess * 2;
-    rs->s = realloc(rs->s, rs->allocated);
   }
   va_start(args, format);
   /* TODO: error check this. */
   added = vsnprintf(rs->s + rs->pos, rs->allocated - rs->pos, format, args);
   va_end(args);
   rs->pos += added;
+  return 1;
 }
 
 static char *
@@ -50,7 +70,8 @@ esc_str(char *src, int len, ProtobufCAllocator *allocator)
       escapes++;
     }
   }
-  dst = malloc((escapes * 4) + ((len - escapes) * 2) + 1);
+  dst = allocator->alloc(allocator->allocator_data,
+      (escapes * 4) + ((len - escapes) * 2) + 1);
   if (!dst) {
     return NULL;
   }
@@ -114,6 +135,11 @@ text_format_to_string_internal(ReturnString *rs,
 
   f = d->fields;
   for (i = 0; i < d->n_fields; i++) {
+    if (rs->malloc_err) {
+      /* If there's been a malloc error, go die. */
+      return;
+    }
+
     /* Decide if something needs to be done for this field. */
     switch (f[i].label) {
       case PROTOBUF_C_LABEL_OPTIONAL:
@@ -299,10 +325,15 @@ text_format_to_string_internal(ReturnString *rs,
                 STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j],
                 strlen(STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j]),
                 allocator);
+            if (!escaped) {
+              PBC_FREE(rs->s);
+              rs->s = NULL;
+              return;
+            }
             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
                 allocator,
                 "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
-            free(escaped);
+            PBC_FREE(escaped);
           }
         } else {
           unsigned char *escaped;
@@ -310,10 +341,15 @@ text_format_to_string_internal(ReturnString *rs,
           escaped = esc_str(STRUCT_MEMBER(unsigned char *, m, f[i].offset),
               strlen(STRUCT_MEMBER(unsigned char *, m, f[i].offset)),
               allocator);
+          if (!escaped) {
+            PBC_FREE(rs->s);
+            rs->s = NULL;
+            return;
+          }
           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
               allocator,
               "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
-          free(escaped);
+          PBC_FREE(escaped);
         }
         break;
       case PROTOBUF_C_TYPE_BYTES:
@@ -325,10 +361,15 @@ text_format_to_string_internal(ReturnString *rs,
                 STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].data,
                 STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].len,
                 allocator);
+            if (!escaped) {
+              PBC_FREE(rs->s);
+              rs->s = NULL;
+              return;
+            }
             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
                 allocator,
                 "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
-            free(escaped);
+            PBC_FREE(escaped);
           }
         } else {
           unsigned char *escaped;
@@ -337,10 +378,15 @@ text_format_to_string_internal(ReturnString *rs,
               STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).data,
               STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).len,
               allocator);
+          if (!escaped) {
+            PBC_FREE(rs->s);
+            rs->s = NULL;
+            return;
+          }
           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
               allocator,
               "%*s%s: \"%s\"\n", level, "", f[i].name, escaped);
-          free(escaped);
+          PBC_FREE(escaped);
         }
         break;
 
@@ -376,7 +422,9 @@ text_format_to_string_internal(ReturnString *rs,
         }
         break;
       default:
-        printf("unknown value\n");
+        PBC_FREE(rs->s);
+        rs->s = NULL;
+        return;
         break;
     }
 
@@ -387,7 +435,7 @@ char *
 text_format_to_string(ProtobufCMessage *m,
     ProtobufCAllocator *allocator)
 {
-  ReturnString rs = { 0, 0, NULL };
+  ReturnString rs = { 0, 0, 0, NULL };
 
   if (!allocator) {
     allocator = &protobuf_c_default_allocator;

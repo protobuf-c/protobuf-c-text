@@ -1,6 +1,9 @@
 Memory allocation:
   * Use ProtobufCAllocator * instead of realloc/malloc/free.
 
+Error propogation:
+  * Free allocated memory when errors.
+
 Tests:
   * Add malloc hooks to enable deterministic failues.  Come up with a
     way to unwind failed allocations and report them.  Then test for that.
