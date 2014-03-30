@@ -27,7 +27,8 @@ typedef enum {
   TOK_COLON,
   TOK_QUOTED,
   TOK_NUMBER,
-  TOK_BOOLEAN
+  TOK_BOOLEAN,
+  TOK_MALLOC_ERR
 } TokenId;
 
 typedef struct _Token {
@@ -67,7 +68,7 @@ token2txt(Token *t)
 }
 
 static void
-tokenfree(Token *t, ProtobufCAllocator *allocator)
+token_free(Token *t, ProtobufCAllocator *allocator)
 {
   switch (t->id) {
     case TOK_BAREWORD:
@@ -86,6 +87,7 @@ tokenfree(Token *t, ProtobufCAllocator *allocator)
 
 typedef struct _Scanner {
   unsigned char *cursor;
+  unsigned char *marker;
   unsigned char *buffer;
   unsigned char *limit;
   unsigned char *token;
@@ -106,9 +108,17 @@ scanner_init_string(Scanner *scanner, char *buf)
 {
   memset(scanner, 0, sizeof(Scanner));
   scanner->buffer = buf;
+  scanner->marker = buf;
   scanner->cursor = buf;
   scanner->limit = &buf[strlen(buf)];
   scanner->line = 1;
+}
+
+static void
+scanner_free(Scanner *scanner, ProtobufCAllocator *allocator)
+{
+  if (scanner->f && scanner->buffer)
+    allocator->free(allocator->allocator_data, scanner->buffer);
 }
 
 static ProtobufCBinaryData *
@@ -201,6 +211,9 @@ fill(Scanner *scanner, ProtobufCAllocator *allocator)
     oldlen = scanner->limit - scanner->token;
     len = CHUNK + oldlen;
     buf = allocator->alloc(allocator->allocator_data, len);
+    if (!buf) {
+      return -1;
+    }
     memcpy(buf, scanner->token, oldlen);
     nmemb = fread(buf + oldlen, 1, CHUNK, scanner->f);
     if (nmemb != CHUNK) {
@@ -214,18 +227,22 @@ fill(Scanner *scanner, ProtobufCAllocator *allocator)
     scanner->token = buf;
     allocator->free(allocator->allocator_data, scanner->buffer);
     scanner->buffer = buf;
+    scanner->marker = buf;
   }
 
-  return scanner->limit >= scanner->cursor;
+  return scanner->limit >= scanner->cursor? 1: 0;
 }
 
 #define RETURN(tt) { t.id = tt; return t; }
-#define YYFILL(n) { if (!fill(scanner, allocator)) RETURN(TOK_EOF); }
+#define YYFILL(n) { fill_result = fill(scanner, allocator); \
+                    if (fill_result <=0) \
+                      RETURN((fill_result == -1? TOK_MALLOC_ERR: TOK_EOF)); }
 
 static Token
 scan(Scanner *scanner, ProtobufCAllocator *allocator)
 {
   Token t;
+  int fill_result;
 
 token_start:
   scanner->token = scanner->cursor;
@@ -234,7 +251,7 @@ token_start:
   re2c:define:YYCTYPE   = "unsigned char";
   re2c:define:YYCURSOR  = scanner->cursor;
   re2c:define:YYLIMIT   = scanner->limit;
-  re2c:define:YYMARKER  = scanner->buffer;
+  re2c:define:YYMARKER  = scanner->marker;
 
   I = [-]? [0-9]+;
   F = [-]? [0-9]* "." [0-9]+;
@@ -247,6 +264,9 @@ token_start:
   I | F       {
                 t.number = allocator->alloc(allocator->allocator_data,
                        (scanner->cursor - scanner->token) + 1);
+                if (!t.number) {
+                  RETURN(TOK_MALLOC_ERR);
+                }
                 memcpy(t.number, scanner->token,
                        scanner->cursor - scanner->token);
                 t.number[scanner->cursor - scanner->token] = '\0';
@@ -257,6 +277,9 @@ token_start:
   BW          {
                 t.bareword = allocator->alloc(allocator->allocator_data,
                        (scanner->cursor - scanner->token) + 1);
+                if (!t.bareword) {
+                  RETURN(TOK_MALLOC_ERR);
+                }
                 memcpy(t.bareword, scanner->token,
                        scanner->cursor - scanner->token);
                 t.bareword[scanner->cursor - scanner->token] = '\0';
@@ -266,6 +289,9 @@ token_start:
                 t.qs = unesc_str(scanner->token + 1,
                                  scanner->cursor - scanner->token - 2,
                                  allocator);
+                if (!t.qs) {
+                  RETURN(TOK_MALLOC_ERR);
+                }
                 RETURN(TOK_QUOTED);
               }
   "{"         { t.symbol = '{'; RETURN(TOK_OBRACE); }
@@ -900,10 +926,15 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
 
   while (state_id != STATE_DONE) {
     token = scan(scanner, allocator);
+    if (token.id == TOK_MALLOC_ERR) {
+      scanner_free(scanner, allocator);
+      token_free(&token, allocator);
+    }
     state_id = states[state_id](&state, &token);
-    tokenfree(&token, allocator);
+    token_free(&token, allocator);
   }
 
+  scanner_free(scanner, allocator);
   *error_txt = state.error;
   return state.msgs[0];
 }
