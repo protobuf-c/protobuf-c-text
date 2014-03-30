@@ -6,6 +6,7 @@ before_install:
 install:
     - sudo apt-get -q install protobuf-c-compiler
       libprotobuf-c0 libprotobuf-c0-dev
+      check re2c
 
 script:
     - ./autogen.sh
