@@ -19,11 +19,11 @@ typedef struct _ReturnString {
   char *s;
 } ReturnString;
 
-static int rs_append(ReturnString *rs, int guess,
+static void rs_append(ReturnString *rs, int guess,
     ProtobufCAllocator *allocator,
     const char *format, ...)
   __attribute__((format(printf, 4, 5)));
-static int
+static void
 rs_append(ReturnString *rs, int guess,
     ProtobufCAllocator *allocator,
     const char *format, ...)
