@@ -2,6 +2,7 @@ ACLOCAL_AMFLAGS = -I m4 --install
 PROTOBUF_C_TEST_SRCS = t/addressbook.pb-c.c
 PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 				          $(PROTOBUF_C_TEST_SRCS))
+AM_CFLAGS = -I $(srcdir)/protobuf-c-text
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
 TESTS = $(srcdir)/t/test_generation.sh $(srcdir)/t/test_parse.sh
@@ -74,16 +75,13 @@ AM_V_PROTOC_C_ = $(AM_V_PROTOC_C_@AM_DEFAULT_V@)
 AM_V_PROTOC_C_0 = @echo "  PBC_C " $<;
 %.pb-c.c %.pb-c.h: %.proto
 	$(AM_V_PROTOC_C)$(PROTOC_C) --proto_path=$(dir $<) --c_out=$(dir $@) $<
-	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.c,$<) || true
-	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.h,$<) || true
-	@rm -f $(patsubst %.proto,%.pb-c.c~,$<) $(patsubst %.proto,%.pb-c.h~,$<)
 
 # Define macros to have quiet re2c statements.
 AM_V_RE2C = $(AM_V_RE2C_@AM_V@)
 AM_V_RE2C_ = $(AM_V_RE2C_@AM_DEFAULT_V@)
 AM_V_RE2C_0 = @echo "  RE2C  " $<;
 %.c: %.re
-	$(AM_V_RE2C)$(RE2C) -s -o $(patsubst %.re,%.c,$<) $<
+	$(AM_V_RE2C)$(RE2C) -s -o $@ $<
 
 include am/aminclude_coverage.am
 include am/aminclude_doxygen.am
