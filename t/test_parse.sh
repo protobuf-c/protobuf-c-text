@@ -5,4 +5,4 @@ if [[ ! -f t/addressbook.c.text ]]; then
 fi
 ./t/c-parse t/addressbook.c.data < t/addressbook.c.text
 
-cmp t/addressbook.c.data t/addressbook.data
+cmp t/addressbook.c.data $srcdir/t/addressbook.data

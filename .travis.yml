@@ -1,0 +1,12 @@
+language: c
+
+before_install:
+    - sudo apt-get update -qq
+
+install:
+    - sudo apt-get -q install protobuf-c-compiler
+      libprotobuf-c0 libprotobuf-c0-dev
+
+script:
+    - ./autogen.sh
+    - ./configure && make distcheck VERBOSE=1 && make clean

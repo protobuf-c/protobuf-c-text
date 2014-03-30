@@ -4,10 +4,10 @@ PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 				          $(PROTOBUF_C_TEST_SRCS))
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
-TESTS = t/test_generation.sh t/test_parse.sh
+TESTS = $(srcdir)/t/test_generation.sh $(srcdir)/t/test_parse.sh
 check_PROGRAMS = t/c-dump t/c-parse
-check_SCRIPTS = t/test_generation.sh
-BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_SRCS) \
+check_SCRIPTS = t/test_generation.sh t/test_parse.sh
+BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_HDRS) \
 		protobuf-c-text/parse.c
 noinst_HEADERS = protobuf-c-text/protobuf-c-util.h
 
@@ -50,19 +50,22 @@ analyze: all
 	done
 
 # Test programs.
-t_c_dump_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-dump.c
-t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
+t_c_dump_SOURCES = t/c-dump.c
+nodist_t_c_dump_SOURCES = $(PROTOBUF_C_TEST_SRCS)
+t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
 t_c_dump_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_dump_LDFLAGS = -static
 
-t_c_parse_SOURCES = $(PROTOBUF_C_TEST_SRCS) t/c-parse.c
-t_c_parse_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
+t_c_parse_SOURCES = t/c-parse.c
+nodist_t_c_parse_SOURCES = $(PROTOBUF_C_TEST_SRCS)
+t_c_parse_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
 t_c_parse_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_parse_LDFLAGS = -static
 
 EXTRA_DIST = t/addressbook.proto \
 	     t/addressbook.data \
-	     protobuf-c-text/libprotobuf-c-text.pc.in
+	     protobuf-c-text/libprotobuf-c-text.pc.in \
+	     $(check_SCRIPTS)
 
 # Define macros to have quiet protoc-c statements.
 AM_V_PROTOC_C = $(AM_V_PROTOC_C_@AM_V@)
@@ -70,8 +73,8 @@ AM_V_PROTOC_C_ = $(AM_V_PROTOC_C_@AM_DEFAULT_V@)
 AM_V_PROTOC_C_0 = @echo "  PBC_C " $<;
 %.pb-c.c %.pb-c.h: %.proto
 	$(AM_V_PROTOC_C)$(PROTOC_C) --proto_path=$(dir $<) --c_out=$(dir $@) $<
-	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.c,$<)
-	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.h,$<)
+	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.c,$<) || true
+	@indent -kr -nut -i2 $(patsubst %.proto,%.pb-c.h,$<) || true
 	@rm -f $(patsubst %.proto,%.pb-c.c~,$<) $(patsubst %.proto,%.pb-c.h~,$<)
 
 # Define macros to have quiet re2c statements.
