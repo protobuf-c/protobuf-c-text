@@ -44,4 +44,6 @@ main(int argc, char *argv[])
   }
 
   tutorial__address_book__free_unpacked(ab, NULL);
+
+  exit(0);
 }
