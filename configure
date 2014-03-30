@@ -16365,10 +16365,10 @@ $as_echo "no" >&6; }
 		PKG_CONFIG=""
 	fi
 fi
-if test -n "$PKG_CONFIG"; then
-  # Kludge for systems where the pkg-config install dir is simply wrong!
-  if $PKG_CONFIG --variable=pc_path pkg-config 2>/dev/null \
-      | grep -q /libdata/; then
+if test -n "$PKG_CONFIG"; then :
+   # Kludge for systems where the pkg-config install dir is simply wrong!
+    if $PKG_CONFIG --variable=pc_path pkg-config 2>/dev/null \
+                       | grep -q /libdata/; then :
 
 
 
@@ -16384,7 +16384,7 @@ pkgconfigdir=$with_pkgconfigdir
 
 
 
-  else
+else
 
 
 
@@ -16400,10 +16400,10 @@ pkgconfigdir=$with_pkgconfigdir
 
 
 
-  fi
+fi
 else
-  # This should never be reached.
-  as_fn_error $? "pkg-config is required!" "$LINENO" 5
+   # This should never be reached.
+    as_fn_error $? "pkg-config is required!" "$LINENO" 5
 fi
 
 

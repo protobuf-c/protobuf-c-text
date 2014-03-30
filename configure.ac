@@ -31,18 +31,14 @@ AS_IF([test -z "$RE2C"],
       [AC_MSG_ERROR([re2c is required!])])
 AM_PROG_CC_C_O
 PKG_PROG_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  # Kludge for systems where the pkg-config install dir is simply wrong!
-  if $PKG_CONFIG --variable=pc_path pkg-config 2>/dev/null \
-      | grep -q /libdata/; then
-    PKG_INSTALLDIR(['${prefix}/libdata/pkgconfig'])
-  else
-    PKG_INSTALLDIR
-  fi
-else
-  # This should never be reached.
-  AC_MSG_ERROR([pkg-config is required!])
-fi
+AS_IF([test -n "$PKG_CONFIG"],
+  [ # Kludge for systems where the pkg-config install dir is simply wrong!
+    AS_IF([$PKG_CONFIG --variable=pc_path pkg-config 2>/dev/null \
+                       | grep -q /libdata/],
+          [PKG_INSTALLDIR(['${prefix}/libdata/pkgconfig'])],
+          [PKG_INSTALLDIR])],
+  [ # This should never be reached.
+    AC_MSG_ERROR([pkg-config is required!])])
 
 PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 AC_TDD_GCOV
