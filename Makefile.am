@@ -17,10 +17,11 @@ valgrind: $(check_PROGRAMS)
 	@t/valgrind.test_generation.sh
 
 # Libraries.
+nodist_protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
+    protobuf-c-text/parse.c
 protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
     protobuf-c-text/generate.c \
-    protobuf-c-text/parse.re \
-    protobuf-c-text/parse.c
+    protobuf-c-text/parse.re
 protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # Version updating rules:
 # 1. If the library source code has changed but interfaces are the same,
