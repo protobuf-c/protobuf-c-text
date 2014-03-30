@@ -4,10 +4,10 @@
 .PHONY: coverage-html generate-coverage-html clean-coverage-html
 
 clean-gcda:
-	@find -name '*.gcda' -print | xargs -r rm
+	@rm -f */*.gcda
 
 clean-gcno:
-	@find -name '*.gcno' -print | xargs -r rm
+	@rm -f */*.gcno
 
 if HAVE_GCOV
 

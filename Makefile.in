@@ -1223,10 +1223,10 @@ analyze: all
 .PHONY: coverage-html generate-coverage-html clean-coverage-html
 
 clean-gcda:
-	@find -name '*.gcda' -print | xargs -r rm
+	@rm -f */*.gcda
 
 clean-gcno:
-	@find -name '*.gcno' -print | xargs -r rm
+	@rm -f */*.gcno
 
 @HAVE_GCOV_TRUE@coverage-html: clean-gcda
 @HAVE_GCOV_TRUE@	@$(MAKE) $(AM_MAKEFLAGS) -k check
