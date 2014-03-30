@@ -1,0 +1,16 @@
+Memory allocation:
+  * Change functions to take ProtobufCMessageDescriptor instead of
+    ProtobufCMessage. Allocate complete message - it can then be freed
+    via protobuf_c_message_free_unpacked()
+  * Change functions to take ProtobufCAllocator * and change all
+    realloc/malloc/free calls to use it.
+  * Make sure protobuf_c_message_free_unpacked() works.
+
+Tests:
+  * Add malloc hooks to enable deterministic failues.  Come up with a
+    way to unwind failed allocations and report them.  Then test for that.
+  * Add a bunch of tasts of broken text format buffers.
+  * Add mcheck or valgrind tests to check for leaking memory.
+
+Documentation:
+  * All of it.
