@@ -67,7 +67,13 @@ t_c_parse_LDFLAGS = -static
 EXTRA_DIST = t/addressbook.proto \
 	     t/addressbook.data \
 	     protobuf-c-text/libprotobuf-c-text.pc.in \
-	     $(check_SCRIPTS)
+	     $(check_SCRIPTS) \
+	     t/broken/bareword-instead-of-string.text \
+	     t/broken/float-for-int.text \
+	     t/broken/int-too-big.text \
+	     t/broken/message-for-int.text \
+	     t/broken/negative-in-unsigned.text \
+	     t/broken/non-existant-field.text
 
 # Define macros to have quiet protoc-c statements.
 AM_V_PROTOC_C = $(AM_V_PROTOC_C_@AM_V@)
@@ -107,4 +113,5 @@ MOSTLYCLEANFILES = $(DX_CLEANFILES) \
 		   $(PROTOBUF_C_TEST_HDRS) \
 		   t/addressbook.c.text \
 		   t/addressbook.protoc-c.text \
-		   t/addressbook.c.data
+		   t/addressbook.c.data \
+		   t/broken_parse.out

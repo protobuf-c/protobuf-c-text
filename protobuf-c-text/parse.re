@@ -569,6 +569,8 @@ state_value(State *state, Token *t)
               t->bareword, state->field->name);
         }
       }
+      return state_error(state, t,
+          "'%s' is not an enum field.", state->field->name);
       break;
 
     case TOK_BOOLEAN:
@@ -592,10 +594,9 @@ state_value(State *state, Token *t)
           return STATE_OPEN;
         }
 
-      } else {
-        return state_error(state, t,
-            "'%s' is not a boolean field.", state->field->name);
       }
+      return state_error(state, t,
+          "'%s' is not a boolean field.", state->field->name);
       break;
 
     case TOK_QUOTED:
@@ -667,10 +668,9 @@ state_value(State *state, Token *t)
           return STATE_OPEN;
         }
 
-      } else {
-        return state_error(state, t,
-            "'%s' is not a boolean field.", state->field->name);
       }
+      return state_error(state, t,
+          "'%s' is not a boolean field.", state->field->name);
       break;
 
     case TOK_NUMBER:
