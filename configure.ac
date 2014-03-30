@@ -23,8 +23,12 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
+AC_ARG_VAR(PROTOC_C, [Protobuf C compiler.])
+AC_ARG_VAR(RE2C, [re2c lexical scanner C pre-processor.])
 AC_CHECK_PROG(PROTOC_C, protoc-c, protoc-c)
 AC_CHECK_PROG(RE2C, re2c, re2c)
+AS_IF([test -z "$RE2C"],
+      [AC_MSG_ERROR([re2c is required!])])
 AM_PROG_CC_C_O
 PKG_PROG_PKG_CONFIG
 if test -n "$PKG_CONFIG"; then
@@ -50,7 +54,7 @@ DX_PS_FEATURE(OFF)
 DX_MAN_FEATURE(ON)
 DX_DOT_FEATURE(ON)
 DX_INIT_DOXYGEN([riak-git], [docs/Doxyfile], [docs/doxygen])
-AS_IF([test -z "x$DX_DOXYGEN"], [have_doxygen=no], [have_doxygen=yes])
+AS_IF([test -z "$DX_DOXYGEN"], [have_doxygen=no], [have_doxygen=yes])
 
 # Checks for libraries.  Each defines a with_LIB var that can be
 # one of three values: yes, discover or no. By default the value is
