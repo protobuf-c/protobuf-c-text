@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -f t/addressbook.c.data
+
 if [[ ! -f t/addressbook.c.text ]]; then
   exit 77
 fi
