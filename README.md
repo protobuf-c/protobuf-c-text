@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lyda/protobuf-c-text.png?branch=master)](https://travis-ci.org/lyda/protobuf-c-text)
+
 # Protobuf Text Format Support for C
 
 Python, C++ and Java protobufs support text format but C protobufs do not.
