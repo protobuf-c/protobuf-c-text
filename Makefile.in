@@ -46,7 +46,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/am/aminclude_doxygen.am \
 	$(top_srcdir)/build-aux/config.h.in $(top_srcdir)/configure \
 	$(top_srcdir)/protobuf-c-text/libprotobuf-c-text.pc.in AUTHORS \
-	COPYING ChangeLog INSTALL NEWS build-aux/compile \
+	COPYING ChangeLog INSTALL NEWS TODO build-aux/compile \
 	build-aux/config.guess build-aux/config.sub build-aux/depcomp \
 	build-aux/install-sh build-aux/ltmain.sh build-aux/missing
 subdir = .

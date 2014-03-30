@@ -836,6 +836,8 @@ CXX
 CXXFLAGS
 CCC
 CXXCPP
+PROTOC_C
+RE2C
 PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
@@ -1507,6 +1509,8 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   CXXCPP      C++ preprocessor
+  PROTOC_C    Protobuf C compiler.
+  RE2C        re2c lexical scanner C pre-processor.
   PKG_CONFIG  path to pkg-config utility
   PKG_CONFIG_PATH
               directories to add to pkg-config's search path
@@ -16036,6 +16040,8 @@ $as_echo "no" >&6; }
   SET_MAKE="MAKE=${MAKE-make}"
 fi
 
+
+
 # Extract the first word of "protoc-c", so it can be a program name with args.
 set dummy protoc-c; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -16110,6 +16116,9 @@ $as_echo "no" >&6; }
 fi
 
 
+if test -z "$RE2C"; then :
+  as_fn_error $? "re2c is required!" "$LINENO" 5
+fi
 if test "x$CC" != xcc; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $CC and cc understand -c and -o together" >&5
 $as_echo_n "checking whether $CC and cc understand -c and -o together... " >&6; }
@@ -18528,7 +18537,7 @@ esac
 #echo DX_FLAG_ps=$DX_FLAG_ps
 #echo DX_ENV=$DX_ENV
 
-if test -z "x$DX_DOXYGEN"; then :
+if test -z "$DX_DOXYGEN"; then :
   have_doxygen=no
 else
   have_doxygen=yes
