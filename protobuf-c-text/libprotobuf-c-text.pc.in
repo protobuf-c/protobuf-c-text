@@ -7,6 +7,6 @@ Name: libprotobuf-c-test
 Description: Protobuf text format routines for C library
 Requires: libprotobuf-c
 Version: @VERSION@
-Libs: -L${libdir} -lprotobuf-c
+Libs: -L${libdir} -lprotobuf-c-text
 Libs.private:
 Cflags: -I${includedir}
