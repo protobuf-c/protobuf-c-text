@@ -10,4 +10,4 @@ install:
 
 script:
     - ./autogen.sh
-    - ./configure && make distcheck VERBOSE=1 && make clean
+    - ./configure && make distcheck && make clean
