@@ -26,8 +26,6 @@ main(int argc, char *argv[])
     printf("ERROR on import:\n%s", errors);
     free(errors);
     exit(1);
-  } else {
-    printf("Import successful\n");
   }
 
   len = tutorial__address_book__get_packed_size(ab);

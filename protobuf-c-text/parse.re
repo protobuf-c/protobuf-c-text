@@ -67,15 +67,18 @@ token2txt(Token *t)
 }
 
 static void
-tokenfree(Token *t)
+tokenfree(Token *t, ProtobufCAllocator *allocator)
 {
   switch (t->id) {
     case TOK_BAREWORD:
-      free(t->bareword);     break;
+      allocator->free(allocator->allocator_data, t->bareword);
+      break;
     case TOK_QUOTED:
-      free(t->qs->data); break;
+      allocator->free(allocator->allocator_data, t->qs->data);
+      break;
     case TOK_NUMBER:
-      free(t->number);       break;
+      allocator->free(allocator->allocator_data, t->number);
+      break;
     default:
       break;
   }
@@ -109,15 +112,16 @@ scanner_init_string(Scanner *scanner, char *buf)
 }
 
 static ProtobufCBinaryData *
-unesc_str(unsigned char *src, int len)
+unesc_str(unsigned char *src, int len, ProtobufCAllocator *allocator)
 {
   ProtobufCBinaryData *dst_pbbd;
   unsigned char *dst;
   int i = 0, dst_len = 0;
   unsigned char oct[4];
 
-  dst_pbbd = malloc(sizeof(ProtobufCBinaryData));
-  dst = malloc(len + 1);
+  dst_pbbd = allocator->alloc(allocator->allocator_data,
+      sizeof(ProtobufCBinaryData));
+  dst = allocator->alloc(allocator->allocator_data, len + 1);
   if (!dst_pbbd || !dst) {
     goto unesc_str_error;
   }
@@ -176,15 +180,15 @@ unesc_str(unsigned char *src, int len)
   return dst_pbbd;
 
 unesc_str_error:
-  free(dst);
-  free(dst_pbbd);
+  allocator->free(allocator->allocator_data, dst);
+  allocator->free(allocator->allocator_data, dst_pbbd);
   return NULL;
 }
 
 #define CHUNK 4096
 
 static int
-fill(Scanner *scanner)
+fill(Scanner *scanner, ProtobufCAllocator *allocator)
 {
   char *buf;
   int len, oldlen, nmemb;
@@ -196,7 +200,7 @@ fill(Scanner *scanner)
   if (scanner->f && !feof(scanner->f)) {
     oldlen = scanner->limit - scanner->token;
     len = CHUNK + oldlen;
-    buf = malloc(len);
+    buf = allocator->alloc(allocator->allocator_data, len);
     memcpy(buf, scanner->token, oldlen);
     nmemb = fread(buf + oldlen, 1, CHUNK, scanner->f);
     if (nmemb != CHUNK) {
@@ -208,7 +212,7 @@ fill(Scanner *scanner)
     scanner->cursor = &buf[scanner->cursor - scanner->token];
     scanner->limit = buf + len;
     scanner->token = buf;
-    free(scanner->buffer);
+    allocator->free(allocator->allocator_data, scanner->buffer);
     scanner->buffer = buf;
   }
 
@@ -216,10 +220,10 @@ fill(Scanner *scanner)
 }
 
 #define RETURN(tt) { t.id = tt; return t; }
-#define YYFILL(n) { if (!fill(scanner)) RETURN(TOK_EOF); }
+#define YYFILL(n) { if (!fill(scanner, allocator)) RETURN(TOK_EOF); }
 
 static Token
-scan(Scanner *scanner)
+scan(Scanner *scanner, ProtobufCAllocator *allocator)
 {
   Token t;
 
@@ -241,7 +245,8 @@ token_start:
   WS = [ \t];
 
   I | F       {
-                t.number = malloc((scanner->cursor - scanner->token) + 1);
+                t.number = allocator->alloc(allocator->allocator_data,
+                       (scanner->cursor - scanner->token) + 1);
                 memcpy(t.number, scanner->token,
                        scanner->cursor - scanner->token);
                 t.number[scanner->cursor - scanner->token] = '\0';
@@ -250,7 +255,8 @@ token_start:
   "true"      { t.boolean=true; RETURN(TOK_BOOLEAN); }
   "false"     { t.boolean=false; RETURN(TOK_BOOLEAN); }
   BW          {
-                t.bareword = malloc((scanner->cursor - scanner->token) + 1);
+                t.bareword = allocator->alloc(allocator->allocator_data,
+                       (scanner->cursor - scanner->token) + 1);
                 memcpy(t.bareword, scanner->token,
                        scanner->cursor - scanner->token);
                 t.bareword[scanner->cursor - scanner->token] = '\0';
@@ -258,7 +264,8 @@ token_start:
               }
   QS          {
                 t.qs = unesc_str(scanner->token + 1,
-                                 scanner->cursor - scanner->token - 2);
+                                 scanner->cursor - scanner->token - 2,
+                                 allocator);
                 RETURN(TOK_QUOTED);
               }
   "{"         { t.symbol = '{'; RETURN(TOK_OBRACE); }
@@ -287,7 +294,7 @@ typedef struct {
   char *error;
 } State;
 
-void
+int
 state_init(State *state,
     Scanner *scanner,
     const ProtobufCMessageDescriptor *descriptor,
@@ -296,13 +303,22 @@ state_init(State *state,
   ProtobufCMessage *msg;
 
   memset(state, 0, sizeof(State));
+  state->allocator = allocator;
   state->scanner = scanner;
-  state->msgs = malloc(10 * sizeof(ProtobufCMessage *));
+  state->msgs = state->allocator->alloc(state->allocator->allocator_data,
+      10 * sizeof(ProtobufCMessage *));
   state->max_msg = 10;
-  msg = malloc(descriptor->sizeof_message);
+  msg = state->allocator->alloc(state->allocator->allocator_data,
+      descriptor->sizeof_message);
+  if (!state->msgs || !msg) {
+    state->allocator->free(state->allocator->allocator_data, state->msgs);
+    state->allocator->free(state->allocator->allocator_data, msg);
+    return 0;
+  }
   protobuf_c_message_init(descriptor, msg);
   state->msgs[0] = msg;
-  state->allocator = allocator;
+
+  return 1;
 }
 
 /*
@@ -317,7 +333,8 @@ state_error(State *state, Token *t, char *error_fmt, ...)
   int error_idx, error_imax = 800;
 
   /* 10 solid lines of errors is more than enough. */
-  state->error = malloc(error_imax);
+  state->error = state->allocator->alloc(state->allocator->allocator_data,
+      error_imax);
   va_start(args, error_fmt);
   error_idx = vsnprintf(state->error, error_imax, error_fmt, args);
   va_end(args);
@@ -430,7 +447,9 @@ state_assignment(State *state, Token *t)
           /* TODO: error out if tmp is NULL. */
           STRUCT_MEMBER(ProtobufCMessage **, msg, state->field->offset)
             = tmp;
-          tmp[n_members - 1] = malloc(((ProtobufCMessageDescriptor *)
+          tmp[n_members - 1] = state->allocator->alloc(
+              state->allocator->allocator_data,
+              ((ProtobufCMessageDescriptor *)
                 state->field->descriptor)->sizeof_message);
           /* TODO: error out if tmp[n_members - 1] is NULL. */
           state->msgs[state->current_msg] = tmp[n_members - 1];
@@ -446,8 +465,9 @@ state_assignment(State *state, Token *t)
                 "'%s' is too many messages deep.", state->field->name);
           }
           state->msgs[state->current_msg]
-            = malloc(((ProtobufCMessageDescriptor *)
-                      state->field->descriptor)->sizeof_message);
+            = state->allocator->alloc(state->allocator->allocator_data,
+                ((ProtobufCMessageDescriptor *)
+                 state->field->descriptor)->sizeof_message);
           STRUCT_MEMBER(ProtobufCMessage *, msg, state->field->offset)
             = state->msgs[state->current_msg];
           ((ProtobufCMessageDescriptor *)state->field->descriptor)
@@ -566,14 +586,16 @@ state_value(State *state, Token *t)
           /* TODO: error out if pbbd is NULL. */
           STRUCT_MEMBER(ProtobufCBinaryData *, msg, state->field->offset)
             = pbbd;
-          pbbd[n_members - 1].data = malloc(t->qs->len);
+          pbbd[n_members - 1].data = state->allocator->alloc(
+              state->allocator->allocator_data, t->qs->len);
           memcpy(pbbd[n_members - 1].data, t->qs->data, t->qs->len);
           pbbd[n_members - 1].len = t->qs->len;
           return STATE_OPEN;
         } else {
           pbbd = STRUCT_MEMBER_PTR(ProtobufCBinaryData, msg,
               state->field->offset);
-          pbbd->data = malloc(t->qs->len);
+          pbbd->data = state->allocator->alloc(
+              state->allocator->allocator_data, t->qs->len);
           memcpy(pbbd->data, t->qs->data, t->qs->len);
           pbbd->len = t->qs->len;
           return STATE_OPEN;
@@ -600,14 +622,16 @@ state_value(State *state, Token *t)
               n_members * sizeof(unsigned char *));
           /* TODO: error out if s is NULL. */
           STRUCT_MEMBER(unsigned char **, msg, state->field->offset) = s;
-          s[n_members - 1] = malloc(t->qs->len + 1);
+          s[n_members - 1] = state->allocator->alloc(
+              state->allocator->allocator_data, t->qs->len + 1);
           memcpy(s[n_members - 1], t->qs->data, t->qs->len);
           s[n_members - 1][t->qs->len] = '\0';
           return STATE_OPEN;
         } else {
           unsigned char *s;
 
-          s = malloc(t->qs->len + 1);
+          s = state->allocator->alloc(state->allocator->allocator_data,
+              t->qs->len + 1);
           memcpy(s, t->qs->data, t->qs->len);
           s[t->qs->len] = '\0';
           if (strlen(s) != t->qs->len) {
@@ -870,12 +894,14 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
   *error_txt = NULL;
 
   state_id = STATE_OPEN;
-  state_init(&state, scanner, descriptor, allocator);
+  if (!state_init(&state, scanner, descriptor, allocator)) {
+    return NULL;
+  }
 
   while (state_id != STATE_DONE) {
-    token = scan(scanner);
+    token = scan(scanner, allocator);
     state_id = states[state_id](&state, &token);
-    tokenfree(&token);
+    tokenfree(&token, allocator);
   }
 
   *error_txt = state.error;
