@@ -38,7 +38,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = t/c-dump$(EXEEXT) t/c-parse$(EXEEXT)
+check_PROGRAMS = t/c-dump$(EXEEXT) t/c-dump2$(EXEEXT) \
+	t/c-parse$(EXEEXT) t/c-parse2$(EXEEXT)
 DIST_COMMON = README $(am__configure_deps) \
 	$(libprotobuf_c_text_HEADERS) $(noinst_HEADERS) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
@@ -121,10 +122,21 @@ t_c_dump_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
 t_c_dump_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_c_dump_CFLAGS) \
 	$(CFLAGS) $(t_c_dump_LDFLAGS) $(LDFLAGS) -o $@
+am_t_c_dump2_OBJECTS = t/t_c_dump2-c-dump2.$(OBJEXT) \
+	t/t_c_dump2-broken-alloc.$(OBJEXT)
+am__objects_2 = t/t_c_dump2-addressbook.pb-c.$(OBJEXT)
+nodist_t_c_dump2_OBJECTS = $(am__objects_2)
+t_c_dump2_OBJECTS = $(am_t_c_dump2_OBJECTS) \
+	$(nodist_t_c_dump2_OBJECTS)
+t_c_dump2_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
+	$(am__DEPENDENCIES_1)
+t_c_dump2_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_c_dump2_CFLAGS) \
+	$(CFLAGS) $(t_c_dump2_LDFLAGS) $(LDFLAGS) -o $@
 am_t_c_parse_OBJECTS = t/t_c_parse-c-parse.$(OBJEXT) \
 	t/t_c_parse-broken-alloc.$(OBJEXT)
-am__objects_2 = t/t_c_parse-addressbook.pb-c.$(OBJEXT)
-nodist_t_c_parse_OBJECTS = $(am__objects_2)
+am__objects_3 = t/t_c_parse-addressbook.pb-c.$(OBJEXT)
+nodist_t_c_parse_OBJECTS = $(am__objects_3)
 t_c_parse_OBJECTS = $(am_t_c_parse_OBJECTS) \
 	$(nodist_t_c_parse_OBJECTS)
 t_c_parse_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
@@ -132,6 +144,17 @@ t_c_parse_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
 t_c_parse_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_c_parse_CFLAGS) \
 	$(CFLAGS) $(t_c_parse_LDFLAGS) $(LDFLAGS) -o $@
+am_t_c_parse2_OBJECTS = t/t_c_parse2-c-parse2.$(OBJEXT) \
+	t/t_c_parse2-broken-alloc.$(OBJEXT)
+am__objects_4 = t/t_c_parse2-addressbook.pb-c.$(OBJEXT)
+nodist_t_c_parse2_OBJECTS = $(am__objects_4)
+t_c_parse2_OBJECTS = $(am_t_c_parse2_OBJECTS) \
+	$(nodist_t_c_parse2_OBJECTS)
+t_c_parse2_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
+	$(am__DEPENDENCIES_1)
+t_c_parse2_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_c_parse2_CFLAGS) \
+	$(CFLAGS) $(t_c_parse2_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/build-aux
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
@@ -161,9 +184,12 @@ am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(nodist_protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(t_c_dump_SOURCES) $(nodist_t_c_dump_SOURCES) \
-	$(t_c_parse_SOURCES) $(nodist_t_c_parse_SOURCES)
+	$(t_c_dump2_SOURCES) $(nodist_t_c_dump2_SOURCES) \
+	$(t_c_parse_SOURCES) $(nodist_t_c_parse_SOURCES) \
+	$(t_c_parse2_SOURCES) $(nodist_t_c_parse2_SOURCES)
 DIST_SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
-	$(t_c_dump_SOURCES) $(t_c_parse_SOURCES)
+	$(t_c_dump_SOURCES) $(t_c_dump2_SOURCES) $(t_c_parse_SOURCES) \
+	$(t_c_parse2_SOURCES)
 DATA = $(pkgconfig_DATA)
 HEADERS = $(libprotobuf_c_text_HEADERS) $(noinst_HEADERS)
 ETAGS = etags
@@ -402,11 +428,21 @@ nodist_t_c_dump_SOURCES = $(PROTOBUF_C_TEST_SRCS)
 t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
 t_c_dump_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_dump_LDFLAGS = -static
+t_c_dump2_SOURCES = t/c-dump2.c t/broken-alloc.h t/broken-alloc.c
+nodist_t_c_dump2_SOURCES = $(PROTOBUF_C_TEST_SRCS)
+t_c_dump2_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
+t_c_dump2_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_c_dump2_LDFLAGS = -static
 t_c_parse_SOURCES = t/c-parse.c t/broken-alloc.h t/broken-alloc.c
 nodist_t_c_parse_SOURCES = $(PROTOBUF_C_TEST_SRCS)
 t_c_parse_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
 t_c_parse_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_parse_LDFLAGS = -static
+t_c_parse2_SOURCES = t/c-parse2.c t/broken-alloc.h t/broken-alloc.c
+nodist_t_c_parse2_SOURCES = $(PROTOBUF_C_TEST_SRCS)
+t_c_parse2_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
+t_c_parse2_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_c_parse2_LDFLAGS = -static
 EXTRA_DIST = t/addressbook.proto \
 	     t/addressbook.data \
 	     protobuf-c-text/libprotobuf-c-text.pc.in \
@@ -587,6 +623,15 @@ t/t_c_dump-addressbook.pb-c.$(OBJEXT): t/$(am__dirstamp) \
 t/c-dump$(EXEEXT): $(t_c_dump_OBJECTS) $(t_c_dump_DEPENDENCIES) $(EXTRA_t_c_dump_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/c-dump$(EXEEXT)
 	$(AM_V_CCLD)$(t_c_dump_LINK) $(t_c_dump_OBJECTS) $(t_c_dump_LDADD) $(LIBS)
+t/t_c_dump2-c-dump2.$(OBJEXT): t/$(am__dirstamp) \
+	t/$(DEPDIR)/$(am__dirstamp)
+t/t_c_dump2-broken-alloc.$(OBJEXT): t/$(am__dirstamp) \
+	t/$(DEPDIR)/$(am__dirstamp)
+t/t_c_dump2-addressbook.pb-c.$(OBJEXT): t/$(am__dirstamp) \
+	t/$(DEPDIR)/$(am__dirstamp)
+t/c-dump2$(EXEEXT): $(t_c_dump2_OBJECTS) $(t_c_dump2_DEPENDENCIES) $(EXTRA_t_c_dump2_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/c-dump2$(EXEEXT)
+	$(AM_V_CCLD)$(t_c_dump2_LINK) $(t_c_dump2_OBJECTS) $(t_c_dump2_LDADD) $(LIBS)
 t/t_c_parse-c-parse.$(OBJEXT): t/$(am__dirstamp) \
 	t/$(DEPDIR)/$(am__dirstamp)
 t/t_c_parse-broken-alloc.$(OBJEXT): t/$(am__dirstamp) \
@@ -596,6 +641,15 @@ t/t_c_parse-addressbook.pb-c.$(OBJEXT): t/$(am__dirstamp) \
 t/c-parse$(EXEEXT): $(t_c_parse_OBJECTS) $(t_c_parse_DEPENDENCIES) $(EXTRA_t_c_parse_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/c-parse$(EXEEXT)
 	$(AM_V_CCLD)$(t_c_parse_LINK) $(t_c_parse_OBJECTS) $(t_c_parse_LDADD) $(LIBS)
+t/t_c_parse2-c-parse2.$(OBJEXT): t/$(am__dirstamp) \
+	t/$(DEPDIR)/$(am__dirstamp)
+t/t_c_parse2-broken-alloc.$(OBJEXT): t/$(am__dirstamp) \
+	t/$(DEPDIR)/$(am__dirstamp)
+t/t_c_parse2-addressbook.pb-c.$(OBJEXT): t/$(am__dirstamp) \
+	t/$(DEPDIR)/$(am__dirstamp)
+t/c-parse2$(EXEEXT): $(t_c_parse2_OBJECTS) $(t_c_parse2_DEPENDENCIES) $(EXTRA_t_c_parse2_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/c-parse2$(EXEEXT)
+	$(AM_V_CCLD)$(t_c_parse2_LINK) $(t_c_parse2_OBJECTS) $(t_c_parse2_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -606,9 +660,15 @@ mostlyclean-compile:
 	-rm -f t/t_c_dump-addressbook.pb-c.$(OBJEXT)
 	-rm -f t/t_c_dump-broken-alloc.$(OBJEXT)
 	-rm -f t/t_c_dump-c-dump.$(OBJEXT)
+	-rm -f t/t_c_dump2-addressbook.pb-c.$(OBJEXT)
+	-rm -f t/t_c_dump2-broken-alloc.$(OBJEXT)
+	-rm -f t/t_c_dump2-c-dump2.$(OBJEXT)
 	-rm -f t/t_c_parse-addressbook.pb-c.$(OBJEXT)
 	-rm -f t/t_c_parse-broken-alloc.$(OBJEXT)
 	-rm -f t/t_c_parse-c-parse.$(OBJEXT)
+	-rm -f t/t_c_parse2-addressbook.pb-c.$(OBJEXT)
+	-rm -f t/t_c_parse2-broken-alloc.$(OBJEXT)
+	-rm -f t/t_c_parse2-c-parse2.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -618,9 +678,15 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-addressbook.pb-c.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-broken-alloc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump-c-dump.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump2-addressbook.pb-c.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump2-broken-alloc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_dump2-c-dump2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse-addressbook.pb-c.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse-broken-alloc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse-c-parse.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse2-addressbook.pb-c.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse2-broken-alloc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse2-c-parse2.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -702,6 +768,48 @@ t/t_c_dump-addressbook.pb-c.obj: t/addressbook.pb-c.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump_CFLAGS) $(CFLAGS) -c -o t/t_c_dump-addressbook.pb-c.obj `if test -f 't/addressbook.pb-c.c'; then $(CYGPATH_W) 't/addressbook.pb-c.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb-c.c'; fi`
 
+t/t_c_dump2-c-dump2.o: t/c-dump2.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -MT t/t_c_dump2-c-dump2.o -MD -MP -MF t/$(DEPDIR)/t_c_dump2-c-dump2.Tpo -c -o t/t_c_dump2-c-dump2.o `test -f 't/c-dump2.c' || echo '$(srcdir)/'`t/c-dump2.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_dump2-c-dump2.Tpo t/$(DEPDIR)/t_c_dump2-c-dump2.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/c-dump2.c' object='t/t_c_dump2-c-dump2.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -c -o t/t_c_dump2-c-dump2.o `test -f 't/c-dump2.c' || echo '$(srcdir)/'`t/c-dump2.c
+
+t/t_c_dump2-c-dump2.obj: t/c-dump2.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -MT t/t_c_dump2-c-dump2.obj -MD -MP -MF t/$(DEPDIR)/t_c_dump2-c-dump2.Tpo -c -o t/t_c_dump2-c-dump2.obj `if test -f 't/c-dump2.c'; then $(CYGPATH_W) 't/c-dump2.c'; else $(CYGPATH_W) '$(srcdir)/t/c-dump2.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_dump2-c-dump2.Tpo t/$(DEPDIR)/t_c_dump2-c-dump2.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/c-dump2.c' object='t/t_c_dump2-c-dump2.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -c -o t/t_c_dump2-c-dump2.obj `if test -f 't/c-dump2.c'; then $(CYGPATH_W) 't/c-dump2.c'; else $(CYGPATH_W) '$(srcdir)/t/c-dump2.c'; fi`
+
+t/t_c_dump2-broken-alloc.o: t/broken-alloc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -MT t/t_c_dump2-broken-alloc.o -MD -MP -MF t/$(DEPDIR)/t_c_dump2-broken-alloc.Tpo -c -o t/t_c_dump2-broken-alloc.o `test -f 't/broken-alloc.c' || echo '$(srcdir)/'`t/broken-alloc.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_dump2-broken-alloc.Tpo t/$(DEPDIR)/t_c_dump2-broken-alloc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/broken-alloc.c' object='t/t_c_dump2-broken-alloc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -c -o t/t_c_dump2-broken-alloc.o `test -f 't/broken-alloc.c' || echo '$(srcdir)/'`t/broken-alloc.c
+
+t/t_c_dump2-broken-alloc.obj: t/broken-alloc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -MT t/t_c_dump2-broken-alloc.obj -MD -MP -MF t/$(DEPDIR)/t_c_dump2-broken-alloc.Tpo -c -o t/t_c_dump2-broken-alloc.obj `if test -f 't/broken-alloc.c'; then $(CYGPATH_W) 't/broken-alloc.c'; else $(CYGPATH_W) '$(srcdir)/t/broken-alloc.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_dump2-broken-alloc.Tpo t/$(DEPDIR)/t_c_dump2-broken-alloc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/broken-alloc.c' object='t/t_c_dump2-broken-alloc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -c -o t/t_c_dump2-broken-alloc.obj `if test -f 't/broken-alloc.c'; then $(CYGPATH_W) 't/broken-alloc.c'; else $(CYGPATH_W) '$(srcdir)/t/broken-alloc.c'; fi`
+
+t/t_c_dump2-addressbook.pb-c.o: t/addressbook.pb-c.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -MT t/t_c_dump2-addressbook.pb-c.o -MD -MP -MF t/$(DEPDIR)/t_c_dump2-addressbook.pb-c.Tpo -c -o t/t_c_dump2-addressbook.pb-c.o `test -f 't/addressbook.pb-c.c' || echo '$(srcdir)/'`t/addressbook.pb-c.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_dump2-addressbook.pb-c.Tpo t/$(DEPDIR)/t_c_dump2-addressbook.pb-c.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb-c.c' object='t/t_c_dump2-addressbook.pb-c.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -c -o t/t_c_dump2-addressbook.pb-c.o `test -f 't/addressbook.pb-c.c' || echo '$(srcdir)/'`t/addressbook.pb-c.c
+
+t/t_c_dump2-addressbook.pb-c.obj: t/addressbook.pb-c.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -MT t/t_c_dump2-addressbook.pb-c.obj -MD -MP -MF t/$(DEPDIR)/t_c_dump2-addressbook.pb-c.Tpo -c -o t/t_c_dump2-addressbook.pb-c.obj `if test -f 't/addressbook.pb-c.c'; then $(CYGPATH_W) 't/addressbook.pb-c.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb-c.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_dump2-addressbook.pb-c.Tpo t/$(DEPDIR)/t_c_dump2-addressbook.pb-c.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb-c.c' object='t/t_c_dump2-addressbook.pb-c.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_dump2_CFLAGS) $(CFLAGS) -c -o t/t_c_dump2-addressbook.pb-c.obj `if test -f 't/addressbook.pb-c.c'; then $(CYGPATH_W) 't/addressbook.pb-c.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb-c.c'; fi`
+
 t/t_c_parse-c-parse.o: t/c-parse.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse_CFLAGS) $(CFLAGS) -MT t/t_c_parse-c-parse.o -MD -MP -MF t/$(DEPDIR)/t_c_parse-c-parse.Tpo -c -o t/t_c_parse-c-parse.o `test -f 't/c-parse.c' || echo '$(srcdir)/'`t/c-parse.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_parse-c-parse.Tpo t/$(DEPDIR)/t_c_parse-c-parse.Po
@@ -743,6 +851,48 @@ t/t_c_parse-addressbook.pb-c.obj: t/addressbook.pb-c.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb-c.c' object='t/t_c_parse-addressbook.pb-c.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse_CFLAGS) $(CFLAGS) -c -o t/t_c_parse-addressbook.pb-c.obj `if test -f 't/addressbook.pb-c.c'; then $(CYGPATH_W) 't/addressbook.pb-c.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb-c.c'; fi`
+
+t/t_c_parse2-c-parse2.o: t/c-parse2.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -MT t/t_c_parse2-c-parse2.o -MD -MP -MF t/$(DEPDIR)/t_c_parse2-c-parse2.Tpo -c -o t/t_c_parse2-c-parse2.o `test -f 't/c-parse2.c' || echo '$(srcdir)/'`t/c-parse2.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_parse2-c-parse2.Tpo t/$(DEPDIR)/t_c_parse2-c-parse2.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/c-parse2.c' object='t/t_c_parse2-c-parse2.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -c -o t/t_c_parse2-c-parse2.o `test -f 't/c-parse2.c' || echo '$(srcdir)/'`t/c-parse2.c
+
+t/t_c_parse2-c-parse2.obj: t/c-parse2.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -MT t/t_c_parse2-c-parse2.obj -MD -MP -MF t/$(DEPDIR)/t_c_parse2-c-parse2.Tpo -c -o t/t_c_parse2-c-parse2.obj `if test -f 't/c-parse2.c'; then $(CYGPATH_W) 't/c-parse2.c'; else $(CYGPATH_W) '$(srcdir)/t/c-parse2.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_parse2-c-parse2.Tpo t/$(DEPDIR)/t_c_parse2-c-parse2.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/c-parse2.c' object='t/t_c_parse2-c-parse2.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -c -o t/t_c_parse2-c-parse2.obj `if test -f 't/c-parse2.c'; then $(CYGPATH_W) 't/c-parse2.c'; else $(CYGPATH_W) '$(srcdir)/t/c-parse2.c'; fi`
+
+t/t_c_parse2-broken-alloc.o: t/broken-alloc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -MT t/t_c_parse2-broken-alloc.o -MD -MP -MF t/$(DEPDIR)/t_c_parse2-broken-alloc.Tpo -c -o t/t_c_parse2-broken-alloc.o `test -f 't/broken-alloc.c' || echo '$(srcdir)/'`t/broken-alloc.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_parse2-broken-alloc.Tpo t/$(DEPDIR)/t_c_parse2-broken-alloc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/broken-alloc.c' object='t/t_c_parse2-broken-alloc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -c -o t/t_c_parse2-broken-alloc.o `test -f 't/broken-alloc.c' || echo '$(srcdir)/'`t/broken-alloc.c
+
+t/t_c_parse2-broken-alloc.obj: t/broken-alloc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -MT t/t_c_parse2-broken-alloc.obj -MD -MP -MF t/$(DEPDIR)/t_c_parse2-broken-alloc.Tpo -c -o t/t_c_parse2-broken-alloc.obj `if test -f 't/broken-alloc.c'; then $(CYGPATH_W) 't/broken-alloc.c'; else $(CYGPATH_W) '$(srcdir)/t/broken-alloc.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_parse2-broken-alloc.Tpo t/$(DEPDIR)/t_c_parse2-broken-alloc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/broken-alloc.c' object='t/t_c_parse2-broken-alloc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -c -o t/t_c_parse2-broken-alloc.obj `if test -f 't/broken-alloc.c'; then $(CYGPATH_W) 't/broken-alloc.c'; else $(CYGPATH_W) '$(srcdir)/t/broken-alloc.c'; fi`
+
+t/t_c_parse2-addressbook.pb-c.o: t/addressbook.pb-c.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -MT t/t_c_parse2-addressbook.pb-c.o -MD -MP -MF t/$(DEPDIR)/t_c_parse2-addressbook.pb-c.Tpo -c -o t/t_c_parse2-addressbook.pb-c.o `test -f 't/addressbook.pb-c.c' || echo '$(srcdir)/'`t/addressbook.pb-c.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_parse2-addressbook.pb-c.Tpo t/$(DEPDIR)/t_c_parse2-addressbook.pb-c.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb-c.c' object='t/t_c_parse2-addressbook.pb-c.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -c -o t/t_c_parse2-addressbook.pb-c.o `test -f 't/addressbook.pb-c.c' || echo '$(srcdir)/'`t/addressbook.pb-c.c
+
+t/t_c_parse2-addressbook.pb-c.obj: t/addressbook.pb-c.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -MT t/t_c_parse2-addressbook.pb-c.obj -MD -MP -MF t/$(DEPDIR)/t_c_parse2-addressbook.pb-c.Tpo -c -o t/t_c_parse2-addressbook.pb-c.obj `if test -f 't/addressbook.pb-c.c'; then $(CYGPATH_W) 't/addressbook.pb-c.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb-c.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_c_parse2-addressbook.pb-c.Tpo t/$(DEPDIR)/t_c_parse2-addressbook.pb-c.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb-c.c' object='t/t_c_parse2-addressbook.pb-c.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -c -o t/t_c_parse2-addressbook.pb-c.obj `if test -f 't/addressbook.pb-c.c'; then $(CYGPATH_W) 't/addressbook.pb-c.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb-c.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

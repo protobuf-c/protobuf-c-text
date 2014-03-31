@@ -30,14 +30,20 @@ protobuf-c-text/libprotobuf-c-text.pc
 *.gcno
 
 # Test generated cruft.
-t/addressbook.protoc-c.text
-t/addressbook.c.text
-t/addressbook.c.data
-t/broken_parse.out
+/t/addressbook.protoc-c.text
+/t/addressbook.c.text
+/t/addressbook.c.data
+/t/broken_parse.out
+/t/tutorial_test.c.data
+/t/tutorial_test.c.text
+/t/tutorial_test.protoc_c.text
+
 
 # Test binaries.
 /t/c-dump
+/t/c-dump2
 /t/c-parse
+/t/c-parse2
 
 # Generated parsing code.
 protobuf-c-text/parse.c

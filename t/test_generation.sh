@@ -4,6 +4,7 @@ if [[ -z "$srcdir" ]]; then
   srcdir=.
 fi
 
+### Tutorial Addressbook message.
 rm -f t/addressbook.c.text t/addressbook.protoc-c.text
 ./t/c-dump $srcdir/t/addressbook.data > t/addressbook.c.text
 protoc-c --decode=tutorial.AddressBook -I $srcdir \
@@ -11,6 +12,13 @@ protoc-c --decode=tutorial.AddressBook -I $srcdir \
   < $srcdir/t/addressbook.data > t/addressbook.protoc-c.text
 
 if ! cmp t/addressbook.c.text t/addressbook.protoc-c.text; then
+  exit 1
+fi
+
+### Tutorial Test message.
+if ! ./t/c-dump2 $srcdir/t/tutorial_test.data \
+    > t/tutorial_test.c.text; then
+  echo "ERROR: This shouldn't have failed."
   exit 1
 fi
 

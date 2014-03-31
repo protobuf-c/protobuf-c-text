@@ -341,7 +341,7 @@ state_init(State *state,
     state->allocator->free(state->allocator->allocator_data, msg);
     return 0;
   }
-  protobuf_c_message_init(descriptor, msg);
+  descriptor->message_init(msg);
   state->msgs[0] = msg;
 
   return 1;
@@ -445,12 +445,11 @@ state_assignment(State *state, Token *t)
         if (state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
           /* Do optional member accounting. */
           if (STRUCT_MEMBER(protobuf_c_boolean, msg,
-                state->field->quantifier_offset)) {
+                state->field->offset)) {
             return state_error(state, t,
-                "'%s' has already been assigned.", state->field->name);
+                "The '%s' message has already been assigned.",
+                state->field->name);
           }
-          STRUCT_MEMBER(protobuf_c_boolean, msg,
-              state->field->quantifier_offset) = 1;
         }
         if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
           ProtobufCMessage **tmp;

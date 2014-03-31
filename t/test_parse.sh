@@ -4,6 +4,7 @@ if [[ -z "$srcdir" ]]; then
   srcdir=.
 fi
 
+### Addressbook message main tests.
 rm -f t/addressbook.c.data
 
 if [[ ! -f t/addressbook.c.text ]]; then
@@ -31,6 +32,28 @@ for text in $srcdir/t/broken/*.text; do
   rm -f t/broken_parse.data
 done
 
+### Tutorial Test message main tests.
+rm -f t/tutorial_test.c.data
+
+if [[ ! -f t/tutorial_test.c.text ]]; then
+  exit 77
+fi
+if ./t/c-parse t/tutorial_test.c.data < t/tutorial_test.c.text > /dev/null; then
+  echo "./t/c-parse t/tutorial_test.c.data < t/tutorial_test.c.text"
+  echo "ERROR: should have failed."
+  exit 1;
+fi
+if ! ./t/c-parse2 t/tutorial_test.c.data < t/tutorial_test.c.text; then
+  echo "./t/c-parse2 t/tutorial_test.c.data < t/tutorial_test.c.text"
+  echo "ERROR: should NOT have failed."
+  exit 1;
+fi
+
+if ! cmp t/tutorial_test.c.data $srcdir/t/tutorial_test.data; then
+  exit 1;
+fi
+
+### Malloc failure tests.
 if [[ -z "$BROKEN_MALLOC_TEST" ]]; then
   exit 0
 fi

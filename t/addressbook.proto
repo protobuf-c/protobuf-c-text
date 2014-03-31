@@ -86,7 +86,8 @@ message Test {
     repeated TestEnum rp_enum_var = 2;
   }
 
-  required TestMsg rq_msg = 40;
-  optional TestMsg op_msg = 41;
+  required TestMsg rq_msg = 35;
+  optional TestMsg opt_msg = 36;
+  optional TestMsg no_op_msg = 37;
 
 }

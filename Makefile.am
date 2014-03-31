@@ -6,7 +6,7 @@ AM_CFLAGS = -I $(srcdir)/protobuf-c-text
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
 TESTS = $(srcdir)/t/test_generation.sh $(srcdir)/t/test_parse.sh
-check_PROGRAMS = t/c-dump t/c-parse
+check_PROGRAMS = t/c-dump t/c-dump2 t/c-parse t/c-parse2
 check_SCRIPTS = t/test_generation.sh t/test_parse.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_HDRS) \
 		protobuf-c-text/parse.c
@@ -58,11 +58,23 @@ t_c_dump_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
 t_c_dump_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_dump_LDFLAGS = -static
 
+t_c_dump2_SOURCES = t/c-dump2.c t/broken-alloc.h t/broken-alloc.c
+nodist_t_c_dump2_SOURCES = $(PROTOBUF_C_TEST_SRCS)
+t_c_dump2_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
+t_c_dump2_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_c_dump2_LDFLAGS = -static
+
 t_c_parse_SOURCES = t/c-parse.c t/broken-alloc.h t/broken-alloc.c
 nodist_t_c_parse_SOURCES = $(PROTOBUF_C_TEST_SRCS)
 t_c_parse_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
 t_c_parse_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_parse_LDFLAGS = -static
+
+t_c_parse2_SOURCES = t/c-parse2.c t/broken-alloc.h t/broken-alloc.c
+nodist_t_c_parse2_SOURCES = $(PROTOBUF_C_TEST_SRCS)
+t_c_parse2_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
+t_c_parse2_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_c_parse2_LDFLAGS = -static
 
 EXTRA_DIST = t/addressbook.proto \
 	     t/addressbook.data \

@@ -149,6 +149,10 @@ text_format_to_string_internal(ReturnString *rs,
                 == (char *)f[i].default_value)) {
             continue;
           }
+        } else if (f[i].type == PROTOBUF_C_TYPE_MESSAGE) {
+          if (!STRUCT_MEMBER(char *, m, f[i].offset)) {
+            continue;
+          }
         } else {
           if (!STRUCT_MEMBER(protobuf_c_boolean, m, f[i].quantifier_offset)) {
             continue;
@@ -169,7 +173,7 @@ text_format_to_string_internal(ReturnString *rs,
       case PROTOBUF_C_TYPE_UINT32:
       case PROTOBUF_C_TYPE_FIXED32:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
                 "%*s%s: %u\n",
@@ -187,7 +191,7 @@ text_format_to_string_internal(ReturnString *rs,
       case PROTOBUF_C_TYPE_SINT32:
       case PROTOBUF_C_TYPE_SFIXED32:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
                 "%*s%s: %d\n",
@@ -206,7 +210,7 @@ text_format_to_string_internal(ReturnString *rs,
       case PROTOBUF_C_TYPE_UINT64:
       case PROTOBUF_C_TYPE_FIXED64:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
                 "%*s%s: %lu\n",
@@ -224,7 +228,7 @@ text_format_to_string_internal(ReturnString *rs,
       case PROTOBUF_C_TYPE_SINT64:
       case PROTOBUF_C_TYPE_SFIXED64:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
                 "%*s%s: %ld\n",
@@ -241,7 +245,7 @@ text_format_to_string_internal(ReturnString *rs,
         break;
       case PROTOBUF_C_TYPE_FLOAT:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             float_var = STRUCT_MEMBER(float *, m, f[i].offset)[j];
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
@@ -260,7 +264,7 @@ text_format_to_string_internal(ReturnString *rs,
         break;
       case PROTOBUF_C_TYPE_DOUBLE:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
                 "%*s%s: %g\n",
@@ -277,7 +281,7 @@ text_format_to_string_internal(ReturnString *rs,
         break;
       case PROTOBUF_C_TYPE_BOOL:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
                 "%*s%s: %s\n",
@@ -297,7 +301,7 @@ text_format_to_string_internal(ReturnString *rs,
       case PROTOBUF_C_TYPE_ENUM:
         enumd = (ProtobufCEnumDescriptor *)f[i].descriptor;
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             enumv = protobuf_c_enum_descriptor_get_value(
                 enumd, STRUCT_MEMBER(int *, m, f[i].offset)[j]);
             rs_append(rs, level + strlen(f[i].name) + 20,
@@ -318,7 +322,7 @@ text_format_to_string_internal(ReturnString *rs,
         break;
       case PROTOBUF_C_TYPE_STRING:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             unsigned char *escaped;
 
             escaped = esc_str(
@@ -356,7 +360,7 @@ text_format_to_string_internal(ReturnString *rs,
         break;
       case PROTOBUF_C_TYPE_BYTES:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
-          for (j = 0; quantifier_offset; j++) {
+          for (j = 0; j < quantifier_offset; j++) {
             unsigned char *escaped;
 
             escaped = esc_str(
