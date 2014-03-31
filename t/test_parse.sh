@@ -76,6 +76,22 @@ EOF
       exit 1
     fi
   fi
+
+  BROKEN_MALLOC=$i ./t/c-parse2 t/broken_parse.data \
+    < t/tutorial_test.c.text > t/broken_parse.out
+  exit_code=$?
+  if [[ $exit_code -ne 0 ]]; then
+    if ! grep -q ERROR t/broken_parse.out; then
+      cat << EOF
+ERROR: This should have failed.
+Debug:
+BROKEN_MALLOC=$i gdb ./t/c-parse2
+run t/broken_parse.data < t/tutorial_test.c.text
+EOF
+      exit 1
+    fi
+  fi
+
   i=$(($i + 1))
 done
 echo

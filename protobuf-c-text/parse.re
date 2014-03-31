@@ -537,6 +537,9 @@ state_assignment(State *state, Token *t)
             = state->allocator->alloc(state->allocator->allocator_data,
                 ((ProtobufCMessageDescriptor *)
                  state->field->descriptor)->sizeof_message);
+          if (!state->msgs[state->current_msg]) {
+            return state_error(state, t, "Malloc failure.");
+          }
           STRUCT_MEMBER(ProtobufCMessage *, msg, state->field->offset)
             = state->msgs[state->current_msg];
           ((ProtobufCMessageDescriptor *)state->field->descriptor)
@@ -668,6 +671,9 @@ state_value(State *state, Token *t)
             = pbbd;
           pbbd[n_members - 1].data = state->allocator->alloc(
               state->allocator->allocator_data, t->qs->len);
+          if (!pbbd[n_members - 1].data) {
+            return state_error(state, t, "Malloc failure.");
+          }
           memcpy(pbbd[n_members - 1].data, t->qs->data, t->qs->len);
           pbbd[n_members - 1].len = t->qs->len;
           return STATE_OPEN;
