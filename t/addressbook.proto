@@ -91,3 +91,7 @@ message Test {
   optional TestMsg no_op_msg = 37;
 
 }
+
+message Short {
+  required uint32 id = 1;
+}

@@ -18,14 +18,15 @@ main(int argc, char *argv[])
   size_t len;
   uint8_t *buf;
   FILE *out;
-  char *errors;
+  char *error_txt;
+  Tutorial__Short *shortmsg;
 
   ab = (Tutorial__AddressBook *)text_format_from_file(
       &tutorial__address_book__descriptor,
-      stdin, &errors, &broken_allocator);
-  if (errors) {
-    printf("ERROR on import:\n%s", errors);
-    free(errors);
+      stdin, &error_txt, &broken_allocator);
+  if (error_txt) {
+    printf("ERROR on import:\n%s", error_txt);
+    free(error_txt);
     exit(1);
   }
   if (!ab) {
@@ -49,6 +50,20 @@ main(int argc, char *argv[])
   }
 
   tutorial__address_book__free_unpacked(ab, &broken_allocator);
+
+  shortmsg = (Tutorial__Short *)text_format_from_string(
+      &tutorial__short__descriptor,
+      "id: 42", &error_txt, NULL);
+  if (error_txt) {
+    printf("ERROR on import:\n%s", error_txt);
+    free(error_txt);
+    exit(1);
+  }
+  if (!shortmsg) {
+    printf("ERROR malloc failures.\n");
+    exit(1);
+  }
+  tutorial__short__free_unpacked(shortmsg, NULL);
 
   exit(0);
 }

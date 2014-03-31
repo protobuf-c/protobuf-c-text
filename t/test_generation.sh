@@ -30,7 +30,7 @@ echo -n "Testing broken malloc"
 i=0
 exit_code=1
 # while [[ $exit_code -ne 0 && $i -lt 100 ]]; do
-while [[ $i -lt 100 ]]; do
+while [[ $i -lt 300 ]]; do
   echo -n .
   rm -f t/broken.text
   BROKEN_MALLOC=$i ./t/c-dump $srcdir/t/addressbook.data \
