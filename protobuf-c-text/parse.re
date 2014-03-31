@@ -19,6 +19,30 @@
 #include "protobuf-c-util.h"
 #include "config.h"
 
+static void *
+local_realloc(void *ptr,
+    size_t old_size,
+    size_t size,
+    ProtobufCAllocator *allocator)
+{
+  void *tmp;
+
+  tmp = allocator->alloc(allocator->allocator_data, size);
+  if (!tmp) {
+    return NULL;
+  }
+  if (old_size < size) {
+    /* Extending. */
+    memcpy(tmp, ptr, old_size);
+  } else {
+    /* Truncating. */
+    memcpy(tmp, ptr, size);
+  }
+
+  allocator->free(allocator->allocator_data, ptr);
+  return tmp;
+}
+
 typedef enum {
   TOK_EOF,
   TOK_BAREWORD,
@@ -310,6 +334,7 @@ typedef enum {
   STATE_DONE
 } StateId;
 
+#define STATE_ERROR_STR_MAX 160
 typedef struct {
   Scanner *scanner;
   const ProtobufCFieldDescriptor *field;
@@ -317,10 +342,11 @@ typedef struct {
   int max_msg;
   ProtobufCMessage **msgs;
   ProtobufCAllocator *allocator;
-  char *error;
+  int error;
+  char *error_str;
 } State;
 
-int
+static int
 state_init(State *state,
     Scanner *scanner,
     const ProtobufCMessageDescriptor *descriptor,
@@ -331,12 +357,16 @@ state_init(State *state,
   memset(state, 0, sizeof(State));
   state->allocator = allocator;
   state->scanner = scanner;
+  state->error_str = state->allocator->alloc(
+      state->allocator->allocator_data, STATE_ERROR_STR_MAX);
   state->msgs = state->allocator->alloc(state->allocator->allocator_data,
       10 * sizeof(ProtobufCMessage *));
   state->max_msg = 10;
   msg = state->allocator->alloc(state->allocator->allocator_data,
       descriptor->sizeof_message);
-  if (!state->msgs || !msg) {
+  if (!state->msgs || !msg || !state->error_str) {
+    state->allocator->free(state->allocator->allocator_data,
+        state->error_str);
     state->allocator->free(state->allocator->allocator_data, state->msgs);
     state->allocator->free(state->allocator->allocator_data, msg);
     return 0;
@@ -345,6 +375,12 @@ state_init(State *state,
   state->msgs[0] = msg;
 
   return 1;
+}
+
+static void
+state_free(State *state)
+{
+  state->allocator->free(state->allocator->allocator_data, state->msgs);
 }
 
 /*
@@ -356,17 +392,18 @@ static StateId
 state_error(State *state, Token *t, char *error_fmt, ...)
 {
   va_list args;
-  int error_idx, error_imax = 800;
+  int error_idx;
 
   /* 10 solid lines of errors is more than enough. */
-  state->error = state->allocator->alloc(state->allocator->allocator_data,
-      error_imax);
+  state->error = 1;
   va_start(args, error_fmt);
-  error_idx = vsnprintf(state->error, error_imax, error_fmt, args);
+  error_idx = vsnprintf(state->error_str, STATE_ERROR_STR_MAX,
+      error_fmt, args);
   va_end(args);
 
-  if (error_idx < error_imax) {
-    error_idx += snprintf(state->error + error_idx, error_imax - error_idx,
+  if (error_idx < STATE_ERROR_STR_MAX) {
+    snprintf(state->error_str + error_idx,
+        STATE_ERROR_STR_MAX - error_idx,
         "\nError found on line %d.\n", state->scanner->line);
   }
 
@@ -465,18 +502,23 @@ state_assignment(State *state, Token *t)
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          tmp
-            = realloc(STRUCT_MEMBER(ProtobufCMessage *, msg,
-                                    state->field->offset),
-                      n_members * sizeof(ProtobufCMessage *));
-          /* TODO: error out if tmp is NULL. */
+          tmp = local_realloc(
+              STRUCT_MEMBER(ProtobufCMessage *, msg, state->field->offset),
+              (n_members - 1) * sizeof(ProtobufCMessage *),
+              n_members * sizeof(ProtobufCMessage *),
+              state->allocator);
+          if (!tmp) {
+            return state_error(state, t, "Malloc failure.");
+          }
           STRUCT_MEMBER(ProtobufCMessage **, msg, state->field->offset)
             = tmp;
           tmp[n_members - 1] = state->allocator->alloc(
               state->allocator->allocator_data,
               ((ProtobufCMessageDescriptor *)
                 state->field->descriptor)->sizeof_message);
-          /* TODO: error out if tmp[n_members - 1] is NULL. */
+          if (!tmp[n_members - 1]) {
+            return state_error(state, t, "Malloc failure.");
+          }
           state->msgs[state->current_msg] = tmp[n_members - 1];
           ((ProtobufCMessageDescriptor *)state->field->descriptor)
             ->message_init(tmp[n_members - 1]);
@@ -552,9 +594,13 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                 state->field->quantifier_offset);
-            tmp = realloc(STRUCT_MEMBER(int *, msg, state->field->offset),
-                n_members * sizeof(int));
-            /* TODO: error out if tmp is NULL. */
+            tmp = local_realloc(
+                STRUCT_MEMBER(int *, msg, state->field->offset),
+                (n_members - 1) * sizeof(int),
+                n_members * sizeof(int), state->allocator);
+            if (!tmp) {
+              return state_error(state, t, "Malloc failure.");
+            }
             STRUCT_MEMBER(int *, msg, state->field->offset) = tmp;
             tmp[n_members - 1] = enumv->value;
             return STATE_OPEN;
@@ -580,10 +626,13 @@ state_value(State *state, Token *t)
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          tmp = realloc(
+          tmp = local_realloc(
               STRUCT_MEMBER(protobuf_c_boolean *, msg, state->field->offset),
-              n_members * sizeof(protobuf_c_boolean));
-          /* TODO: error out if tmp is NULL. */
+              (n_members - 1) * sizeof(protobuf_c_boolean),
+              n_members * sizeof(protobuf_c_boolean), state->allocator);
+          if (!tmp) {
+            return state_error(state, t, "Malloc failure.");
+          }
           STRUCT_MEMBER(protobuf_c_boolean *, msg, state->field->offset) = tmp;
           tmp[n_members - 1] = t->boolean;
           return STATE_OPEN;
@@ -606,10 +655,13 @@ state_value(State *state, Token *t)
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          pbbd = realloc(
+          pbbd = local_realloc(
               STRUCT_MEMBER(ProtobufCBinaryData *, msg, state->field->offset),
-              n_members * sizeof(ProtobufCBinaryData));
-          /* TODO: error out if pbbd is NULL. */
+              (n_members - 1) * sizeof(ProtobufCBinaryData),
+              n_members * sizeof(ProtobufCBinaryData), state->allocator);
+          if (!pbbd) {
+            return state_error(state, t, "Malloc failure.");
+          }
           STRUCT_MEMBER(ProtobufCBinaryData *, msg, state->field->offset)
             = pbbd;
           pbbd[n_members - 1].data = state->allocator->alloc(
@@ -643,13 +695,19 @@ state_value(State *state, Token *t)
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          s = realloc(
+          s = local_realloc(
               STRUCT_MEMBER(unsigned char **, msg, state->field->offset),
-              n_members * sizeof(unsigned char *));
-          /* TODO: error out if s is NULL. */
+              (n_members - 1) * sizeof(unsigned char *),
+              n_members * sizeof(unsigned char *), state->allocator);
+          if (!s) {
+            return state_error(state, t, "Malloc failure.");
+          }
           STRUCT_MEMBER(unsigned char **, msg, state->field->offset) = s;
           s[n_members - 1] = state->allocator->alloc(
               state->allocator->allocator_data, t->qs->len + 1);
+          if (!s[n_members - 1]) {
+            return state_error(state, t, "Malloc failure.");
+          }
           memcpy(s[n_members - 1], t->qs->data, t->qs->len);
           s[n_members - 1][t->qs->len] = '\0';
           return STATE_OPEN;
@@ -684,10 +742,13 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = realloc(
+            vals = local_realloc(
                 STRUCT_MEMBER(uint32_t *, msg, state->field->offset),
-                n_members * sizeof(uint32_t));
-            /* TODO: error out if vals is NULL. */
+                (n_members - 1) * sizeof(uint32_t),
+                n_members * sizeof(uint32_t), state->allocator);
+            if (!vals) {
+              return state_error(state, t, "Malloc failure.");
+            }
             STRUCT_MEMBER(uint32_t *, msg, state->field->offset) = vals;
             val = strtoul(t->number, &end, 10);
             if (*end != '\0' || val > UINT32_MAX) {
@@ -720,10 +781,13 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = realloc(
+            vals = local_realloc(
                 STRUCT_MEMBER(int32_t *, msg, state->field->offset),
-                n_members * sizeof(int32_t));
-            /* TODO: error out if vals is NULL. */
+                (n_members - 1) * sizeof(int32_t),
+                n_members * sizeof(int32_t), state->allocator);
+            if (!vals) {
+              return state_error(state, t, "Malloc failure.");
+            }
             STRUCT_MEMBER(int32_t *, msg, state->field->offset) = vals;
             val = strtol(t->number, &end, 10);
             if (*end != '\0' || val < INT32_MIN || val > INT32_MAX) {
@@ -756,10 +820,13 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = realloc(
+            vals = local_realloc(
                 STRUCT_MEMBER(uint64_t *, msg, state->field->offset),
-                n_members * sizeof(uint64_t));
-            /* TODO: error out if vals is NULL. */
+                (n_members - 1) * sizeof(uint64_t),
+                n_members * sizeof(uint64_t), state->allocator);
+            if (!vals) {
+              return state_error(state, t, "Malloc failure.");
+            }
             STRUCT_MEMBER(uint64_t *, msg, state->field->offset) = vals;
             vals[n_members - 1] = strtoull(t->number, &end, 10);
             if (*end != '\0') {
@@ -790,10 +857,13 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = realloc(
+            vals = local_realloc(
                 STRUCT_MEMBER(int64_t *, msg, state->field->offset),
-                n_members * sizeof(int64_t));
-            /* TODO: error out if vals is NULL. */
+                (n_members - 1) * sizeof(int64_t),
+                n_members * sizeof(int64_t), state->allocator);
+            if (!vals) {
+              return state_error(state, t, "Malloc failure.");
+            }
             STRUCT_MEMBER(int64_t *, msg, state->field->offset) = vals;
             vals[n_members - 1] = strtol(t->number, &end, 10);
             if (*end != '\0') {
@@ -823,10 +893,13 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = realloc(
+            vals = local_realloc(
                 STRUCT_MEMBER(float *, msg, state->field->offset),
-                n_members * sizeof(float));
-            /* TODO: error out if vals is NULL. */
+                (n_members - 1) * sizeof(float),
+                n_members * sizeof(float), state->allocator);
+            if (!vals) {
+              return state_error(state, t, "Malloc failure.");
+            }
             STRUCT_MEMBER(float *, msg, state->field->offset) = vals;
             vals[n_members - 1] = strtof(t->number, &end);
             if (*end != '\0') {
@@ -856,10 +929,13 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = realloc(
+            vals = local_realloc(
                 STRUCT_MEMBER(double *, msg, state->field->offset),
-                n_members * sizeof(double));
-            /* TODO: error out if vals is NULL. */
+                (n_members - 1) * sizeof(double),
+                n_members * sizeof(double), state->allocator);
+            if (!vals) {
+              return state_error(state, t, "Malloc failure.");
+            }
             STRUCT_MEMBER(double *, msg, state->field->offset) = vals;
             vals[n_members - 1] = strtod(t->number, &end);
             if (*end != '\0') {
@@ -912,6 +988,7 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
   Token token;
   State state;
   StateId state_id;
+  ProtobufCMessage *msg;
 
   if (!allocator) {
     allocator = &protobuf_c_default_allocator;
@@ -934,8 +1011,12 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
   }
 
   scanner_free(scanner, allocator);
-  *error_txt = state.error;
-  return state.msgs[0];
+  msg = state.msgs[0];
+  if (state.error) {
+    *error_txt = state.error_str;
+  }
+  state_free(&state);
+  return msg;
 }
 
 ProtobufCMessage *
