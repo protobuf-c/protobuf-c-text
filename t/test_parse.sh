@@ -59,7 +59,7 @@ echo -n "Testing broken malloc"
 i=0
 exit_code=1
 #while [[ $exit_code -ne 0 && $i -lt 100 ]]; do
-while [[ $i -lt 100 ]]; do
+while [[ $i -lt 300 ]]; do
   echo -n .
   rm -f t/broken_parse.out t/broken_parse.data
   BROKEN_MALLOC=$i ./t/c-parse t/broken_parse.data \

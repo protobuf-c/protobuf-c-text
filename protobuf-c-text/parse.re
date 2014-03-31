@@ -480,7 +480,8 @@ state_assignment(State *state, Token *t)
       break;
     case TOK_OBRACE:
       if (state->field->type == PROTOBUF_C_TYPE_MESSAGE) {
-        if (state->field->label == PROTOBUF_C_LABEL_OPTIONAL) {
+        if (state->field->label == PROTOBUF_C_LABEL_OPTIONAL
+            || state->field->label == PROTOBUF_C_LABEL_REQUIRED) {
           /* Do optional member accounting. */
           if (STRUCT_MEMBER(protobuf_c_boolean, msg,
                 state->field->offset)) {
