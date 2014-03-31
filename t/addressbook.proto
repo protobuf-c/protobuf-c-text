@@ -42,3 +42,51 @@ message Person {
 message AddressBook {
   repeated Person person = 1;
 }
+
+message Test {
+
+  required string rq_str_var = 1;
+  required double rq_double_var = 2;
+  required float rq_float_var = 3;
+  required int64 rq_int64_var = 4;
+  required uint32 rq_uint32_var = 5;
+  required uint64 rq_uint64_var = 6;
+  required sint32 rq_sint32_var = 7;
+  required sint64 rq_sint64_var = 8;
+  required fixed32 rq_fixed32_var = 9;
+  required fixed64 rq_fixed64_var = 10;
+  required sfixed32 rq_sfixed32_var = 11;
+  required sfixed64 rq_sfixed64_var = 12;
+  required bool rq_bool_var = 13;
+  required bytes rq_bytes_var = 14;
+
+  repeated string rp_str_var = 21;
+  repeated double rp_double_var = 22;
+  repeated float rp_float_var = 23;
+  repeated int64 rp_int64_var = 24;
+  repeated uint32 rp_uint32_var = 25;
+  repeated uint64 rp_uint64_var = 26;
+  repeated sint32 rp_sint32_var = 27;
+  repeated sint64 rp_sint64_var = 28;
+  repeated fixed32 rp_fixed32_var = 29;
+  repeated fixed64 rp_fixed64_var = 30;
+  repeated sfixed32 rp_sfixed32_var = 31;
+  repeated sfixed64 rp_sfixed64_var = 32;
+  repeated bool rp_bool_var = 33;
+  repeated bytes rp_bytes_var = 34;
+
+  enum TestEnum {
+    FOO = 0;
+    BAR = 1;
+    KITTEN = 2;
+  }
+
+  message TestMsg {
+    required TestEnum rq_enum_var = 1;
+    repeated TestEnum rp_enum_var = 2;
+  }
+
+  required TestMsg rq_msg = 40;
+  optional TestMsg op_msg = 41;
+
+}
