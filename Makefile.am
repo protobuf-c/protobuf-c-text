@@ -78,6 +78,7 @@ t_c_parse2_LDFLAGS = -static
 
 EXTRA_DIST = t/addressbook.proto \
 	     t/addressbook.data \
+	     t/tutorial_test.data \
 	     protobuf-c-text/libprotobuf-c-text.pc.in \
 	     $(check_SCRIPTS) \
 	     t/broken/bareword-instead-of-string.text \
