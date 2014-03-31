@@ -32,7 +32,7 @@ rs_append(ReturnString *rs, int guess,
   int added;
 
   if (rs->malloc_err) {
-    return 0;
+    return;
   }
 
   if (rs->allocated - rs->pos < guess * 2) {
@@ -44,7 +44,7 @@ rs_append(ReturnString *rs, int guess,
       PBC_FREE(rs->s);
       rs->s = NULL;
       rs->malloc_err = 1;
-      return 0;
+      return;
     }
     memcpy(tmp, rs->s, rs->allocated);
     PBC_FREE(rs->s);
@@ -56,7 +56,7 @@ rs_append(ReturnString *rs, int guess,
   added = vsnprintf(rs->s + rs->pos, rs->allocated - rs->pos, format, args);
   va_end(args);
   rs->pos += added;
-  return 1;
+  return;
 }
 
 static char *
@@ -328,6 +328,7 @@ text_format_to_string_internal(ReturnString *rs,
             if (!escaped) {
               PBC_FREE(rs->s);
               rs->s = NULL;
+              rs->malloc_err = 1;
               return;
             }
             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
@@ -344,6 +345,7 @@ text_format_to_string_internal(ReturnString *rs,
           if (!escaped) {
             PBC_FREE(rs->s);
             rs->s = NULL;
+            rs->malloc_err = 1;
             return;
           }
           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
@@ -364,6 +366,7 @@ text_format_to_string_internal(ReturnString *rs,
             if (!escaped) {
               PBC_FREE(rs->s);
               rs->s = NULL;
+              rs->malloc_err = 1;
               return;
             }
             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,
@@ -381,6 +384,7 @@ text_format_to_string_internal(ReturnString *rs,
           if (!escaped) {
             PBC_FREE(rs->s);
             rs->s = NULL;
+            rs->malloc_err = 1;
             return;
           }
           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,

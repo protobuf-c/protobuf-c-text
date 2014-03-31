@@ -14,3 +14,13 @@ are in `t/`.
 ## Dependencies
 
 The `re2c` parser is required to generate the lexer (`parser.re`).
+
+## Testing
+
+The `t/c-*` programs use the `BROKEN_MALLOC` and `BROKEN_MALLOC_SEGV`
+environment vars to control when and how malloc will fail.  The
+`BROKEN_MALLOC` is set to the number of times for malloc to succeed until
+it fails.  When the `BROKEN_MALLOC_SEGV` var is set the test program will
+segfault on the first failure.  This is useful for tracking down errors.
+
+The parse test is disabled unless you do `BROKEN_MALLOC_TEST=1 make check`.

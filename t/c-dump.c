@@ -7,6 +7,7 @@
 #include <google/protobuf-c/protobuf-c.h>
 #include "protobuf-c-text/protobuf-c-text.h"
 #include "addressbook.pb-c.h"
+#include "broken-alloc.h"
 
 #define CHUNK 1024
 
@@ -48,9 +49,13 @@ main(int argc, char *argv[])
 
   ab = read_addressbook(argv[1]);
 
-  s = text_format_to_string((ProtobufCMessage *)ab, NULL);
-  printf("%s", s);
-  free(s);
+  s = text_format_to_string((ProtobufCMessage *)ab, &broken_allocator);
+  if (s) {
+    printf("%s", s);
+    free(s);
+  } else {
+    printf("ERROR: Failed to generate text format.\n");
+  }
 
   return 0;
 }

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ -z "$srcdir" ]]; then
+  srcdir=.
+fi
+
 rm -f t/addressbook.c.data
 
 if [[ ! -f t/addressbook.c.text ]]; then
@@ -26,3 +30,31 @@ for text in $srcdir/t/broken/*.text; do
   fi
   rm -f t/broken_parse.data
 done
+
+if [[ -z "$BROKEN_MALLOC_TEST" ]]; then
+  exit 0
+fi
+
+echo -n "Testing broken malloc"
+i=0
+exit_code=1
+#while [[ $exit_code -ne 0 && $i -lt 100 ]]; do
+while [[ $i -lt 100 ]]; do
+  echo -n .
+  rm -f t/broken_parse.out t/broken_parse.data
+  BROKEN_MALLOC=$i ./t/c-parse t/broken_parse.data \
+    < t/addressbook.c.text > t/broken_parse.out
+  exit_code=$?
+  if [[ $exit_code -ne 0 ]]; then
+    if ! grep -q ERROR t/broken_parse.out; then
+      cat << EOF
+ERROR: This should have failed.
+BROKEN_MALLOC=$i ./t/c-parse t/broken_parse.data \
+  < t/addressbook.c.text > t/broken_parse.out
+EOF
+      exit 1
+    fi
+  fi
+  i=$(($i + 1))
+done
+echo

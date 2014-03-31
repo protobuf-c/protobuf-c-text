@@ -7,6 +7,7 @@
 #include <google/protobuf-c/protobuf-c.h>
 #include "protobuf-c-text/protobuf-c-text.h"
 #include "addressbook.pb-c.h"
+#include "broken-alloc.h"
 
 #define CHUNK 1024
 
@@ -21,10 +22,14 @@ main(int argc, char *argv[])
 
   ab = (Tutorial__AddressBook *)text_format_from_file(
       &tutorial__address_book__descriptor,
-      stdin, &errors, NULL);
+      stdin, &errors, &broken_allocator);
   if (errors) {
     printf("ERROR on import:\n%s", errors);
     free(errors);
+    exit(1);
+  }
+  if (!ab) {
+    printf("ERROR malloc failures.\n");
     exit(1);
   }
 
@@ -43,7 +48,7 @@ main(int argc, char *argv[])
     exit(1);
   }
 
-  tutorial__address_book__free_unpacked(ab, NULL);
+  tutorial__address_book__free_unpacked(ab, &broken_allocator);
 
   exit(0);
 }
