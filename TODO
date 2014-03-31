@@ -1,12 +1,11 @@
 Memory allocation:
-  * Use ProtobufCAllocator * instead of realloc/malloc/free.
+  * Have broken malloc set a sentinal file which it removes when it makes
+    malloc fail.  Loop until the sentinal file remains.
 
 Error propogation:
   * Free allocated memory when errors.
 
 Tests:
-  * Add malloc hooks to enable deterministic failues.  Come up with a
-    way to unwind failed allocations and report them.  Then test for that.
   * Add a bunch of tasts of broken text format buffers.
   * Add mcheck or valgrind tests to check for leaking memory.
 
