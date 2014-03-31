@@ -18,6 +18,7 @@ if ! cmp t/addressbook.c.data $srcdir/t/addressbook.data; then
   exit 1;
 fi
 
+rm -f t/broken_parse.data
 for text in $srcdir/t/broken/*.text; do
   ./t/c-parse t/broken_parse.data < $text > t/broken_parse.out
   if ! grep -q ERROR t/broken_parse.out; then
@@ -29,7 +30,6 @@ for text in $srcdir/t/broken/*.text; do
     echo "Parse for $text worked but shouldn't have."
     exit 1;
   fi
-  rm -f t/broken_parse.data
 done
 
 ### Tutorial Test message main tests.
@@ -54,9 +54,6 @@ if ! cmp t/tutorial_test.c.data $srcdir/t/tutorial_test.data; then
 fi
 
 ### Malloc failure tests.
-if [[ -z "$BROKEN_MALLOC_TEST" ]]; then
-  exit 0
-fi
 
 echo -n "Testing broken malloc"
 i=0

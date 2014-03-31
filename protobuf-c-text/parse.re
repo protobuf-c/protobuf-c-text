@@ -143,6 +143,7 @@ scanner_free(Scanner *scanner, ProtobufCAllocator *allocator)
 {
   if (scanner->f && scanner->buffer)
     allocator->free(allocator->allocator_data, scanner->buffer);
+  scanner->buffer = NULL;
 }
 
 static ProtobufCBinaryData *
@@ -674,6 +675,9 @@ state_value(State *state, Token *t)
               state->field->offset);
           pbbd->data = state->allocator->alloc(
               state->allocator->allocator_data, t->qs->len);
+          if (!pbbd->data) {
+            return state_error(state, t, "Malloc failure.");
+          }
           memcpy(pbbd->data, t->qs->data, t->qs->len);
           pbbd->len = t->qs->len;
           return STATE_OPEN;
@@ -716,6 +720,9 @@ state_value(State *state, Token *t)
 
           s = state->allocator->alloc(state->allocator->allocator_data,
               t->qs->len + 1);
+          if (!s) {
+            return state_error(state, t, "Malloc failure.");
+          }
           memcpy(s, t->qs->data, t->qs->len);
           s[t->qs->len] = '\0';
           if (strlen(s) != t->qs->len) {
@@ -1003,8 +1010,8 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
   while (state_id != STATE_DONE) {
     token = scan(scanner, allocator);
     if (token.id == TOK_MALLOC_ERR) {
-      scanner_free(scanner, allocator);
       token_free(&token, allocator);
+      break;
     }
     state_id = states[state_id](&state, &token);
     token_free(&token, allocator);
