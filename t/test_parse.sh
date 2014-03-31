@@ -72,8 +72,9 @@ while [[ $i -lt 100 ]]; do
     if ! grep -q ERROR t/broken_parse.out; then
       cat << EOF
 ERROR: This should have failed.
-BROKEN_MALLOC=$i ./t/c-parse t/broken_parse.data \
-  < t/addressbook.c.text > t/broken_parse.out
+Debug:
+BROKEN_MALLOC=$i gdb ./t/c-parse
+run t/broken_parse.data < t/addressbook.c.text
 EOF
       exit 1
     fi

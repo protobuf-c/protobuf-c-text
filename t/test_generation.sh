@@ -18,7 +18,11 @@ fi
 ### Tutorial Test message.
 if ! ./t/c-dump2 $srcdir/t/tutorial_test.data \
     > t/tutorial_test.c.text; then
-  echo "ERROR: This shouldn't have failed."
+./t/c-dump2 $srcdir/t/tutorial_test.data
+cat << EOF
+ERROR: This shouldn't have failed.
+./t/c-dump2 $srcdir/t/tutorial_test.data > t/tutorial_test.c.text
+EOF
   exit 1
 fi
 
@@ -37,7 +41,9 @@ while [[ $i -lt 100 ]]; do
       cat << EOF
 ERROR: This should have failed.
 BROKEN_MALLOC=$i ./t/c-dump $srcdir/t/addressbook.data \
-  > t/broken.text
+Debug: 
+BROKEN_MALLOC=$i gdb ./t/c-dump
+run $srcdir/t/addressbook.data > t/broken.text
 EOF
       exit 1
     fi
