@@ -126,4 +126,8 @@ MOSTLYCLEANFILES = $(DX_CLEANFILES) \
 		   t/addressbook.c.text \
 		   t/addressbook.protoc-c.text \
 		   t/addressbook.c.data \
-		   t/broken_parse.out
+		   t/broken_parse.out \
+		   t/tutorial_test.c.data \
+		   t/tutorial_test.c.text \
+		   t/tutorial_test.protoc_c.text
+
