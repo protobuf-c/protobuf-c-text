@@ -480,6 +480,10 @@ state_assignment(State *state, Token *t)
       break;
     case TOK_OBRACE:
       if (state->field->type == PROTOBUF_C_TYPE_MESSAGE) {
+        ProtobufCMessage **tmp;
+        size_t n_members;
+
+        /* Don't assign over an existing message. */
         if (state->field->label == PROTOBUF_C_LABEL_OPTIONAL
             || state->field->label == PROTOBUF_C_LABEL_REQUIRED) {
           /* Do optional member accounting. */
@@ -490,19 +494,9 @@ state_assignment(State *state, Token *t)
                 state->field->name);
           }
         }
-        /* TODO: Review the then/else clauses to move duplicated code
-         *       up here. */
-        if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
-          ProtobufCMessage **tmp;
-          size_t n_members;
 
-          /* Create new message and assign it to the message stack. */
-          state->current_msg++;
-          if (state->current_msg == state->max_msg) {
-            /* TODO: Dynamically increase msgs. */
-            return state_error(state, t,
-                "'%s' is too many messages deep.", state->field->name);
-          }
+        /* Allocate space for the repeated message list. */
+        if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
@@ -516,36 +510,33 @@ state_assignment(State *state, Token *t)
           }
           STRUCT_MEMBER(ProtobufCMessage **, msg, state->field->offset)
             = tmp;
-          tmp[n_members - 1] = state->allocator->alloc(
-              state->allocator->allocator_data,
+          tmp[n_members - 1] = NULL;
+        }
+
+        /* Create and push a new message on the message stack. */
+        state->current_msg++;
+        if (state->current_msg == state->max_msg) {
+          /* TODO: Dynamically increase msgs. */
+          return state_error(state, t,
+              "'%s' is too many messages deep.", state->field->name);
+        }
+        state->msgs[state->current_msg]
+          = state->allocator->alloc(state->allocator->allocator_data,
               ((ProtobufCMessageDescriptor *)
-                state->field->descriptor)->sizeof_message);
-          if (!tmp[n_members - 1]) {
-            return state_error(state, t, "Malloc failure.");
-          }
-          state->msgs[state->current_msg] = tmp[n_members - 1];
-          ((ProtobufCMessageDescriptor *)state->field->descriptor)
-            ->message_init(tmp[n_members - 1]);
+               state->field->descriptor)->sizeof_message);
+        if (!state->msgs[state->current_msg]) {
+          return state_error(state, t, "Malloc failure.");
+        }
+        ((ProtobufCMessageDescriptor *)state->field->descriptor)
+          ->message_init(state->msgs[state->current_msg]);
+
+        /* Assign the message just created. */
+        if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+          tmp[n_members - 1] = state->msgs[state->current_msg];
           return STATE_OPEN;
         } else {
-          /* Create new message and assign it to the message stack. */
-          state->current_msg++;
-          if (state->current_msg == state->max_msg) {
-            /* TODO: Dynamically increase msgs. */
-            return state_error(state, t,
-                "'%s' is too many messages deep.", state->field->name);
-          }
-          state->msgs[state->current_msg]
-            = state->allocator->alloc(state->allocator->allocator_data,
-                ((ProtobufCMessageDescriptor *)
-                 state->field->descriptor)->sizeof_message);
-          if (!state->msgs[state->current_msg]) {
-            return state_error(state, t, "Malloc failure.");
-          }
           STRUCT_MEMBER(ProtobufCMessage *, msg, state->field->offset)
             = state->msgs[state->current_msg];
-          ((ProtobufCMessageDescriptor *)state->field->descriptor)
-            ->message_init(state->msgs[state->current_msg]);
           return STATE_OPEN;
         }
 
