@@ -562,6 +562,7 @@ state_value(State *state, Token *t)
   ProtobufCMessage *msg;
   size_t n_members;
   char *end;
+  int64_t val;
 
   msg = state->msgs[state->current_msg];
   if (state->field->type != PROTOBUF_C_TYPE_STRING) {
@@ -742,9 +743,14 @@ state_value(State *state, Token *t)
         case PROTOBUF_C_TYPE_INT32:
         case PROTOBUF_C_TYPE_UINT32:
         case PROTOBUF_C_TYPE_FIXED32:
+          val = strtoul(t->number, &end, 10);
+          if (*end != '\0' || val > (uint64_t)UINT32_MAX) {
+            return state_error(state, t,
+                "Unable to convert '%s' for field '%s'.",
+                t->number, state->field->name);
+          }
           if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
             uint32_t *vals;
-            uint64_t val;
 
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
@@ -757,23 +763,9 @@ state_value(State *state, Token *t)
               return state_error(state, t, "Malloc failure.");
             }
             STRUCT_MEMBER(uint32_t *, msg, state->field->offset) = vals;
-            val = strtoul(t->number, &end, 10);
-            if (*end != '\0' || val > UINT32_MAX) {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
             vals[n_members - 1] = (uint32_t)val;
             return STATE_OPEN;
           } else {
-            uint64_t val;
-
-            val = strtoul(t->number, &end, 10);
-            if (*end != '\0' || val > UINT32_MAX) {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
             STRUCT_MEMBER(uint32_t, msg, state->field->offset) = (uint32_t)val;
             return STATE_OPEN;
           }
@@ -781,9 +773,14 @@ state_value(State *state, Token *t)
 
         case PROTOBUF_C_TYPE_SINT32:
         case PROTOBUF_C_TYPE_SFIXED32:
+          val = strtol(t->number, &end, 10);
+          if (*end != '\0' || val < INT32_MIN || val > INT32_MAX) {
+            return state_error(state, t,
+                "Unable to convert '%s' for field '%s'.",
+                t->number, state->field->name);
+          }
           if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
             int32_t *vals;
-            int64_t val;
 
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
@@ -796,23 +793,9 @@ state_value(State *state, Token *t)
               return state_error(state, t, "Malloc failure.");
             }
             STRUCT_MEMBER(int32_t *, msg, state->field->offset) = vals;
-            val = strtol(t->number, &end, 10);
-            if (*end != '\0' || val < INT32_MIN || val > INT32_MAX) {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
             vals[n_members - 1] = (uint32_t)val;
             return STATE_OPEN;
           } else {
-            int32_t val;
-
-            val = strtol(t->number, &end, 10);
-            if (*end != '\0' || val < INT32_MIN || val > INT32_MAX) {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
             STRUCT_MEMBER(int32_t, msg, state->field->offset) = val;
             return STATE_OPEN;
           }
@@ -821,6 +804,12 @@ state_value(State *state, Token *t)
         case PROTOBUF_C_TYPE_INT64:
         case PROTOBUF_C_TYPE_UINT64:
         case PROTOBUF_C_TYPE_FIXED64:
+          val = strtoull(t->number, &end, 10);
+          if (*end != '\0') {
+            return state_error(state, t,
+                "Unable to convert '%s' for field '%s'.",
+                t->number, state->field->name);
+          }
           if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
             uint64_t *vals;
 
@@ -835,22 +824,9 @@ state_value(State *state, Token *t)
               return state_error(state, t, "Malloc failure.");
             }
             STRUCT_MEMBER(uint64_t *, msg, state->field->offset) = vals;
-            vals[n_members - 1] = strtoull(t->number, &end, 10);
-            if (*end != '\0') {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
+            vals[n_members - 1] = val;
             return STATE_OPEN;
           } else {
-            uint64_t val;
-
-            val = strtoull(t->number, &end, 10);
-            if (*end != '\0') {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
             STRUCT_MEMBER(uint64_t, msg, state->field->offset) = val;
             return STATE_OPEN;
           }
@@ -858,6 +834,12 @@ state_value(State *state, Token *t)
 
         case PROTOBUF_C_TYPE_SINT64:
         case PROTOBUF_C_TYPE_SFIXED64:
+          val = strtoll(t->number, &end, 10);
+          if (*end != '\0') {
+            return state_error(state, t,
+                "Unable to convert '%s' for field '%s'.",
+                t->number, state->field->name);
+          }
           if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
             int64_t *vals;
 
@@ -872,51 +854,17 @@ state_value(State *state, Token *t)
               return state_error(state, t, "Malloc failure.");
             }
             STRUCT_MEMBER(int64_t *, msg, state->field->offset) = vals;
-            vals[n_members - 1] = strtol(t->number, &end, 10);
-            if (*end != '\0') {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
+            vals[n_members - 1] = val;
             return STATE_OPEN;
           } else {
-            int64_t val;
-
-            val = strtoll(t->number, &end, 10);
-            if (*end != '\0') {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
             STRUCT_MEMBER(int64_t, msg, state->field->offset) = val;
             return STATE_OPEN;
           }
           break;
 
         case PROTOBUF_C_TYPE_FLOAT:
-          if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
-            float *vals;
-
-            STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
-            n_members = STRUCT_MEMBER(size_t, msg,
-                                      state->field->quantifier_offset);
-            vals = local_realloc(
-                STRUCT_MEMBER(float *, msg, state->field->offset),
-                (n_members - 1) * sizeof(float),
-                n_members * sizeof(float), state->allocator);
-            if (!vals) {
-              return state_error(state, t, "Malloc failure.");
-            }
-            STRUCT_MEMBER(float *, msg, state->field->offset) = vals;
-            vals[n_members - 1] = strtof(t->number, &end);
-            if (*end != '\0') {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
-            return STATE_OPEN;
-          } else {
-            float val;
+          {
+            float val, *vals;
 
             val = strtof(t->number, &end);
             if (*end != '\0') {
@@ -924,35 +872,32 @@ state_value(State *state, Token *t)
                   "Unable to convert '%s' for field '%s'.",
                   t->number, state->field->name);
             }
-            STRUCT_MEMBER(float, msg, state->field->offset) = val;
-            return STATE_OPEN;
+            if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+              float *vals;
+
+              STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
+              n_members = STRUCT_MEMBER(size_t, msg,
+                                        state->field->quantifier_offset);
+              vals = local_realloc(
+                  STRUCT_MEMBER(float *, msg, state->field->offset),
+                  (n_members - 1) * sizeof(float),
+                  n_members * sizeof(float), state->allocator);
+              if (!vals) {
+                return state_error(state, t, "Malloc failure.");
+              }
+              STRUCT_MEMBER(float *, msg, state->field->offset) = vals;
+              vals[n_members - 1] = val;
+              return STATE_OPEN;
+            } else {
+              STRUCT_MEMBER(float, msg, state->field->offset) = val;
+              return STATE_OPEN;
+            }
           }
           break;
 
         case PROTOBUF_C_TYPE_DOUBLE:
-          if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
-            double *vals;
-
-            STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
-            n_members = STRUCT_MEMBER(size_t, msg,
-                                      state->field->quantifier_offset);
-            vals = local_realloc(
-                STRUCT_MEMBER(double *, msg, state->field->offset),
-                (n_members - 1) * sizeof(double),
-                n_members * sizeof(double), state->allocator);
-            if (!vals) {
-              return state_error(state, t, "Malloc failure.");
-            }
-            STRUCT_MEMBER(double *, msg, state->field->offset) = vals;
-            vals[n_members - 1] = strtod(t->number, &end);
-            if (*end != '\0') {
-              return state_error(state, t,
-                  "Unable to convert '%s' for field '%s'.",
-                  t->number, state->field->name);
-            }
-            return STATE_OPEN;
-          } else {
-            double val;
+          {
+            double val,*vals;
 
             val = strtod(t->number, &end);
             if (*end != '\0') {
@@ -960,8 +905,24 @@ state_value(State *state, Token *t)
                   "Unable to convert '%s' for field '%s'.",
                   t->number, state->field->name);
             }
-            STRUCT_MEMBER(double, msg, state->field->offset) = val;
-            return STATE_OPEN;
+            if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
+              STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
+              n_members = STRUCT_MEMBER(size_t, msg,
+                                        state->field->quantifier_offset);
+              vals = local_realloc(
+                  STRUCT_MEMBER(double *, msg, state->field->offset),
+                  (n_members - 1) * sizeof(double),
+                  n_members * sizeof(double), state->allocator);
+              if (!vals) {
+                return state_error(state, t, "Malloc failure.");
+              }
+              STRUCT_MEMBER(double *, msg, state->field->offset) = vals;
+              vals[n_members - 1] = val;
+              return STATE_OPEN;
+            } else {
+              STRUCT_MEMBER(double, msg, state->field->offset) = val;
+              return STATE_OPEN;
+            }
           }
           break;
 
@@ -1011,6 +972,7 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
     token = scan(scanner, allocator);
     if (token.id == TOK_MALLOC_ERR) {
       token_free(&token, allocator);
+      state_error(&state, &token, "String unescape or malloc failure.");
       break;
     }
     state_id = states[state_id](&state, &token);

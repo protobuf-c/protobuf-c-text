@@ -53,6 +53,20 @@ if ! cmp t/tutorial_test.c.data $srcdir/t/tutorial_test.data; then
   exit 1;
 fi
 
+rm -f t/broken_parse.data
+for text in $srcdir/t/broken2/*.text; do
+  ./t/c-parse2 t/broken_parse.data < $text > t/broken_parse.out
+  if ! grep -q ERROR t/broken_parse.out; then
+    echo "./t/c-parse2 t/broken_parse.data < $text"
+    echo "This didn't fail as expected."
+    exit 1;
+  fi
+  if [[ -f t/broken_parse.data ]]; then
+    echo "Parse for $text worked but shouldn't have."
+    exit 1;
+  fi
+done
+
 ### Malloc failure tests.
 
 echo -n "Testing broken malloc"

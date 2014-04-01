@@ -94,4 +94,6 @@ message Test {
 
 message Short {
   required uint32 id = 1;
+  optional uint32 truer = 2;
+  optional string falser = 3;
 }

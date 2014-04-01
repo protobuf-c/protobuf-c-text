@@ -1,0 +1,50 @@
+rq_str_var: "Astring: \t \n \\ \' \" \001"
+rq_double_var: 3.6
+rq_float_var: 39.6
+rq_int64_var: 123
+rq_uint32_var: 456
+rq_uint64_var: 789
+rq_sint32_var: -1234
+rq_sint64_var: -5678
+rq_fixed32_var: 1024
+rq_fixed64_var: 2048
+rq_sfixed32_var: -128
+rq_sfixed64_var: -512
+rq_bool_var: false
+rq_bytes_var: "\000\001\002\003\004\005\006"
+rp_str_var: "String 1"
+rp_str_var: "String 2"
+rp_double_var: 12344
+rp_double_var: 12345
+rp_float_var: 56788
+rp_float_var: 56789
+rp_int64_var: 23455
+rp_int64_var: 23456
+rp_uint32_var: 67899.5
+rp_uint32_var: 67900
+rp_uint64_var: 9877
+rp_uint64_var: 9878
+rp_sint32_var: 8766
+rp_sint32_var: 8767
+rp_sint64_var: 7655
+rp_sint64_var: 7656
+rp_fixed32_var: 6544
+rp_fixed32_var: 6545
+rp_fixed64_var: 5433
+rp_fixed64_var: 5434
+rp_sfixed32_var: 4322
+rp_sfixed32_var: 4323
+rp_sfixed64_var: -2
+rp_sfixed64_var: -1
+rp_bool_var: true
+rp_bool_var: false
+rp_bytes_var: "Bytes 2"
+rp_bytes_var: "Bytes 3"
+rq_msg {
+  rq_enum_var: BAR
+  rp_enum_var: KITTEN
+  rp_enum_var: FOO
+}
+opt_msg {
+  rq_enum_var: FOO
+}

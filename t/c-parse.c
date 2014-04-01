@@ -53,7 +53,7 @@ main(int argc, char *argv[])
 
   shortmsg = (Tutorial__Short *)text_format_from_string(
       &tutorial__short__descriptor,
-      "id: 42", &error_txt, NULL);
+      "id: 42\ntruer: 7\nfalser: \"\t\"\n", &error_txt, NULL);
   if (error_txt) {
     printf("ERROR on import:\n%s", error_txt);
     free(error_txt);
