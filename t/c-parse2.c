@@ -14,18 +14,25 @@
 int
 main(int argc, char *argv[])
 {
+  TextFormatResult tf_res;
   Tutorial__Test *testmsg;
   size_t len;
   uint8_t *buf;
   FILE *out;
-  char *errors;
 
   testmsg = (Tutorial__Test *)text_format_from_file(
             &tutorial__test__descriptor,
-            stdin, &errors, &broken_allocator);
-  if (errors) {
-    printf("ERROR on import:\n%s", errors);
-    free(errors);
+            stdin, &tf_res, &broken_allocator);
+  if (tf_res.error_txt) {
+    printf("ERROR on import:\n%s", tf_res.error_txt);
+    free(tf_res.error_txt);
+    exit(1);
+  }
+  if (!tf_res.complete) {
+    printf("ERROR on import: message not complete.an");
+    if (testmsg) {
+      tutorial__test__free_unpacked(testmsg, &broken_allocator);
+    }
     exit(1);
   }
   if (!testmsg) {

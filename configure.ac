@@ -59,6 +59,7 @@ AS_IF([test -z "$DX_DOXYGEN"], [have_doxygen=no], [have_doxygen=yes])
 # fail if the library cannot be found.
 AC_CHECK_LIB([protobuf-c], [protobuf_c_message_get_packed_size],
     [], [AC_MSG_FAILURE([protobuf-c required - is -dev pkg installed?])])
+AC_CHECK_FUNCS([protobuf_c_message_check])
 
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h stdint.h stdlib.h string.h sys/time.h unistd.h])

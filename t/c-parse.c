@@ -14,19 +14,26 @@
 int
 main(int argc, char *argv[])
 {
+  TextFormatResult tf_res;
   Tutorial__AddressBook *ab;
   size_t len;
   uint8_t *buf;
   FILE *out;
-  char *error_txt;
   Tutorial__Short *shortmsg;
 
   ab = (Tutorial__AddressBook *)text_format_from_file(
       &tutorial__address_book__descriptor,
-      stdin, &error_txt, &broken_allocator);
-  if (error_txt) {
-    printf("ERROR on import:\n%s", error_txt);
-    free(error_txt);
+      stdin, &tf_res, &broken_allocator);
+  if (tf_res.error_txt) {
+    printf("ERROR on import:\n%s", tf_res.error_txt);
+    free(tf_res.error_txt);
+    exit(1);
+  }
+  if (!tf_res.complete) {
+    printf("ERROR on import: Message not complete.\n");
+    if (ab) {
+      tutorial__address_book__free_unpacked(ab, &broken_allocator);
+    }
     exit(1);
   }
   if (!ab) {
@@ -53,10 +60,17 @@ main(int argc, char *argv[])
 
   shortmsg = (Tutorial__Short *)text_format_from_string(
       &tutorial__short__descriptor,
-      "id: 42\ntruer: 7\nfalser: \"\t\"\n", &error_txt, NULL);
-  if (error_txt) {
-    printf("ERROR on import:\n%s", error_txt);
-    free(error_txt);
+      "id: 42\ntruer: 7\nfalser: \"\t\"\n", &tf_res, NULL);
+  if (tf_res.error_txt) {
+    printf("ERROR on import:\n%s", tf_res.error_txt);
+    free(tf_res.error_txt);
+    exit(1);
+  }
+  if (!tf_res.complete) {
+    printf("ERROR on import: Message not complete.\n");
+    if (shortmsg) {
+      tutorial__short__free_unpacked(shortmsg, &broken_allocator);
+    }
     exit(1);
   }
   if (!shortmsg) {

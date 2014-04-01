@@ -18598,6 +18598,17 @@ as_fn_error $? "protobuf-c required - is -dev pkg installed?
 See \`config.log' for more details" "$LINENO" 5; }
 fi
 
+for ac_func in protobuf_c_message_check
+do :
+  ac_fn_c_check_func "$LINENO" "protobuf_c_message_check" "ac_cv_func_protobuf_c_message_check"
+if test "x$ac_cv_func_protobuf_c_message_check" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_PROTOBUF_C_MESSAGE_CHECK 1
+_ACEOF
+
+fi
+done
+
 
 # Checks for header files.
 for ac_header in fcntl.h stdint.h stdlib.h string.h sys/time.h unistd.h

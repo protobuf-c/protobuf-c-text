@@ -438,7 +438,6 @@ state_open(State *state, Token *t)
       break;
     case TOK_CBRACE:
       if (state->current_msg > 0) {
-        /* TODO: Check all required fields have been set. */
         state->current_msg--;
       } else {
         return state_error(state, t, "Extra closing brace found.");
@@ -726,9 +725,6 @@ state_value(State *state, Token *t)
           }
           memcpy(s, t->qs->data, t->qs->len);
           s[t->qs->len] = '\0';
-          if (strlen(s) != t->qs->len) {
-            /* TODO: Error if there's an embedded NUL in a string? */
-          }
           STRUCT_MEMBER(unsigned char *, msg, state->field->offset) = s;
           return STATE_OPEN;
         }
@@ -950,18 +946,19 @@ static StateId(* states[])(State *, Token *) = {
 static ProtobufCMessage *
 text_format_parse(const ProtobufCMessageDescriptor *descriptor,
     Scanner *scanner,
-    char **error_txt,
+    TextFormatResult *result,
     ProtobufCAllocator *allocator)
 {
   Token token;
   State state;
   StateId state_id;
-  ProtobufCMessage *msg;
+  ProtobufCMessage *msg = NULL;
 
   if (!allocator) {
     allocator = &protobuf_c_default_allocator;
   }
-  *error_txt = NULL;
+  result->error_txt = NULL;
+  result->complete = 0;
 
   state_id = STATE_OPEN;
   if (!state_init(&state, scanner, descriptor, allocator)) {
@@ -980,9 +977,18 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
   }
 
   scanner_free(scanner, allocator);
-  msg = state.msgs[0];
   if (state.error) {
-    *error_txt = state.error_str;
+    result->error_txt = state.error_str;
+    if (msg) {
+      protobuf_c_message_free_unpacked(state.msgs[0], allocator);
+    }
+  } else {
+    msg = state.msgs[0];
+#ifdef HAVE_PROTOBUF_C_MESSAGE_CHECK
+    result->complete = protobuf_c_message_check(msg);
+#else
+    result->complete = -1;
+#endif
   }
   state_free(&state);
   return msg;
@@ -991,23 +997,23 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
 ProtobufCMessage *
 text_format_from_file(const ProtobufCMessageDescriptor *descriptor,
     FILE *msg_file,
-    char **error_txt,
+    TextFormatResult *result,
     ProtobufCAllocator *allocator)
 {
   Scanner scanner;
 
   scanner_init_file(&scanner, msg_file);
-  return text_format_parse(descriptor, &scanner, error_txt, allocator);
+  return text_format_parse(descriptor, &scanner, result, allocator);
 }
 
 ProtobufCMessage *
 text_format_from_string(const ProtobufCMessageDescriptor *descriptor,
     char *msg,
-    char **error_txt,
+    TextFormatResult *result,
     ProtobufCAllocator *allocator)
 {
   Scanner scanner;
 
   scanner_init_string(&scanner, msg);
-  return text_format_parse(descriptor, &scanner, error_txt, allocator);
+  return text_format_parse(descriptor, &scanner, result, allocator);
 }
