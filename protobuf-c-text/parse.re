@@ -6,6 +6,7 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -397,15 +398,14 @@ state_error(State *state, Token *t, char *error_fmt, ...)
 
   /* 10 solid lines of errors is more than enough. */
   state->error = 1;
-  va_start(args, error_fmt);
-  error_idx = vsnprintf(state->error_str, STATE_ERROR_STR_MAX,
-      error_fmt, args);
-  va_end(args);
+  error_idx = snprintf(state->error_str, STATE_ERROR_STR_MAX,
+      "Error found on line %d.\n", state->scanner->line);
 
   if (error_idx < STATE_ERROR_STR_MAX) {
-    snprintf(state->error_str + error_idx,
-        STATE_ERROR_STR_MAX - error_idx,
-        "\nError found on line %d.\n", state->scanner->line);
+    va_start(args, error_fmt);
+    vsnprintf(state->error_str + error_idx, STATE_ERROR_STR_MAX - error_idx,
+        error_fmt, args);
+    va_end(args);
   }
 
   return STATE_DONE;
@@ -866,15 +866,14 @@ state_value(State *state, Token *t)
           {
             float val, *vals;
 
+            errno = 0;
             val = strtof(t->number, &end);
-            if (*end != '\0') {
+            if (*end != '\0' || errno == ERANGE) {
               return state_error(state, t,
                   "Unable to convert '%s' for field '%s'.",
                   t->number, state->field->name);
             }
             if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
-              float *vals;
-
               STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
               n_members = STRUCT_MEMBER(size_t, msg,
                                         state->field->quantifier_offset);
@@ -899,8 +898,9 @@ state_value(State *state, Token *t)
           {
             double val,*vals;
 
+            errno = 0;
             val = strtod(t->number, &end);
-            if (*end != '\0') {
+            if (*end != '\0' || errno == ERANGE) {
               return state_error(state, t,
                   "Unable to convert '%s' for field '%s'.",
                   t->number, state->field->name);
