@@ -490,6 +490,8 @@ state_assignment(State *state, Token *t)
                 state->field->name);
           }
         }
+        /* TODO: Review the then/else clauses to move duplicated code
+         *       up here. */
         if (state->field->label == PROTOBUF_C_LABEL_REPEATED) {
           ProtobufCMessage **tmp;
           size_t n_members;
