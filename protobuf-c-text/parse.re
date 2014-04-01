@@ -518,9 +518,16 @@ state_assignment(State *state, Token *t)
         /* Create and push a new message on the message stack. */
         state->current_msg++;
         if (state->current_msg == state->max_msg) {
-          /* TODO: Dynamically increase msgs. */
-          return state_error(state, t,
-              "'%s' is too many messages deep.", state->field->name);
+          ProtobufCMessage **tmp_msgs;
+
+          tmp_msgs = local_realloc(
+              state->msgs, (state->max_msg) * sizeof(ProtobufCMessage *),
+              (state->max_msg += 10) * sizeof(ProtobufCMessage *),
+              state->allocator);
+          if (!tmp_msgs) {
+            return state_error(state, t, "Malloc failure.");
+          }
+          state->msgs = tmp_msgs;
         }
         state->msgs[state->current_msg]
           = state->allocator->alloc(state->allocator->allocator_data,

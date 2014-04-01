@@ -45,6 +45,7 @@ protobuf-c-text/libprotobuf-c-text.pc
 /t/c-dump2
 /t/c-parse
 /t/c-parse2
+/t/test_msgs
 
 # Generated parsing code.
 protobuf-c-text/parse.c

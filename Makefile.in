@@ -38,8 +38,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+TESTS = $(srcdir)/t/test_generation.sh $(srcdir)/t/test_parse.sh \
+	t/test_msgs$(EXEEXT)
 check_PROGRAMS = t/c-dump$(EXEEXT) t/c-dump2$(EXEEXT) \
-	t/c-parse$(EXEEXT) t/c-parse2$(EXEEXT)
+	t/c-parse$(EXEEXT) t/c-parse2$(EXEEXT) t/test_msgs$(EXEEXT)
 DIST_COMMON = README $(am__configure_deps) \
 	$(libprotobuf_c_text_HEADERS) $(noinst_HEADERS) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
@@ -155,6 +157,16 @@ t_c_parse2_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
 t_c_parse2_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_c_parse2_CFLAGS) \
 	$(CFLAGS) $(t_c_parse2_LDFLAGS) $(LDFLAGS) -o $@
+am_t_test_msgs_OBJECTS = t/t_test_msgs-test_msgs.$(OBJEXT)
+am__objects_5 = t/t_test_msgs-addressbook.pb-c.$(OBJEXT)
+nodist_t_test_msgs_OBJECTS = $(am__objects_5)
+t_test_msgs_OBJECTS = $(am_t_test_msgs_OBJECTS) \
+	$(nodist_t_test_msgs_OBJECTS)
+t_test_msgs_DEPENDENCIES = protobuf-c-text/libprotobuf-c-text.la \
+	$(am__DEPENDENCIES_1)
+t_test_msgs_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(t_test_msgs_CFLAGS) \
+	$(CFLAGS) $(t_test_msgs_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/build-aux
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
@@ -186,10 +198,11 @@ SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(t_c_dump_SOURCES) $(nodist_t_c_dump_SOURCES) \
 	$(t_c_dump2_SOURCES) $(nodist_t_c_dump2_SOURCES) \
 	$(t_c_parse_SOURCES) $(nodist_t_c_parse_SOURCES) \
-	$(t_c_parse2_SOURCES) $(nodist_t_c_parse2_SOURCES)
+	$(t_c_parse2_SOURCES) $(nodist_t_c_parse2_SOURCES) \
+	$(t_test_msgs_SOURCES) $(nodist_t_test_msgs_SOURCES)
 DIST_SOURCES = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES) \
 	$(t_c_dump_SOURCES) $(t_c_dump2_SOURCES) $(t_c_parse_SOURCES) \
-	$(t_c_parse2_SOURCES)
+	$(t_c_parse2_SOURCES) $(t_test_msgs_SOURCES)
 DATA = $(pkgconfig_DATA)
 HEADERS = $(libprotobuf_c_text_HEADERS) $(noinst_HEADERS)
 ETAGS = etags
@@ -389,7 +402,6 @@ PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 
 AM_CFLAGS = -I $(srcdir)/protobuf-c-text
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
-TESTS = $(srcdir)/t/test_generation.sh $(srcdir)/t/test_parse.sh
 check_SCRIPTS = t/test_generation.sh t/test_parse.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_HDRS) \
 		protobuf-c-text/parse.c
@@ -443,6 +455,11 @@ nodist_t_c_parse2_SOURCES = $(PROTOBUF_C_TEST_SRCS)
 t_c_parse2_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
 t_c_parse2_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_parse2_LDFLAGS = -static
+t_test_msgs_SOURCES = t/test_msgs.c
+nodist_t_test_msgs_SOURCES = $(PROTOBUF_C_TEST_SRCS)
+t_test_msgs_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
+t_test_msgs_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_test_msgs_LDFLAGS = -static
 EXTRA_DIST = t/addressbook.proto \
 	     t/addressbook.data \
 	     t/tutorial_test.data \
@@ -655,6 +672,13 @@ t/t_c_parse2-addressbook.pb-c.$(OBJEXT): t/$(am__dirstamp) \
 t/c-parse2$(EXEEXT): $(t_c_parse2_OBJECTS) $(t_c_parse2_DEPENDENCIES) $(EXTRA_t_c_parse2_DEPENDENCIES) t/$(am__dirstamp)
 	@rm -f t/c-parse2$(EXEEXT)
 	$(AM_V_CCLD)$(t_c_parse2_LINK) $(t_c_parse2_OBJECTS) $(t_c_parse2_LDADD) $(LIBS)
+t/t_test_msgs-test_msgs.$(OBJEXT): t/$(am__dirstamp) \
+	t/$(DEPDIR)/$(am__dirstamp)
+t/t_test_msgs-addressbook.pb-c.$(OBJEXT): t/$(am__dirstamp) \
+	t/$(DEPDIR)/$(am__dirstamp)
+t/test_msgs$(EXEEXT): $(t_test_msgs_OBJECTS) $(t_test_msgs_DEPENDENCIES) $(EXTRA_t_test_msgs_DEPENDENCIES) t/$(am__dirstamp)
+	@rm -f t/test_msgs$(EXEEXT)
+	$(AM_V_CCLD)$(t_test_msgs_LINK) $(t_test_msgs_OBJECTS) $(t_test_msgs_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -674,6 +698,8 @@ mostlyclean-compile:
 	-rm -f t/t_c_parse2-addressbook.pb-c.$(OBJEXT)
 	-rm -f t/t_c_parse2-broken-alloc.$(OBJEXT)
 	-rm -f t/t_c_parse2-c-parse2.$(OBJEXT)
+	-rm -f t/t_test_msgs-addressbook.pb-c.$(OBJEXT)
+	-rm -f t/t_test_msgs-test_msgs.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -692,6 +718,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse2-addressbook.pb-c.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse2-broken-alloc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_c_parse2-c-parse2.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_test_msgs-addressbook.pb-c.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@t/$(DEPDIR)/t_test_msgs-test_msgs.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -898,6 +926,34 @@ t/t_c_parse2-addressbook.pb-c.obj: t/addressbook.pb-c.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb-c.c' object='t/t_c_parse2-addressbook.pb-c.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_c_parse2_CFLAGS) $(CFLAGS) -c -o t/t_c_parse2-addressbook.pb-c.obj `if test -f 't/addressbook.pb-c.c'; then $(CYGPATH_W) 't/addressbook.pb-c.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb-c.c'; fi`
+
+t/t_test_msgs-test_msgs.o: t/test_msgs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_test_msgs_CFLAGS) $(CFLAGS) -MT t/t_test_msgs-test_msgs.o -MD -MP -MF t/$(DEPDIR)/t_test_msgs-test_msgs.Tpo -c -o t/t_test_msgs-test_msgs.o `test -f 't/test_msgs.c' || echo '$(srcdir)/'`t/test_msgs.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_test_msgs-test_msgs.Tpo t/$(DEPDIR)/t_test_msgs-test_msgs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/test_msgs.c' object='t/t_test_msgs-test_msgs.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_test_msgs_CFLAGS) $(CFLAGS) -c -o t/t_test_msgs-test_msgs.o `test -f 't/test_msgs.c' || echo '$(srcdir)/'`t/test_msgs.c
+
+t/t_test_msgs-test_msgs.obj: t/test_msgs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_test_msgs_CFLAGS) $(CFLAGS) -MT t/t_test_msgs-test_msgs.obj -MD -MP -MF t/$(DEPDIR)/t_test_msgs-test_msgs.Tpo -c -o t/t_test_msgs-test_msgs.obj `if test -f 't/test_msgs.c'; then $(CYGPATH_W) 't/test_msgs.c'; else $(CYGPATH_W) '$(srcdir)/t/test_msgs.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_test_msgs-test_msgs.Tpo t/$(DEPDIR)/t_test_msgs-test_msgs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/test_msgs.c' object='t/t_test_msgs-test_msgs.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_test_msgs_CFLAGS) $(CFLAGS) -c -o t/t_test_msgs-test_msgs.obj `if test -f 't/test_msgs.c'; then $(CYGPATH_W) 't/test_msgs.c'; else $(CYGPATH_W) '$(srcdir)/t/test_msgs.c'; fi`
+
+t/t_test_msgs-addressbook.pb-c.o: t/addressbook.pb-c.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_test_msgs_CFLAGS) $(CFLAGS) -MT t/t_test_msgs-addressbook.pb-c.o -MD -MP -MF t/$(DEPDIR)/t_test_msgs-addressbook.pb-c.Tpo -c -o t/t_test_msgs-addressbook.pb-c.o `test -f 't/addressbook.pb-c.c' || echo '$(srcdir)/'`t/addressbook.pb-c.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_test_msgs-addressbook.pb-c.Tpo t/$(DEPDIR)/t_test_msgs-addressbook.pb-c.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb-c.c' object='t/t_test_msgs-addressbook.pb-c.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_test_msgs_CFLAGS) $(CFLAGS) -c -o t/t_test_msgs-addressbook.pb-c.o `test -f 't/addressbook.pb-c.c' || echo '$(srcdir)/'`t/addressbook.pb-c.c
+
+t/t_test_msgs-addressbook.pb-c.obj: t/addressbook.pb-c.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_test_msgs_CFLAGS) $(CFLAGS) -MT t/t_test_msgs-addressbook.pb-c.obj -MD -MP -MF t/$(DEPDIR)/t_test_msgs-addressbook.pb-c.Tpo -c -o t/t_test_msgs-addressbook.pb-c.obj `if test -f 't/addressbook.pb-c.c'; then $(CYGPATH_W) 't/addressbook.pb-c.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb-c.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) t/$(DEPDIR)/t_test_msgs-addressbook.pb-c.Tpo t/$(DEPDIR)/t_test_msgs-addressbook.pb-c.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='t/addressbook.pb-c.c' object='t/t_test_msgs-addressbook.pb-c.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(t_test_msgs_CFLAGS) $(CFLAGS) -c -o t/t_test_msgs-addressbook.pb-c.obj `if test -f 't/addressbook.pb-c.c'; then $(CYGPATH_W) 't/addressbook.pb-c.c'; else $(CYGPATH_W) '$(srcdir)/t/addressbook.pb-c.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

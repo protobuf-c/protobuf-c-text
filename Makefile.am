@@ -77,8 +77,9 @@ t_c_parse2_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CH
 t_c_parse2_LDFLAGS = -static
 
 t_test_msgs_SOURCES = t/test_msgs.c
-t_test_msgs_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
-t_test_msgs_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+nodist_t_test_msgs_SOURCES = $(PROTOBUF_C_TEST_SRCS)
+t_test_msgs_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
+t_test_msgs_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_test_msgs_LDFLAGS = -static
 
 EXTRA_DIST = t/addressbook.proto \

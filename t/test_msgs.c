@@ -18,21 +18,21 @@ START_TEST(test_deep_nesting)
   
   msg = (Tutorial__Recurse *)text_format_from_string(
       &tutorial__recurse__descriptor,
-      "id: 1 m: {\n"
-      " id: 2 m: {\n"
-      "  id: 3 m: {\n"
-      "   id: 4 m: {\n"
-      "    id: 5 m: {\n"
-      "     id: 6 m: {\n"
-      "      id: 7 m: {\n"
-      "       id: 8 m: {\n"
-      "        id: 9 m: {\n"
-      "         id: 10 m: {\n"
-      "          id: 11 m: {\n"
-      "           id: 12 m: {\n"
-      "            id: 13 m: {\n"
-      "             id: 14 m: {\n"
-      "              id: 15 m: {\n"
+      "id: 1 m {\n"
+      " id: 2 m {\n"
+      "  id: 3 m {\n"
+      "   id: 4 m {\n"
+      "    id: 5 m {\n"
+      "     id: 6 m {\n"
+      "      id: 7 m {\n"
+      "       id: 8 m {\n"
+      "        id: 9 m {\n"
+      "         id: 10 m {\n"
+      "          id: 11 m {\n"
+      "           id: 12 m {\n"
+      "            id: 13 m {\n"
+      "             id: 14 m {\n"
+      "              id: 15 m {\n"
       "               id: 16\n"
       "              }\n"
       "             }\n"
@@ -55,7 +55,7 @@ START_TEST(test_deep_nesting)
       "There was an unexpected error: %s", tf_res.error_txt);
   ck_assert_int_ne(tf_res.complete, 1);
   ck_assert_msg(msg == NULL, "Unexpected malloc failure.");
-  tutorial__short__free_unpacked(msg, NULL);
+  tutorial__recurse__free_unpacked(msg, NULL);
 }
 END_TEST
 

@@ -99,6 +99,6 @@ message Short {
 }
 
 message Recurse {
-  required uint32_t id = 1;
+  required uint32 id = 1;
   optional Recurse m = 2;
 }
