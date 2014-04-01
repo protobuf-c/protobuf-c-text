@@ -52,7 +52,6 @@ rs_append(ReturnString *rs, int guess,
     rs->allocated += guess * 2;
   }
   va_start(args, format);
-  /* TODO: error check this. */
   added = vsnprintf(rs->s + rs->pos, rs->allocated - rs->pos, format, args);
   va_end(args);
   rs->pos += added;

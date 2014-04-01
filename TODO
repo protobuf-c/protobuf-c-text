@@ -3,10 +3,9 @@ Memory allocation:
     malloc fail.  Loop until the sentinal file remains.
 
 Error propogation:
-  * Free allocated memory when errors.
+  * Perhaps use TextFormatResult to propagate errors in generate.c?
 
 Tests:
-  * Add a bunch of tasts of broken text format buffers.
   * Add mcheck or valgrind tests to check for leaking memory.
 
 Documentation:

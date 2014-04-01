@@ -5,8 +5,8 @@ PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 AM_CFLAGS = -I $(srcdir)/protobuf-c-text
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
-TESTS = $(srcdir)/t/test_generation.sh $(srcdir)/t/test_parse.sh
-check_PROGRAMS = t/c-dump t/c-dump2 t/c-parse t/c-parse2
+TESTS = $(srcdir)/t/test_generation.sh $(srcdir)/t/test_parse.sh t/test_msgs
+check_PROGRAMS = t/c-dump t/c-dump2 t/c-parse t/c-parse2 t/test_msgs
 check_SCRIPTS = t/test_generation.sh t/test_parse.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_HDRS) \
 		protobuf-c-text/parse.c
@@ -75,6 +75,11 @@ nodist_t_c_parse2_SOURCES = $(PROTOBUF_C_TEST_SRCS)
 t_c_parse2_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
 t_c_parse2_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_c_parse2_LDFLAGS = -static
+
+t_test_msgs_SOURCES = t/test_msgs.c
+t_test_msgs_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) @CHECK_CFLAGS@
+t_test_msgs_LDADD = $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_test_msgs_LDFLAGS = -static
 
 EXTRA_DIST = t/addressbook.proto \
 	     t/addressbook.data \

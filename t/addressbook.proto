@@ -97,3 +97,8 @@ message Short {
   optional uint32 truer = 2;
   optional string falser = 3;
 }
+
+message Recurse {
+  required uint32_t id = 1;
+  optional Recurse m = 2;
+}

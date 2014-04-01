@@ -23,4 +23,5 @@ environment vars to control when and how malloc will fail.  The
 it fails.  When the `BROKEN_MALLOC_SEGV` var is set the test program will
 segfault on the first failure.  This is useful for tracking down errors.
 
-The parse test is disabled unless you do `BROKEN_MALLOC_TEST=1 make check`.
+Note that the error message will print out the `gdb` line and the `run`
+command you need to issue to reproduce the error.
