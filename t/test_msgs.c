@@ -51,10 +51,13 @@ START_TEST(test_deep_nesting)
       "}\n",
       &tf_res, NULL);
 
-  ck_assert_msg(tf_res.error_txt == NULL,
-      "There was an unexpected error: %s", tf_res.error_txt);
+  if (tf_res.error_txt != NULL) {
+    ck_assert_msg(strlen(tf_res.error_txt) == 0,
+        "There was an unexpected error: [%d]\"%s\"",
+        strlen(tf_res.error_txt), tf_res.error_txt);
+  }
   ck_assert_int_ne(tf_res.complete, 1);
-  ck_assert_msg(msg == NULL, "Unexpected malloc failure.");
+  ck_assert_msg(msg != NULL, "Unexpected malloc failure.");
   tutorial__recurse__free_unpacked(msg, NULL);
 }
 END_TEST
