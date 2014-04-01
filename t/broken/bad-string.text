@@ -1,0 +1,56 @@
+person {
+  name: "mm"
+  id: "kittten"
+  email: "mm@hm.com"
+  phone {
+    number: "1234"
+    type: HOME
+  }
+  double_var: 5.4
+  float_var: 7.8
+  int64_var: 1
+  uint32_var: 2
+  uint64_var: 3
+  sint32_var: -9
+  sint64_var: 67
+  fixed32_var: 123
+  fixed64_var: 234
+  sfixed32_var: 456
+  sfixed64_var: -789
+  bool_var: false
+  bytes_var: "kibble"
+}
+person {
+  name: "gg"
+  id: 3
+  email: "xy@foo"
+  phone {
+    number: "12345"
+    type: HOME
+  }
+  phone {
+    number: "1223456"
+    type: WORK
+  }
+  double_var: 5
+  float_var: 3.1
+  int64_var: 0
+  uint32_var: 0
+  uint64_var: 0
+  sint32_var: 0
+  sint64_var: 0
+  fixed32_var: 0
+  fixed64_var: 0
+  sfixed32_var: 0
+  sfixed64_var: 0
+  bool_var: true
+  string_var: "look at the kitten!"
+  bytes_var: "ssdfgdf"
+}
+person {
+  name: "sdfs"
+  id: 5
+  sfixed64_var: 0
+  string_var: "moo\twoof.\\n"
+  bytes_var: "t\000t/t_c_dump-c-dump.o\000t/.deps\000t/.deps/.dirstamp\000t/.deps/t_c_intake-c-intake.Po\000t/.deps/dump_people.Po\000t/.deps/list_people.Po\000t/.deps/add_person.Po\000t/.deps/addressbook.pb.Po\000t/.deps/t_c_intake-addressbook.pb-c.Po\000t/.deps/t_c_dump-addressbook.pb-c.Po\000t/.deps/t_c_dump-c-dump.Po\000t/addressbook.pb-c.c\000t/c-dump\000t/test_intake.sh\000t/c-dump.c\000t/.dirstamp\000t/list_people\000t/addressbook.pb.o\000t/addressbook.pb.h\000t/c-intake.c\000t/c-intake\000t/moo.c.text\000t/add_person.o\000t/list_people.o\000t/.libs\000t/addressbook.pb-c.h\000t/.add_person.cc.swp\000t/test_generation.sh\000t/add_person.cc\000t/list_people.cc\000t/addressbook.pb.cc\000t/moo.ab\000t/t_c_dump-addressbook.pb-c.o\000t/t_c_intake-addressbook.pb-c.o\000t/addressbook.proto\000t/moo.c++.text\000t/add_person\000t/t_c_intake-c-intake.o\000\nbob\nkitten\001\002\035\n"
+}

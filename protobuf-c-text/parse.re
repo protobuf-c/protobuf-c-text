@@ -741,7 +741,7 @@ state_value(State *state, Token *t)
 
       }
       return state_error(state, t,
-          "'%s' is not a boolean field.", state->field->name);
+          "'%s' is not a string or byte field.", state->field->name);
       break;
 
     case TOK_NUMBER:
