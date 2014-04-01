@@ -273,6 +273,9 @@ scan(Scanner *scanner, ProtobufCAllocator *allocator)
 token_start:
   scanner->token = scanner->cursor;
 
+  /* I don't think multiline strings are allowed.  If I'm wrong,
+   * the QS re should be ["] (EQ|[^"]|NL)* ["]; */
+
   /*!re2c
   re2c:define:YYCTYPE   = "unsigned char";
   re2c:define:YYCURSOR  = scanner->cursor;
@@ -284,7 +287,7 @@ token_start:
   BW = [a-zA-Z0-9_]+;
   EQ = [\\] ["];
   NL = "\n";
-  QS = ["] (EQ|[^"]|NL)* ["];
+  QS = ["] (EQ|[^"])* ["];
   WS = [ \t];
 
   I | F       {
