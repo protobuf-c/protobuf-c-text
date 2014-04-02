@@ -1,5 +1,6 @@
 /** \file
  * Routines to generate text format protobufs.
+ *
  * This file contains the internal support functions as well as the
  * exported functions which are used to generate text format protobufs
  * from C protobuf data types.
@@ -20,15 +21,36 @@
 #include "protobuf-c-util.h"
 #include "config.h"
 
+/** \addtogroup utility
+ * @{
+ */
+
 #define PBC_FREE(ptr) allocator->free(allocator->allocator_data, ptr)
 
+/** A dynamic string struct.
+ *
+ * Used to track additions to a growing string and memory allocation
+ * errors that occur in processing
+ */.
 typedef struct _ReturnString {
-  int malloc_err;
-  int allocated;
-  int pos;
-  char *s;
+  int malloc_err;  /**< Set to 1 when there's been a malloc error. */
+  int allocated;   /**< Size of allocated string. */
+  int pos;         /**< Current end of the string. */
+  char *s;         /**< The string. */
 } ReturnString;
 
+/** Append a string to the ReturnString.
+ *
+ * Append the string built from \c format and its args to the \c rs
+ * string. Note that \c malloc_err is checked and if it's true,
+ * this function won't do anything.
+ *
+ * \param[in,out] rs The string to append to.
+ * \param[in] guess A guess at the number of chars being added.
+ * \param[in] allocator allocator functions.
+ * \param[in] format Printf-style format string.
+ * \param[in] ... Variable number of args for \c format.
+ */
 static void rs_append(ReturnString *rs, int guess,
     ProtobufCAllocator *allocator,
     const char *format, ...)
@@ -68,6 +90,25 @@ rs_append(ReturnString *rs, int guess,
   return;
 }
 
+/** @} */  /* End of utility group. */
+
+
+/** \defgroup generate Functions to generate text format proto bufs
+ * \ingroup internal
+ * @{
+ */
+
+/** Escape string.
+ *
+ * Add escape characters to strings for problematic characters.
+ *
+ * \param[in] src The unescaped string to process.
+ * \param[in] len Length of \c str. Note that \str might have ASCII \c NULs
+ *                so strlen() isn't good enough here.
+ * \param[in] allocator allocator functions.
+ * \return The fully escaped string, or \c NULL if there has been an
+ *         allocation error.
+ */
 static char *
 esc_str(char *src, int len, ProtobufCAllocator *allocator)
 {
@@ -128,6 +169,18 @@ esc_str(char *src, int len, ProtobufCAllocator *allocator)
   return dst;
 }
 
+/** Internal function to back API function.
+ *
+ * Has a few extra params to better enable recursion.  This function gets
+ * called for each nested message as the \c ProtobufCMessage struct is
+ * traversed.
+ *
+ * \param[in,out] rs The string being built up for the text format protobuf.
+ * \param[in] level Indent level - increments in 2's.
+ * \param[in] m The \c ProtobufCMessage being serialised.
+ * \param[in] d The descriptor for the \c ProtobufCMessage.
+ * \param[in] allocator allocator functions.
+ */
 static void
 text_format_to_string_internal(ReturnString *rs,
     int level,
@@ -408,8 +461,6 @@ text_format_to_string_internal(ReturnString *rs,
         break;
 
       case PROTOBUF_C_TYPE_MESSAGE:
-        /* Clarification: I think loops for repeat fields need to
-         * be done here. */
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
           for (j = 0;
               j < STRUCT_MEMBER(size_t, m, f[i].quantifier_offset);
@@ -447,6 +498,10 @@ text_format_to_string_internal(ReturnString *rs,
 
   }
 }
+
+/** @} */  /* End of generate group. */
+
+/* See .h file for API docs. */
 
 char *
 text_format_to_string(ProtobufCMessage *m,

@@ -2,6 +2,7 @@
 
 /** \file
  * Routines to parse text format protobufs.
+ *
  * This file contains the internal support functions as well as the
  * exported functions which are used to parse text format protobufs
  * into C protobuf data types.
@@ -9,7 +10,9 @@
  * Note that this file must first be pre-processed with re2c.  The
  * build system does this for you, but the manual step is as follows:
  *
+ * \code
  * re2c -s -o protobuf-c-text/parse.c protobuf-c-text/parse.re
+ * \endcode
  *
  * \author Kevin Lyda <kevin@ie.suberic.net>
  * \date   March 2014
@@ -31,6 +34,23 @@
 #include "protobuf-c-util.h"
 #include "config.h"
 
+/** \defgroup utility Utility functions
+ * \ingroup internal
+ * @{
+ */
+
+/** A realloc implementation using ProtobufCAllocator functions.
+ *
+ * Similar to \c realloc, but using ProtobufCAllocator functions to do the
+ * memory manipulations.
+ *
+ * \param ptr Memory to realloc.
+ * \param old_size The size of ptr before realloc.
+ * \param size The desired size of ptr after realloc.
+ * \param allocator The functions to use to achieve this.
+ * \return NULL on realloc failure - note \c ptr isn't freed in this case.
+ *         The new, \c size sized pointer (and \c ptr is freed in this case).
+ */
 static void *
 local_realloc(void *ptr,
     size_t old_size,
@@ -55,30 +75,55 @@ local_realloc(void *ptr,
   return tmp;
 }
 
+/** @} */  /* End of utility group. */
+
+/** \defgroup lexer Routines related to lexing text format protobufs
+ * \ingroup internal
+ * @{
+ */
+
+/** Token types.
+ *
+ * Types of tokens found by scan(). These will be in the \c id
+ * field of \c Token .
+ */
 typedef enum {
-  TOK_EOF,
-  TOK_BAREWORD,
-  TOK_OBRACE,
-  TOK_CBRACE,
-  TOK_COLON,
-  TOK_QUOTED,
-  TOK_NUMBER,
-  TOK_BOOLEAN,
-  TOK_MALLOC_ERR
+  TOK_EOF,        /**< End of file. */
+  TOK_BAREWORD,   /**< A bare, unquoted single word. */
+  TOK_OBRACE,     /**< An opening brace. */
+  TOK_CBRACE,     /**< A closing brace. */
+  TOK_COLON,      /**< A colon. */
+  TOK_QUOTED,     /**< A quoted string. */
+  TOK_NUMBER,     /**< A number. */
+  TOK_BOOLEAN,    /**< The unquoted form of "true" and "false". */
+  TOK_MALLOC_ERR  /**< A memory allocation error occurred. */
 } TokenId;
 
+/** A token and its value.
+ *
+ * A \c Token found by scan().  It contains the \c TokenId and the
+ * value of the token found (if a value is relevant).
+ */
 typedef struct _Token {
-  TokenId id;
+  TokenId id;        /**< The kind of token. */
   union {
-    char *number;
-    char *bareword;
-    ProtobufCBinaryData *qs;
-    bool boolean;
-    char symbol;
+    char *number;    /**< \b TOK_NUMBER: string with the number. */
+    char *bareword;  /**< \b TOK_BAREWORD: string with bareword in it. */
+    ProtobufCBinaryData *qs; /**< \b TOK_QUOTED: Unescaped quoted string
+                               with the quotes removed. */
+    bool boolean;    /**< \b TOK_BOOLEAN: \c true or \c false . */
   };
 } Token;
 
-static char *
+/** Converts a Token to a string based on its type.
+ *
+ * Provides a string summary of the type of token; used for error messages.
+ *
+ * \param t The token.
+ * \return A string representation of the token. This is a char * on the stack.
+ *         Do not modify or free it.
+ */
+static const char *
 token2txt(Token *t)
 {
   switch (t->id) {
@@ -103,6 +148,14 @@ token2txt(Token *t)
   }
 }
 
+/** Frees memory allocated in a \c Token instance.
+ *
+ * Frees memory allocated in a \c Token instance, but not
+ * the \c Token itself.
+ *
+ * \param[in] t The token.
+ * \param[in] allocator The memory allocator functions.
+ */
 static void
 token_free(Token *t, ProtobufCAllocator *allocator)
 {
@@ -121,16 +174,29 @@ token_free(Token *t, ProtobufCAllocator *allocator)
   }
 }
 
+/** Maintains state for successive calls to scan() .
+ *
+ * This structure is used by the scanner to maintain state.
+ */
 typedef struct _Scanner {
-  unsigned char *cursor;
-  unsigned char *marker;
-  unsigned char *buffer;
-  unsigned char *limit;
-  unsigned char *token;
-  FILE *f;
-  int line;
+  unsigned char *cursor; /**< Where we are in the \c buffer. */
+  unsigned char *marker; /**< Used for backtracking. */
+  unsigned char *buffer; /**< The buffer holding the data being parsed. */
+  unsigned char *limit;  /**< Where the buffer ends. */
+  unsigned char *token;  /**< Pointer to the start of the current token. */
+  FILE *f;  /**< For file scanners, this is the input source.  Data read
+              from it is put in \c buffer. */
+  int line; /**< Current line number being parsed. Used for error
+              reporting. */
 } Scanner;
 
+/** Initialise a \c Scanner from a \c FILE
+ *
+ * The resulting \c Scanner will load input from a \c FILE.
+ *
+ * \param[in,out] scanner The state struct for the scanner.
+ * \param[in] f \c FILE to read input from.
+ */
 static void
 scanner_init_file(Scanner *scanner, FILE *f)
 {
@@ -139,6 +205,13 @@ scanner_init_file(Scanner *scanner, FILE *f)
   scanner->line = 1;
 }
 
+/** Initialise a \c Scanner from a string.
+ *
+ * The resulting \c Scanner will load input from a string.
+ *
+ * \param[in,out] scanner The state struct for the scanner.
+ * \param[in] buf String to get input from.
+ */
 static void
 scanner_init_string(Scanner *scanner, char *buf)
 {
@@ -150,6 +223,11 @@ scanner_init_string(Scanner *scanner, char *buf)
   scanner->line = 1;
 }
 
+/** Free data internal to the \c Scanner instance.
+ *
+ * \param[in,out] scanner The state struct for the scanner.
+ * \param[in] allocator Allocator functions.
+ */
 static void
 scanner_free(Scanner *scanner, ProtobufCAllocator *allocator)
 {
@@ -158,6 +236,18 @@ scanner_free(Scanner *scanner, ProtobufCAllocator *allocator)
   scanner->buffer = NULL;
 }
 
+/** Unescape string.
+ *
+ * Remove escape sequences from a string and replace them with the
+ * actual characters.
+ *
+ * \param src String to unescape.
+ * \param len Length of string to unescape.
+ * \param[in] allocator Allocator functions.
+ * \return A ProtobufCBinaryData pointer with the unescaped data.
+ *         Note this must be freed with the ProtobufCAllocator
+ *         allocator you called this with.
+ */
 static ProtobufCBinaryData *
 unesc_str(unsigned char *src, int len, ProtobufCAllocator *allocator)
 {
@@ -234,6 +324,19 @@ unesc_str_error:
 
 #define CHUNK 4096
 
+/** Function to request more data from input source in \c Scanner.
+ *
+ * In the case of a string being the input source for \c Scanner,
+ * nothing happens. For a \c FILE backed \c Scanner, a \c CHUNK's
+ * worth of data is read from the \c FILE.
+ *
+ * \param[in,out] scanner The state struct for the scanner.
+ * \param[in] allocator Allocator functions.
+ * \return Returns the success of the function:
+ *         - -1: Memory allocation failure.
+ *         - 0: No more input added.
+ *         - >0: Input added.
+ */
 static int
 fill(Scanner *scanner, ProtobufCAllocator *allocator)
 {
@@ -275,6 +378,14 @@ fill(Scanner *scanner, ProtobufCAllocator *allocator)
                     if (fill_result <=0) \
                       RETURN((fill_result == -1? TOK_MALLOC_ERR: TOK_EOF)); }
 
+/** Generated lexer.
+ *
+ * The guts of the parser generated by re2c.
+ *
+ * \param[in,out] scanner The state struct for the scanner.
+ * \param[in] allocator Allocator functions.
+ * \return Returns the next \c Token it finds.
+ */
 static Token
 scan(Scanner *scanner, ProtobufCAllocator *allocator)
 {
@@ -334,15 +445,26 @@ token_start:
                 }
                 RETURN(TOK_QUOTED);
               }
-  "{"         { t.symbol = '{'; RETURN(TOK_OBRACE); }
-  "}"         { t.symbol = '}'; RETURN(TOK_CBRACE); }
-  ":"         { t.symbol = ':'; RETURN(TOK_COLON); }
+  "{"         { RETURN(TOK_OBRACE); }
+  "}"         { RETURN(TOK_CBRACE); }
+  ":"         { RETURN(TOK_COLON); }
   WS          { goto token_start; }
   NL          { scanner->line++; goto token_start; }
   "\000"      { RETURN(TOK_EOF); }
   */
 }
 
+/** @} */  /* End of lexer group. */
+
+/** \defgroup state Routines that define a simple finite state machine
+ * \ingroup internal
+ * @{
+ */
+
+/** StateId enumeration.
+ *
+ * A list of states for the FSM.
+ */
 typedef enum {
   STATE_OPEN,
   STATE_ASSIGNMENT,
@@ -351,17 +473,34 @@ typedef enum {
 } StateId;
 
 #define STATE_ERROR_STR_MAX 160
+/** Maintain state for the FSM.
+ *
+ * Tracks the current state of the FSM.
+ */
 typedef struct {
-  Scanner *scanner;
-  const ProtobufCFieldDescriptor *field;
-  int current_msg;
-  int max_msg;
-  ProtobufCMessage **msgs;
-  ProtobufCAllocator *allocator;
-  int error;
-  char *error_str;
+  Scanner *scanner;         /**< Tracks state for the scanner. */
+  const ProtobufCFieldDescriptor *field;  /**< After finding a
+                          \b TOK_BAREWORD in a \b STATE_OPEN \c field
+                          is set to the field in the message that
+                          matches that bareword. */
+  int current_msg;          /**< Index on the message stack of the
+                              current message. */
+  int max_msg;              /**< Size of the message stack. */
+  ProtobufCMessage **msgs;  /**< The message stack.  As nested messages
+                              are found, they're put here. */
+  ProtobufCAllocator *allocator;  /**< allocator functions. */
+  int error;                /**< Notes an error has occurred. */
+  char *error_str;          /**< Text of error. */
 } State;
 
+/** Initialise a \c State struct.
+ * \param[in,out] state A state struct pointer - the is the state
+ *                      for the FSM.
+ * \param[in,out] scanner The state struct for the scanner.
+ * \param[in] allocator Allocator functions.
+ * \return Success (1) or failure (0). Failure is due to out of
+ *         memory errors.
+ */
 static int
 state_init(State *state,
     Scanner *scanner,
@@ -393,14 +532,42 @@ state_init(State *state,
   return 1;
 }
 
+/** Free internal data in a \c State struct.
+ *
+ * Frees allocated data within the \c State instance. Note that the
+ * \c State instance itself is not freed and that the \c State instance
+ * contains a pointer to the \c ProtobufCAllocator allocator that
+ * was passed in state_init().
+ *
+ * Note also that the \c error_str element is only freed if there hasn't
+ * been an error.  If there has been an error, the responsibility falls
+ * on the caller to free \c error_str .
+ *
+ * \param[in,out] state A state struct pointer.
+ */
 static void
 state_free(State *state)
 {
+  if (!state->error) {
+    state->allocator->free(state->allocator->allocator_data,
+        state->error_str);
+  }
   state->allocator->free(state->allocator->allocator_data, state->msgs);
 }
 
 /*
  * Helper function to handle errors.
+ */
+/** Handle an error in the FSM.
+ *
+ * At any point in the FSM if an error is encounters, call this function
+ * with an explination of the error - and return the resulting value.
+ *
+ * \param[in,out] state A state struct pointer.
+ * \param[in] t The \c Token to process.
+ * \param[in] error_fmt printf style format string for the error message.
+ * \param[in] ... Arguments for \c error_fmt .
+ * \return This will always return \c STATE_DONE .
  */
 static StateId state_error(State *state, Token *t, char *error_fmt, ...)
   __attribute__((format(printf, 3, 4)));
@@ -425,8 +592,19 @@ state_error(State *state, Token *t, char *error_fmt, ...)
   return STATE_DONE;
 }
 
-/*
- * Expect an element name (bareword) or a closing brace.
+/** Expect an element name (bareword) or a closing brace.
+ *
+ * Initial state, and state after each assignment completes (or a message
+ * assignment starts. If a bareword is found, go into \c STATE_ASSIGNMENT
+ * and if a closing brace is found, go into \c STATE_DONE.
+ *
+ * If something else is found or if there are no more messages on the stack
+ * (in other words, we're already at the base message), call and return
+ * with state_error().
+ *
+ * \param[in,out] state A state struct pointer.
+ * \param[in] t The \c Token to process.
+ * \return A StateID value.
  */
 static StateId
 state_open(State *state, Token *t)
@@ -473,8 +651,13 @@ state_open(State *state, Token *t)
   }
 }
 
-/*
- * Expect a colon or opening brace.
+/** Expect a colon or opening brace.
+ *
+ * The state where we expect an assignment.
+ *
+ * \param[in,out] state A state struct pointer.
+ * \param[in] t The \c Token to process.
+ * \return A StateID value.
  */
 static StateId
 state_assignment(State *state, Token *t)
@@ -573,8 +756,16 @@ state_assignment(State *state, Token *t)
   }
 }
 
-/*
- * Expect a quoted string, enum (bareword) or boolean.
+/** Expect a quoted string, enum (bareword) or boolean.
+ *
+ * Assign the value in \c Token to the field we identified in the
+ * state_open() call.  This function is huge in order to handle the
+ * variety of data types and the struct offset math required to manipulate
+ * them.
+ *
+ * \param[in,out] state A state struct pointer.
+ * \param[in] t The \c Token to process.
+ * \return A StateID value.
  */
 static StateId
 state_value(State *state, Token *t)
@@ -964,6 +1155,30 @@ static StateId(* states[])(State *, Token *) = {
   [STATE_VALUE] = state_value
 };
 
+/** @} */  /* End of state group. */
+
+/** \defgroup base-parse Base parsing function
+ * \ingroup internal
+ * @{
+ */
+
+/** Base function for the API functions.
+ *
+ * The API functions take a string or a \c FILE.  This function takes an
+ * appropriately initialised \c Scanner instead.  After that it works
+ * the same as the text_format_from* family of functions.
+ *
+ * \param descriptor a \c ProtobufCMessageDescriptor of a message you
+ *                   want to deserialise.
+ * \param scanner A \c Scanner which will be used by the FSM to parse
+ *                the text format protobuf.
+ * \param result A \c TextFormatResult instance to record any errors.
+ *               It is not an option to pass NULL for this and it must be
+ *               checked for errors.
+ * \param[in] allocator Allocator functions.
+ * \return \c NULL on error. A \c ProtobufCMessage representation of the
+ *         text format protobuf on success.
+ */
 static ProtobufCMessage *
 text_format_parse(const ProtobufCMessageDescriptor *descriptor,
     Scanner *scanner,
@@ -979,7 +1194,7 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
     allocator = &protobuf_c_default_allocator;
   }
   result->error_txt = NULL;
-  result->complete = 0;
+  result->complete = -1;  /* -1 means the check wasn't performed. */
 
   state_id = STATE_OPEN;
   if (!state_init(&state, scanner, descriptor, allocator)) {
@@ -1007,13 +1222,15 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
     msg = state.msgs[0];
 #ifdef HAVE_PROTOBUF_C_MESSAGE_CHECK
     result->complete = protobuf_c_message_check(msg);
-#else
-    result->complete = -1;
 #endif
   }
   state_free(&state);
   return msg;
 }
+
+/** @} */  /* End of state group. */
+
+/* See .h file for API docs. */
 
 ProtobufCMessage *
 text_format_from_file(const ProtobufCMessageDescriptor *descriptor,

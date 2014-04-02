@@ -6,6 +6,12 @@
  * \date   March 2014
  */
 
+/** \defgroup internal Internal API
+ *
+ * These are the functions and data structures used internally.  They are
+ * not exported and are not useable by users of \c libprotobuf-c-text.
+ */
+
 #ifndef PROTOBUF_C_UTIL_H
 #define PROTOBUF_C_UTIL_H
 
