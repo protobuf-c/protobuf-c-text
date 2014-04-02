@@ -4,7 +4,7 @@
 
 Python, C++ and Java protobufs support text format but C protobufs do not.
 This is a project to try and fix that. The end goal is to merge this
-into the [protobuf-c](https://github.com/protobuf-c/protobuf-c) project.
+into the [protobuf-c](https://github.com/protobuf-c) project.
 
 ## Contents
 
