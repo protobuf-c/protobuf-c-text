@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__state.html#ga76cec240c181b7b8482d59ec75ac06fd" title="Expect a colon or opening brace." alt="" coords="131,5,256,35"/>
+<area shape="rect" id="node5" href="$group__state.html#ga4e02f271e7eaec766db0b3b72b0bcc93" title="Expect an element name (bareword) or a closing brace." alt="" coords="151,59,236,88"/>
+<area shape="rect" id="node7" href="$group__state.html#ga91d37ec661f5110ede1a786d2fc8c4b2" title="Expect a quoted string, enum (bareword) or boolean." alt="" coords="149,112,237,141"/>
+</map>

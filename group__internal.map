@@ -1,0 +1,7 @@
+<map id="structs" name="structs">
+<area shape="rect" id="node1" href="$group__generate.html" title="Functions to generate text format proto bufs" alt="" coords="161,5,439,35"/>
+<area shape="rect" id="node2" href="$group__utility.html" title="Utility functions" alt="" coords="244,59,356,88"/>
+<area shape="rect" id="node3" href="$group__base-parse.html" title="Base parsing function" alt="" coords="227,112,373,141"/>
+<area shape="rect" id="node4" href="$group__state.html" title="Routines that define a simple finite state machine" alt="" coords="145,165,455,195"/>
+<area shape="rect" id="node6" href="$group__lexer.html" title="Routines related to lexing text format protobufs" alt="" coords="153,219,447,248"/>
+</map>

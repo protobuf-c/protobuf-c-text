@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__utility.html#gaa5ca4c4e9afec0a9a602d406ef527fb1" title="A realloc implementation using ProtobufCAllocator functions." alt="" coords="145,5,239,35"/>
+<area shape="rect" id="node5" href="$group__state.html#ga17dd60cf1ed75d012394a46803c39c05" title="Handle an error in the FSM." alt="" coords="151,59,233,88"/>
+<area shape="rect" id="node7" href="$group__lexer.html#ga6772ef16a6e9113b3afc06ce09e4c0d0" title="Converts a Token to a string based on its type." alt="" coords="155,112,229,141"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__state.html#ga76cec240c181b7b8482d59ec75ac06fd" title="Expect a colon or opening brace." alt="" coords="140,5,265,35"/>
+<area shape="rect" id="node5" href="$group__state.html#ga4e02f271e7eaec766db0b3b72b0bcc93" title="Expect an element name (bareword) or a closing brace." alt="" coords="160,59,245,88"/>
+<area shape="rect" id="node7" href="$group__state.html#ga91d37ec661f5110ede1a786d2fc8c4b2" title="Expect a quoted string, enum (bareword) or boolean." alt="" coords="159,112,247,141"/>
+<area shape="rect" id="node9" href="$group__base-parse.html#gaae7a840b93bd36e6779605f2336f99c3" title="Base function for the API functions." alt="" coords="140,165,265,195"/>
+<area shape="rect" id="node11" href="$group__api.html#gab7ecd4f9cf489c74179a670256a7875f" title="Import a text format protobuf from a FILE into a ProtobufCMessage." alt="" coords="323,139,467,168"/>
+<area shape="rect" id="node13" href="$group__api.html#ga396d614bbe2c076ca30052f47b783464" title="Import a text format protobuf from a string into a ProtobufCMessage." alt="" coords="315,192,475,221"/>
+</map>

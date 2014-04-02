@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__base-parse.html#gaae7a840b93bd36e6779605f2336f99c3" title="Base function for the API functions." alt="" coords="137,32,263,61"/>
+<area shape="rect" id="node5" href="$group__api.html#gab7ecd4f9cf489c74179a670256a7875f" title="Import a text format protobuf from a FILE into a ProtobufCMessage." alt="" coords="320,5,464,35"/>
+<area shape="rect" id="node7" href="$group__api.html#ga396d614bbe2c076ca30052f47b783464" title="Import a text format protobuf from a string into a ProtobufCMessage." alt="" coords="312,59,472,88"/>
+</map>
