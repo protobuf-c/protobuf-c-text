@@ -1,3 +1,11 @@
+/** \file
+ * Internal utility header file.
+ * Macros used by the generator and parser parts of the library.
+ *
+ * \author Kevin Lyda <kevin@ie.suberic.net>
+ * \date   March 2014
+ */
+
 #ifndef PROTOBUF_C_UTIL_H
 #define PROTOBUF_C_UTIL_H
 

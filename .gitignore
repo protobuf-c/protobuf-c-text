@@ -49,3 +49,6 @@ protobuf-c-text/libprotobuf-c-text.pc
 
 # Generated parsing code.
 protobuf-c-text/parse.c
+
+# Doxygen output.
+/docs/doxygen/

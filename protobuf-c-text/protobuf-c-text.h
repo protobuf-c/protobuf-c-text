@@ -1,3 +1,16 @@
+/** \file
+ * Library header file.
+ * Declarations of all functions and data types exported by
+ * the text format for protobus library.
+ *
+ * \author Kevin Lyda <kevin@ie.suberic.net>
+ * \date   March 2014
+ *
+ * \mainpage
+ *
+ * TODO describe the library.
+ */
+
 #ifndef PROTOBUF_C_TEXT_H
 #define PROTOBUF_C_TEXT_H
 

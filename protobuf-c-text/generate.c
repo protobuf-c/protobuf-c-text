@@ -1,3 +1,13 @@
+/** \file
+ * Routines to generate text format protobufs.
+ * This file contains the internal support functions as well as the
+ * exported functions which are used to generate text format protobufs
+ * from C protobuf data types.
+ *
+ * \author Kevin Lyda <kevin@ie.suberic.net>
+ * \date   March 2014
+ */
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>

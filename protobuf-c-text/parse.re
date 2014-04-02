@@ -1,7 +1,18 @@
-/*
- * vim: set filetype=c:
+/* vim: set filetype=c: */
+
+/** \file
+ * Routines to parse text format protobufs.
+ * This file contains the internal support functions as well as the
+ * exported functions which are used to parse text format protobufs
+ * into C protobuf data types.
  *
- * Compile with: re2c -s -o protobuf-c-text/parse.c protobuf-c-text/parse.re
+ * Note that this file must first be pre-processed with re2c.  The
+ * build system does this for you, but the manual step is as follows:
+ *
+ * re2c -s -o protobuf-c-text/parse.c protobuf-c-text/parse.re
+ *
+ * \author Kevin Lyda <kevin@ie.suberic.net>
+ * \date   March 2014
  */
 
 #include <sys/stat.h>
