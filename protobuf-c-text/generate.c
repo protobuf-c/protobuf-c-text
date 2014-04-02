@@ -31,7 +31,7 @@
  *
  * Used to track additions to a growing string and memory allocation
  * errors that occur in processing
- */.
+ */
 typedef struct _ReturnString {
   int malloc_err;  /**< Set to 1 when there's been a malloc error. */
   int allocated;   /**< Size of allocated string. */
