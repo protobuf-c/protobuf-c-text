@@ -1,0 +1,108 @@
+.TH "libprotobuf-c-text" 3 "Wed Apr 2 2014" "Yak Shavers Local 3571" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+text_format_from_file, text_format_from_string, text_format_to_string \-
+text format support for
+.B protoc-c
+generated code.
+.SH SYNOPSIS
+.B #include <google/protobuf-c/protobuf-c-text.h>
+.sp
+.BI "char * text_format_to_string(ProtobufCMessage *" m ", ProtobufCAllocator *" allocator);
+.sp
+.BI "ProtobufCMessage *text_format_from_string(const ProtobufCMessageDescriptor *" descriptor ", char *" msg ", TextFormatResult *" result ", ProtobufCAllocator *" allocator);
+.sp
+.BI "ProtobufCMessage *text_format_from_file(const ProtobufCMessageDescriptor *" descriptor ", FILE *" msg_file ", TextFormatResult *" result ", ProtobufCAllocator *" allocator);
+.sp
+.SH DESCRIPTION
+These functions supplement the generated code from
+.BR protoc-c
+to allow you to import and export
+.BR ProtobufCMessage
+structures from/to the protobuf text mode serialisation.
+.PP
+These will work with any code generated from \fBprotoc-c\fP. 
+.PP 
+.BR text_format_from_file ()
+\- Import a text format protobuf from a \fBFILE\fP into a
+\fBProtobufCMessage\fP. Given a \fBFILE\fP containing a text format
+protobuf, parse it and return the corresponding \fBProtobufCMessage\fP
+struct. On failure, \fBNULL\fP is returned and \fIresult\fP is updated
+with why.
+.PP
+.B Parameters:
+.RS 4
+\fIdescriptor\fP The descriptor from the generated code. 
+.br
+\fImsg_file\fP The \fBFILE\fP containing the text format protobuf. 
+.br
+\fIresult\fP This structure contains information on any error that halted processing. 
+.br
+\fIallocator\fP The \fBProtobufCAllocator\fP struct. 
+.RE
+.PP
+.B Returns:
+.RS 4
+The resulting \fBProtobufCMessage\fP . It returns NULL on error. Check
+\fIresult->complete\fP to make sure the message is valid.
+.RE
+.PP
+
+.BR text_format_from_string ()
+\- Import a text format protobuf from a string into
+a \fBProtobufCMessage\fP. Given a string containing a text format
+protobuf, parse it and return the corresponding \fBProtobufCMessage\fP
+struct. On failure, \fBNULL\fP is returned and \fBresult\fP is updated
+with why.
+.PP
+.B Parameters:
+.RS 4
+\fIdescriptor\fP The descriptor from the generated code. 
+.br
+\fImsg\fP The string containing the text format protobuf. 
+.br
+\fIresult\fP This structure contains information on any error that halted processing. 
+.br
+\fIallocator\fP The \fBProtobufCAllocator\fP struct. 
+.RE
+.PP
+.B Returns:
+.RS 4
+The resulting \fBProtobufCMessage\fP. It returns NULL on error. Check
+\fIresult->complete\fP to make sure the message is valid.
+.RE
+.PP
+
+.BR text_format_to_string ()
+\- Convert a \fBProtobufCMessage\fP to a string. Given
+a \fBProtobufCMessage\fP serialise it as a text format protobuf.
+.PP
+.B Parameters:
+.RS 4
+\fIm\fP The \fBProtobufCMessage\fP to be serialised. 
+.br
+\fIallocator\fP This is the same \fBProtobufCAllocator\fP type used
+by the \fBlibprotobuf-c\fP library. You can set it to NULL to
+accept \fBprotobuf_c_default_allocator\fP - the default allocator.
+.RE
+.PP
+.B Returns:
+.RS 4
+The string with the text format serialised \fBProtobufCMessage\fP. On
+failure it will return \fBNULL\fP. On success, the resulting value
+be freed by you with the \fBallocator\fP you provided. If you didn't
+provide an allocator technically you should do:
+.PP
+.nf
+ protobuf_c_default_allocator.free(
+     protobuf_c_default_allocator.allocator_data, retval);
+
+.fi
+.PP
+ Though technically \fBfree\fP(\fIretval\fP); is probably sufficient. 
+.RE
+.PP
+.SH AUTHOR
+Kevin Lyda <kevin@ie.suberic.net> \-
+based on a Doxygen generated manpage.

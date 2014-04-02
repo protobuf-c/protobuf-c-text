@@ -12,7 +12,10 @@ BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_HDRS) \
 		protobuf-c-text/parse.c
 noinst_HEADERS = protobuf-c-text/protobuf-c-util.h
 
-#dist_man3_MANS = man/protobuf-c-text.3
+dist_man3_MANS = man/libprotobuf-c-text.3 \
+		 man/text_format_from_file.3 \
+		 man/text_format_from_string.3 \
+		 man/text_format_to_string.3
 
 valgrind: $(check_PROGRAMS)
 	@t/valgrind.test_generation.sh
