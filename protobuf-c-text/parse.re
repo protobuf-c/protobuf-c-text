@@ -466,10 +466,11 @@ token_start:
  * A list of states for the FSM.
  */
 typedef enum {
-  STATE_OPEN,
-  STATE_ASSIGNMENT,
-  STATE_VALUE,
-  STATE_DONE
+  STATE_OPEN,       /**< Ready to start a new statement or close
+                      a nested message. */
+  STATE_ASSIGNMENT, /**< Ready to assign a scalar or a nested message. */
+  STATE_VALUE,      /**< Assign the scalar. */
+  STATE_DONE        /**< Nothing more to read or there's been an error. */
 } StateId;
 
 #define STATE_ERROR_STR_MAX 160
@@ -1149,6 +1150,10 @@ state_value(State *state, Token *t)
   }
 }
 
+/** Table of states and actions.
+ *
+ * This is a table of each state and the action to take when in it.
+ */
 static StateId(* states[])(State *, Token *) = {
   [STATE_OPEN] = state_open,
   [STATE_ASSIGNMENT] = state_assignment,
