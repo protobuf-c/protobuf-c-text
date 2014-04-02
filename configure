@@ -1476,7 +1476,7 @@ Optional Features:
   --enable-gcov           enable coverage testing with gcov
   --disable-doxygen-doc   don't generate any doxygen documentation
   --disable-doxygen-dot   don't generate graphics for doxygen documentation
-  --disable-doxygen-man   don't generate doxygen manual pages
+  --enable-doxygen-man    generate doxygen manual pages
   --enable-doxygen-rtf    generate doxygen RTF documentation
   --enable-doxygen-xml    generate doxygen XML documentation
   --enable-doxygen-chm    generate doxygen compressed HTML help documentation
@@ -16709,9 +16709,8 @@ fi
 
 
 
-
 # Files:
-DX_PROJECT=riak-git
+DX_PROJECT=protobuf-c-text
 
 DX_CONFIG=docs/Doxyfile
 
@@ -17187,7 +17186,7 @@ esac
 
 else
 
-DX_FLAG_man=1
+DX_FLAG_man=0
 
 
 test "$DX_FLAG_doc" = "1" || DX_FLAG_man=0

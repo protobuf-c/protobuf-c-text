@@ -47,9 +47,8 @@ AC_SUBST(COVERAGE_CXXFLAGS)
 AC_SUBST(COVERAGE_LDFLAGS)
 DX_PDF_FEATURE(OFF)
 DX_PS_FEATURE(OFF)
-DX_MAN_FEATURE(ON)
 DX_DOT_FEATURE(ON)
-DX_INIT_DOXYGEN([riak-git], [docs/Doxyfile], [docs/doxygen])
+DX_INIT_DOXYGEN([protobuf-c-text], [docs/Doxyfile], [docs/doxygen])
 AS_IF([test -z "$DX_DOXYGEN"], [have_doxygen=no], [have_doxygen=yes])
 
 # Checks for libraries.  Each defines a with_LIB var that can be
