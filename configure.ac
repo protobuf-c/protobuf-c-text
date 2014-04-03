@@ -24,6 +24,8 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_INSTALL
 AC_PROG_GREP
+AC_PROG_MAKE_SET
+AC_PROG_MKDIR_P
 AC_ARG_VAR(PROTOC_C, [Protobuf C compiler.])
 AC_ARG_VAR(RE2C, [re2c lexical scanner C pre-processor.])
 AC_CHECK_PROG(PROTOC_C, protoc-c, protoc-c)

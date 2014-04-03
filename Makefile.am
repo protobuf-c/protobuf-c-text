@@ -116,15 +116,17 @@ include am/aminclude_doxygen.am
 
 .PHONY: gh-pages
 if HAVE_GCOV
-gh-pages: doxygen-doc coverage-html
+gh-pages: clean
 	test `git rev-parse --abbrev-ref HEAD` = master
 	rm -f $(PWD)/.git/index.gh-pages
+	$(MKDIR_P) docs/html
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout gh-pages
+	$(MAKE) doxygen-doc coverage-html || (git co master; exit 1)
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout .nojekyll
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout CNAME
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html add .
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html ls-files --deleted | GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages xargs git --work-tree $(PWD)/docs/html rm
-	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/doxygen/html commit -m "Update docs."
+	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html commit -m "Update docs."
 	git checkout master
 else
 gh-pages:
