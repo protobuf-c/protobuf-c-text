@@ -18,21 +18,32 @@ The `re2c` parser is required to generate the lexer (`parser.re`).
 ## Testing
 
 The `t/c-*` programs use the `BROKEN_MALLOC` and `BROKEN_MALLOC_SEGV`
-environment vars to control when and how malloc will fail.  The
-`BROKEN_MALLOC` is set to the number of times for malloc to succeed until
-it fails.  When the `BROKEN_MALLOC_SEGV` var is set the test program will
-segfault on the first failure.  This is useful for tracking down errors.
+environment vars to control when and how malloc will fail.
+The `BROKEN_MALLOC` var is set to the number of times for malloc to
+succeed until it fails.  When the `BROKEN_MALLOC_SEGV` var is set the
+test program will segfault on the first failure.  This is useful for
+tracking down errors.
 
 Note that the error message will print out the `gdb` line and the `run`
 command you need to issue to reproduce the error.
 
-## Doxygen Docs
+## Useful make Targets
 
-These can be generated locally in `docs/doxygen/html`. From time to time
-they are
-[published](http://lyda.github.io/protobuf-c-text/)
-to the `gh-pages` branch.  Unfortunately I haven't yet automated this
-so the steps are rather involved.
+Beyond the normal autotools make targets, the following useful targets
+exist:
+
+* `coverage-html`: If you ran `./configure --enable-gcov` this will
+  generate test code coverage reports along with marked up source
+  files to show what is missing.
+* `analyze`: If `clang` is on your system the static analyzer from the
+  llvm project will be run.
+* `doxygen-doc`: This will generate local versions of the
+  [docs](http://text.protobuf-c.io/) available online.  They'll be found
+  in `docs/html`.
+
+## Maintainer Notes
+
+`make gh-pages` notes:
 
 The initial steps was done as follows.  This should not need to be repeated
 but is documented here for future projects.
@@ -57,8 +68,8 @@ GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html checkout 
 GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html checkout .nojekyll
 GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html checkout CNAME
 GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html add .
-GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html ls-files --deleted | GIT_INDEX_FILE=$PWD/.git/index.gh-pages xargs git --work-tree $PWD/docs/html
-GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/doxygen/html commit -m "Update docs."
+GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html ls-files --deleted | GIT_INDEX_FILE=$PWD/.git/index.gh-pages xargs git --work-tree $PWD/docs/html rm
+GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html commit -m "Update docs."
 git checkout master
 git push
 ```

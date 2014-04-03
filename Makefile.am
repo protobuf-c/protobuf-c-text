@@ -45,12 +45,12 @@ analyze_srcs = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES)
 .PHONY: analyze
 analyze: all
 	@for f in $(analyze_srcs); do \
-	  if test "$(AM_V)" = 1; then \
-	    echo clang --analyze -I build-aux $$f -o /dev/null; \
+	  if test "@AM_V@" = 1; then \
+	    echo clang --analyze -x c -I build-aux $$f -o /dev/null; \
 	  else \
 	    echo "  CCSA  " $$f; \
 	  fi; \
-	  clang --analyze -I build-aux $$f -o /dev/null; \
+	  clang --analyze -x c -I build-aux $$f -o /dev/null; \
 	done
 
 # Test programs.
