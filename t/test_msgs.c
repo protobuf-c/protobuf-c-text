@@ -16,7 +16,7 @@ START_TEST(test_deep_nesting)
   TextFormatResult tf_res;
   Tutorial__Recurse *msg;
   
-  msg = (Tutorial__Recurse *)text_format_from_string(
+  msg = (Tutorial__Recurse *)protobuf_c_text_from_string(
       &tutorial__recurse__descriptor,
       "id: 1 m {\n"
       " id: 2 m {\n"

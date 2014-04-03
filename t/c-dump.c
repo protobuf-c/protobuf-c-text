@@ -48,7 +48,7 @@ main(int argc, char *argv[])
 
   ab = read_addressbook(argv[1]);
 
-  s = text_format_to_string((ProtobufCMessage *)ab, &broken_allocator);
+  s = protobuf_c_text_to_string((ProtobufCMessage *)ab, &broken_allocator);
   if (s) {
     printf("%s", s);
     free(s);

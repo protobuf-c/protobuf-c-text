@@ -21,7 +21,7 @@ main(int argc, char *argv[])
   FILE *out;
   Tutorial__Short *shortmsg;
 
-  ab = (Tutorial__AddressBook *)text_format_from_file(
+  ab = (Tutorial__AddressBook *)protobuf_c_text_from_file(
       &tutorial__address_book__descriptor,
       stdin, &tf_res, &broken_allocator);
   if (tf_res.error_txt) {
@@ -58,7 +58,7 @@ main(int argc, char *argv[])
 
   tutorial__address_book__free_unpacked(ab, &broken_allocator);
 
-  shortmsg = (Tutorial__Short *)text_format_from_string(
+  shortmsg = (Tutorial__Short *)protobuf_c_text_from_string(
       &tutorial__short__descriptor,
       "id: 42\ntruer: 7\nfalser: \"\t\"\n", &tf_res, NULL);
   if (tf_res.error_txt) {

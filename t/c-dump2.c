@@ -48,7 +48,8 @@ main(int argc, char *argv[])
 
   testmsg = read_tutorial_test(argv[1]);
 
-  s = text_format_to_string((ProtobufCMessage *)testmsg, &broken_allocator);
+  s = protobuf_c_text_to_string((ProtobufCMessage *)testmsg,
+      &broken_allocator);
   if (s) {
     printf("%s", s);
     free(s);

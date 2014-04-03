@@ -11,6 +11,6 @@ Error propogation:
 
 Documentation:
   * On the \mainpage provide the following:
-    * An example .proto
+    * An example .proto  (PonyCoptor class)
     * An example text format protobuf based on that.
     * Code to read and write it.

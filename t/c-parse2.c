@@ -20,7 +20,7 @@ main(int argc, char *argv[])
   uint8_t *buf;
   FILE *out;
 
-  testmsg = (Tutorial__Test *)text_format_from_file(
+  testmsg = (Tutorial__Test *)protobuf_c_text_from_file(
             &tutorial__test__descriptor,
             stdin, &tf_res, &broken_allocator);
   if (tf_res.error_txt) {

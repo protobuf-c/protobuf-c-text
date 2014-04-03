@@ -181,7 +181,7 @@ esc_str(char *src, int len, ProtobufCAllocator *allocator)
  * \param[in] allocator allocator functions.
  */
 static void
-text_format_to_string_internal(ReturnString *rs,
+protobuf_c_text_to_string_internal(ReturnString *rs,
     int level,
     ProtobufCMessage *m,
     const ProtobufCMessageDescriptor *d,
@@ -467,7 +467,7 @@ text_format_to_string_internal(ReturnString *rs,
             rs_append(rs, level + strlen(f[i].name) + 10,
                 allocator,
                 "%*s%s {\n", level, "", f[i].name);
-            text_format_to_string_internal(rs, level + 2,
+            protobuf_c_text_to_string_internal(rs, level + 2,
                 STRUCT_MEMBER(ProtobufCMessage **, m, f[i].offset)[j],
                 (ProtobufCMessageDescriptor *)f[i].descriptor,
                 allocator);
@@ -479,7 +479,7 @@ text_format_to_string_internal(ReturnString *rs,
           rs_append(rs, level + strlen(f[i].name) + 10,
               allocator,
               "%*s%s {\n", level, "", f[i].name);
-          text_format_to_string_internal(rs, level + 2,
+          protobuf_c_text_to_string_internal(rs, level + 2,
               STRUCT_MEMBER(ProtobufCMessage *, m, f[i].offset),
               (ProtobufCMessageDescriptor *)f[i].descriptor,
               allocator);
@@ -503,7 +503,7 @@ text_format_to_string_internal(ReturnString *rs,
 /* See .h file for API docs. */
 
 char *
-text_format_to_string(ProtobufCMessage *m,
+protobuf_c_text_to_string(ProtobufCMessage *m,
     ProtobufCAllocator *allocator)
 {
   ReturnString rs = { 0, 0, 0, NULL };
@@ -511,7 +511,7 @@ text_format_to_string(ProtobufCMessage *m,
   if (!allocator) {
     allocator = &protobuf_c_default_allocator;
   }
-  text_format_to_string_internal(&rs, 0, m, m->descriptor, allocator);
+  protobuf_c_text_to_string_internal(&rs, 0, m, m->descriptor, allocator);
 
   return rs.s;
 }

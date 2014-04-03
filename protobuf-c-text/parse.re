@@ -48,8 +48,9 @@
  * \param[in] old_size The size of ptr before realloc.
  * \param[in] size The desired size of ptr after realloc.
  * \param[in] allocator The functions to use to achieve this.
- * \return NULL on realloc failure - note \c ptr isn't freed in this case.
- *         The new, \c size sized pointer (and \c ptr is freed in this case).
+ * \return \c NULL on realloc failure - note \c ptr isn't freed in this
+ *         case.  The new, \c size sized pointer (and \c ptr is freed in
+ *         this case).
  */
 static void *
 local_realloc(void *ptr,
@@ -1171,21 +1172,21 @@ static StateId(* states[])(State *, Token *) = {
  *
  * The API functions take a string or a \c FILE.  This function takes an
  * appropriately initialised \c Scanner instead.  After that it works
- * the same as the text_format_from* family of functions.
+ * the same as the protobuf_c_text_from* family of functions.
  *
  * \param[in] descriptor a \c ProtobufCMessageDescriptor of a message you
  *                       want to deserialise.
  * \param[in] scanner A \c Scanner which will be used by the FSM to parse
  *                    the text format protobuf.
  * \param[in,out] result A \c TextFormatResult instance to record any
- *                       errors.  It is not an option to pass NULL for
+ *                       errors.  It is not an option to pass \c NULL for
  *                       this and it must be checked for errors.
  * \param[in] allocator Allocator functions.
  * \return \c NULL on error. A \c ProtobufCMessage representation of the
  *         text format protobuf on success.
  */
 static ProtobufCMessage *
-text_format_parse(const ProtobufCMessageDescriptor *descriptor,
+protobuf_c_text_parse(const ProtobufCMessageDescriptor *descriptor,
     Scanner *scanner,
     TextFormatResult *result,
     ProtobufCAllocator *allocator)
@@ -1238,7 +1239,7 @@ text_format_parse(const ProtobufCMessageDescriptor *descriptor,
 /* See .h file for API docs. */
 
 ProtobufCMessage *
-text_format_from_file(const ProtobufCMessageDescriptor *descriptor,
+protobuf_c_text_from_file(const ProtobufCMessageDescriptor *descriptor,
     FILE *msg_file,
     TextFormatResult *result,
     ProtobufCAllocator *allocator)
@@ -1246,11 +1247,11 @@ text_format_from_file(const ProtobufCMessageDescriptor *descriptor,
   Scanner scanner;
 
   scanner_init_file(&scanner, msg_file);
-  return text_format_parse(descriptor, &scanner, result, allocator);
+  return protobuf_c_text_parse(descriptor, &scanner, result, allocator);
 }
 
 ProtobufCMessage *
-text_format_from_string(const ProtobufCMessageDescriptor *descriptor,
+protobuf_c_text_from_string(const ProtobufCMessageDescriptor *descriptor,
     char *msg,
     TextFormatResult *result,
     ProtobufCAllocator *allocator)
@@ -1258,5 +1259,5 @@ text_format_from_string(const ProtobufCMessageDescriptor *descriptor,
   Scanner scanner;
 
   scanner_init_string(&scanner, msg);
-  return text_format_parse(descriptor, &scanner, result, allocator);
+  return protobuf_c_text_parse(descriptor, &scanner, result, allocator);
 }

@@ -28,9 +28,13 @@
  *       https://developers.google.com/protocol-buffers/docs/overview
  *     - Notes on protobuf compatibility:
  *       https://developers.google.com/protocol-buffers/docs/proto#updating
- *     - Protobuf for C: https://github.com/protobuf-c/protobuf-c
+ *     - Protobuf for C code: https://github.com/protobuf-c/protobuf-c
  *     - Protobuf for C docs:
  *       https://github.com/protobuf-c/protobuf-c/wiki
+ *     - Protobuf for C RPC library code:
+ *       https://github.com/protobuf-c/protobuf-c-rpc
+ *     - Protobuf for C text format code:
+ *       https://github.com/protobuf-c/protobuf-c-text
  *
  * \file
  * Library header file.
@@ -61,8 +65,8 @@
 /** Structure for reporting API errors.
  *
  * Provides feedback on the success of an API call.  Generally if an
- * API call fails it will return NULL.  More detail on why it failed can
- * be found in the parameter with this type.
+ * API call fails it will return \c NULL.  More detail on why it failed
+ * can be found in the parameter with this type.
  */
 typedef struct _TextFormatResult {
   int *error;       /**< Error code. 0 for success, >0 for failure. */
@@ -82,7 +86,7 @@ typedef struct _TextFormatResult {
  * \param[in] m The \c ProtobufCMessage to be serialised.
  * \param[in] allocator This is the same \c ProtobufCAllocator type used
  *                      by the \c libprotobuf-c library.  You can set it
- *                      to NULL to accept \c protobuf_c_default_allocator -
+ *                      to \c NULL to accept \c protobuf_c_default_allocator -
  *                      the default allocator.
  * \return The string with the text format serialised \c ProtobufCMessage.
  *         On failure it will return \c NULL.  On success, the resulting value
@@ -94,7 +98,7 @@ typedef struct _TextFormatResult {
  *         \endcode
  *         Though technically \c free(retval); is probably sufficient.
  */
-extern char *text_format_to_string(ProtobufCMessage *m,
+extern char *protobuf_c_text_to_string(ProtobufCMessage *m,
     ProtobufCAllocator *allocator);
 
 /** Import a text format protobuf from a string into a \c ProtobufCMessage.
@@ -103,15 +107,20 @@ extern char *text_format_to_string(ProtobufCMessage *m,
  * the corresponding \c ProtobufCMessage struct. On failure, \c NULL is
  * returned and \c result is updated with why.
  *
+ * The resulting \c ProtobufCMessage should be freed with
+ * \c protobuf_c_message_free_unpacked() or the generated
+ * \c ..._free_upacked() function. Either is fine, but that's how the
+ * memory should be freed.
+ *
  * \param[in] descriptor The descriptor from the generated code.
  * \param[in] msg The string containing the text format protobuf.
  * \param[out] result This structure contains information on any error
  *                    that halted processing.
  * \param[in] allocator The \c ProtobufCAllocator struct.
- * \return The resulting \c ProtobufCMessage . It returns NULL on error.
- *         Check result->complete to make sure the message is valid.
+ * \return The resulting \c ProtobufCMessage . It returns \c NULL on error.
+ *         Check \c result->complete to make sure the message is valid.
  */
-extern ProtobufCMessage *text_format_from_string(
+extern ProtobufCMessage *protobuf_c_text_from_string(
     const ProtobufCMessageDescriptor *descriptor,
     char *msg,
     TextFormatResult *result,
@@ -123,15 +132,20 @@ extern ProtobufCMessage *text_format_from_string(
  * the corresponding \c ProtobufCMessage struct. On failure, \c NULL is
  * returned and \c result is updated with why.
  *
+ * The resulting \c ProtobufCMessage should be freed with
+ * \c protobuf_c_message_free_unpacked() or the generated
+ * \c ..._free_upacked() function. Either is fine, but that's how the
+ * memory should be freed.
+ *
  * \param[in] descriptor The descriptor from the generated code.
  * \param[in] msg_file The \c FILE containing the text format protobuf.
  * \param[out] result This structure contains information on any error
  *                    that halted processing.
  * \param[in] allocator The \c ProtobufCAllocator struct.
- * \return The resulting \c ProtobufCMessage . It returns NULL on error.
- *         Check result->complete to make sure the message is valid.
+ * \return The resulting \c ProtobufCMessage . It returns \c NULL on error.
+ *         Check \c result->complete to make sure the message is valid.
  */
-extern ProtobufCMessage *text_format_from_file(
+extern ProtobufCMessage *protobuf_c_text_from_file(
     const ProtobufCMessageDescriptor *descriptor,
     FILE *msg_file,
     TextFormatResult *result,
