@@ -51,12 +51,15 @@ rm -rf foo
 Subsequent updates are done like so (starting in `master`):
 
 ```bash
-make doxygen-doc
-GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/doxygen/html co gh-pages
-GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/doxygen/html co .nojekyl
-GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/doxygen/html add .
-# In subsequent edits we might need to remove things?
-GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/doxygen/html ci -m "Update doxygen-docs."
+./configure --enable-gcov
+make clean doxygen-doc coverage-html
+GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html checkout gh-pages
+GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html checkout .nojekyll
+GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html add .
+GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html ls-files --deleted | GIT_INDEX_FILE=$PWD/.git/index.gh-pages xargs git --work-tree $PWD/docs/html
+GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/doxygen/html commit -m "Update docs."
+git checkout master
+git push
 ```
 
 Note that all references to files are done relative to the dir specified
