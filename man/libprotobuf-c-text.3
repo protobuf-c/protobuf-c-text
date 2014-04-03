@@ -2,18 +2,18 @@
 .ad l
 .nh
 .SH NAME
-text_format_from_file, text_format_from_string, text_format_to_string \-
+protobuf_c_text_from_file, protobuf_c_text_from_string, protobuf_c_text_to_string \-
 text format support for
 .B protoc-c
 generated code.
 .SH SYNOPSIS
 .B #include <google/protobuf-c/protobuf-c-text.h>
 .sp
-.BI "char * text_format_to_string(ProtobufCMessage *" m ", ProtobufCAllocator *" allocator);
+.BI "char * protobuf_c_text_to_string(ProtobufCMessage *" m ", ProtobufCAllocator *" allocator);
 .sp
-.BI "ProtobufCMessage *text_format_from_string(const ProtobufCMessageDescriptor *" descriptor ", char *" msg ", TextFormatResult *" result ", ProtobufCAllocator *" allocator);
+.BI "ProtobufCMessage *protobuf_c_text_from_string(const ProtobufCMessageDescriptor *" descriptor ", char *" msg ", TextFormatResult *" result ", ProtobufCAllocator *" allocator);
 .sp
-.BI "ProtobufCMessage *text_format_from_file(const ProtobufCMessageDescriptor *" descriptor ", FILE *" msg_file ", TextFormatResult *" result ", ProtobufCAllocator *" allocator);
+.BI "ProtobufCMessage *protobuf_c_text_from_file(const ProtobufCMessageDescriptor *" descriptor ", FILE *" msg_file ", TextFormatResult *" result ", ProtobufCAllocator *" allocator);
 .sp
 .SH DESCRIPTION
 These functions supplement the generated code from
@@ -24,7 +24,7 @@ structures from/to the protobuf text mode serialisation.
 .PP
 These will work with any code generated from \fBprotoc-c\fP. 
 .PP 
-.BR text_format_from_file ()
+.BR protobuf_c_text_from_file ()
 \- Import a text format protobuf from a \fBFILE\fP into a
 \fBProtobufCMessage\fP. Given a \fBFILE\fP containing a text format
 protobuf, parse it and return the corresponding \fBProtobufCMessage\fP
@@ -49,7 +49,7 @@ The resulting \fBProtobufCMessage\fP . It returns NULL on error. Check
 .RE
 .PP
 
-.BR text_format_from_string ()
+.BR protobuf_c_text_from_string ()
 \- Import a text format protobuf from a string into
 a \fBProtobufCMessage\fP. Given a string containing a text format
 protobuf, parse it and return the corresponding \fBProtobufCMessage\fP
@@ -58,11 +58,12 @@ with why.
 .PP
 .B Parameters:
 .RS 4
-\fIdescriptor\fP The descriptor from the generated code. 
+.I descriptor The descriptor from the generated code. 
 .br
-\fImsg\fP The string containing the text format protobuf. 
+.I msg The string containing the text format protobuf. 
 .br
-\fIresult\fP This structure contains information on any error that halted processing. 
+.I result This structure contains information on any error that halted
+processing.
 .br
 \fIallocator\fP The \fBProtobufCAllocator\fP struct. 
 .RE
@@ -74,7 +75,7 @@ The resulting \fBProtobufCMessage\fP. It returns NULL on error. Check
 .RE
 .PP
 
-.BR text_format_to_string ()
+.BR protobuf_c_text_to_string ()
 \- Convert a \fBProtobufCMessage\fP to a string. Given
 a \fBProtobufCMessage\fP serialise it as a text format protobuf.
 .PP
