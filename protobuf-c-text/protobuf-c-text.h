@@ -59,45 +59,45 @@
  *
  * Both examples use this \c .proto definition:
  * \verbatim
- * message Ponycopter {
- *   optional string hair_colour = 1;
- *   optional uint32 rotors = 2;
- *   optional uint32 awesomeness = 3;
- * }
- * \endverbatim
+message Ponycopter {
+  optional string hair_colour = 1;
+  optional uint32 rotors = 2;
+  optional uint32 awesomeness = 3;
+}
+\endverbatim
  *
  * \b Generating
  *
  * \verbatim
- * #include <google/protobuf-c/protobuf-c.h>
- * #include "ponycopter.pb-c.h"
- *
- * int main(int argc, char *argv[]) {
- *   int len;
- *   char *pc_bin, *pc_text;
- *   Ponycopter *pc;
- *
- *   pc_bin = read_a_blob(argv[1], &len);
- *   pc = ponycopter__unpack(NULL, len, pc_bin);
- *   pc_text = protobuf_c_text_to_string((ProtobufCMessage *)pc, NULL);
- *   printf("Ponycopter: %s\n", pc_text);
- * }
- * \endverbatim
+#include <google/protobuf-c/protobuf-c.h>
+#include "ponycopter.pb-c.h"
+
+int main(int argc, char *argv[]) {
+  int len;
+  char *pc_bin, *pc_text;
+  Ponycopter *pc;
+
+  pc_bin = read_a_blob(argv[1], &len);
+  pc = ponycopter__unpack(NULL, len, pc_bin);
+  pc_text = protobuf_c_text_to_string((ProtobufCMessage *)pc, NULL);
+  printf("Ponycopter: %s\n", pc_text);
+}
+\endverbatim
  *
  * \b Parsing
  *
  * \verbatim
- * #include <google/protobuf-c/protobuf-c.h>
- * #include "ponycopter.pb-c.h"
- *
- * int main(int argc, char *argv[]) {
- *   TextFormatResult tf_res;
- *   Ponycopter *pc;
- *
- *   pc = (Ponycopter *)protobuf_c_text_from_file(
- *          &ponycopter__descriptor, argv[1], &tf_res, NULL);
- * }
- * \endverbatim
+#include <google/protobuf-c/protobuf-c.h>
+#include "ponycopter.pb-c.h"
+
+int main(int argc, char *argv[]) {
+  TextFormatResult tf_res;
+  Ponycopter *pc;
+
+  pc = (Ponycopter *)protobuf_c_text_from_file(
+         &ponycopter__descriptor, argv[1], &tf_res, NULL);
+}
+\endverbatim
  */
 
 #include <google/protobuf-c/protobuf-c.h>
