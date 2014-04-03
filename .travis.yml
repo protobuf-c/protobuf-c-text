@@ -9,5 +9,4 @@ install:
       check re2c
 
 script:
-    - ./autogen.sh
-    - ./configure && make distcheck && make clean
+    - ./autogen.sh && make -j distcheck && make -j clean
