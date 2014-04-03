@@ -976,9 +976,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l01163"></a>01163   <span class="comment">/* End of state group. */</span>
 <a name="l01165"></a>01165 
 <a name="l01188"></a>01188 <span class="keyword">static</span> ProtobufCMessage *
-<a name="l01189"></a><a class="code" href="group__base-parse.html#ga939ff1c3f084e9532827a9dd3b214fda">01189</a> <a class="code" href="group__base-parse.html#ga939ff1c3f084e9532827a9dd3b214fda" title="Base function for the API functions.">protobuf_c_text_parse</a>(<span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
+<a name="l01189"></a><a class="code" href="group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae">01189</a> <a class="code" href="group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions.">protobuf_c_text_parse</a>(<span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
 <a name="l01190"></a>01190     <a class="code" href="struct_scanner.html" title="Maintains state for successive calls to scan() .">Scanner</a> *scanner,
-<a name="l01191"></a>01191     <a class="code" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a> *result,
+<a name="l01191"></a>01191     <a class="code" href="struct_protobuf_c_text_error.html" title="Structure for reporting API errors.">ProtobufCTextError</a> *result,
 <a name="l01192"></a>01192     ProtobufCAllocator *allocator)
 <a name="l01193"></a>01193 {
 <a name="l01194"></a>01194   <a class="code" href="struct_token.html" title="A token and its value.">Token</a> token;
@@ -989,8 +989,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l01199"></a>01199   <span class="keywordflow">if</span> (!allocator) {
 <a name="l01200"></a>01200     allocator = &amp;protobuf_c_default_allocator;
 <a name="l01201"></a>01201   }
-<a name="l01202"></a>01202   result-&gt;<a class="code" href="struct_text_format_result.html#a483740f426017d0df4db1026a848e206" title="String with error message.">error_txt</a> = NULL;
-<a name="l01203"></a>01203   result-&gt;<a class="code" href="struct_text_format_result.html#a520408f4775914f7510cc59db5a60b38" title="Reports whether the message is complete (if supported):">complete</a> = -1;  <span class="comment">/* -1 means the check wasn&#39;t performed. */</span>
+<a name="l01202"></a>01202   result-&gt;<a class="code" href="struct_protobuf_c_text_error.html#a483740f426017d0df4db1026a848e206" title="String with error message.">error_txt</a> = NULL;
+<a name="l01203"></a>01203   result-&gt;<a class="code" href="struct_protobuf_c_text_error.html#a520408f4775914f7510cc59db5a60b38" title="Reports whether the message is complete (if supported):">complete</a> = -1;  <span class="comment">/* -1 means the check wasn&#39;t performed. */</span>
 <a name="l01204"></a>01204 
 <a name="l01205"></a>01205   state_id = <a class="code" href="group__state.html#gga281f4c9dd77f0f9e7b08c7609dcbfffea733f6f4982429abfa43ff9597d35ce61" title="Ready to start a new statement or close a nested message.">STATE_OPEN</a>;
 <a name="l01206"></a>01206   <span class="keywordflow">if</span> (!<a class="code" href="group__state.html#gab4364f83c27b569c0b1431a8b0ea5c79" title="Initialise a State struct.">state_init</a>(&amp;state, scanner, descriptor, allocator)) {
@@ -1010,14 +1010,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l01220"></a>01220 
 <a name="l01221"></a>01221   <a class="code" href="group__lexer.html#ga94db8310f699ee3766ae89362d34d706" title="Free data internal to the Scanner instance.">scanner_free</a>(scanner, allocator);
 <a name="l01222"></a>01222   <span class="keywordflow">if</span> (state.<a class="code" href="struct_state.html#a11614f44ef4d939bdd984953346a7572" title="Notes an error has occurred.">error</a>) {
-<a name="l01223"></a>01223     result-&gt;<a class="code" href="struct_text_format_result.html#a483740f426017d0df4db1026a848e206" title="String with error message.">error_txt</a> = state.<a class="code" href="struct_state.html#a2f025ec6742af78c9d6009faae6cb0c1" title="Text of error.">error_str</a>;
+<a name="l01223"></a>01223     result-&gt;<a class="code" href="struct_protobuf_c_text_error.html#a483740f426017d0df4db1026a848e206" title="String with error message.">error_txt</a> = state.<a class="code" href="struct_state.html#a2f025ec6742af78c9d6009faae6cb0c1" title="Text of error.">error_str</a>;
 <a name="l01224"></a>01224     <span class="keywordflow">if</span> (msg) {
 <a name="l01225"></a>01225       protobuf_c_message_free_unpacked(state.<a class="code" href="struct_state.html#aa25d2c420daffb4f2df31e8ff7966d01" title="The message stack.">msgs</a>[0], allocator);
 <a name="l01226"></a>01226     }
 <a name="l01227"></a>01227   } <span class="keywordflow">else</span> {
 <a name="l01228"></a>01228     msg = state.<a class="code" href="struct_state.html#aa25d2c420daffb4f2df31e8ff7966d01" title="The message stack.">msgs</a>[0];
 <a name="l01229"></a>01229 <span class="preprocessor">#ifdef HAVE_PROTOBUF_C_MESSAGE_CHECK</span>
-<a name="l01230"></a>01230 <span class="preprocessor"></span>    result-&gt;<a class="code" href="struct_text_format_result.html#a520408f4775914f7510cc59db5a60b38" title="Reports whether the message is complete (if supported):">complete</a> = protobuf_c_message_check(msg);
+<a name="l01230"></a>01230 <span class="preprocessor"></span>    result-&gt;<a class="code" href="struct_protobuf_c_text_error.html#a520408f4775914f7510cc59db5a60b38" title="Reports whether the message is complete (if supported):">complete</a> = protobuf_c_message_check(msg);
 <a name="l01231"></a>01231 <span class="preprocessor">#endif</span>
 <a name="l01232"></a>01232 <span class="preprocessor"></span>  }
 <a name="l01233"></a>01233   <a class="code" href="group__state.html#gad47c89d0626c1012c7a8465a41da6ea6" title="Free internal data in a State struct.">state_free</a>(&amp;state);
@@ -1028,27 +1028,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l01239"></a>01239 <span class="comment">/* See .h file for API docs. */</span>
 <a name="l01240"></a>01240 
 <a name="l01241"></a>01241 ProtobufCMessage *
-<a name="l01242"></a><a class="code" href="group__api.html#gaf6fc77446596a7a5cc7987f9906cbe52">01242</a> <a class="code" href="group__api.html#gaf6fc77446596a7a5cc7987f9906cbe52" title="Import a text format protobuf from a FILE into a ProtobufCMessage.">protobuf_c_text_from_file</a>(<span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
+<a name="l01242"></a><a class="code" href="group__api.html#ga2801ad7b57ea6dfb51eab72ac20df725">01242</a> <a class="code" href="group__api.html#ga2801ad7b57ea6dfb51eab72ac20df725" title="Import a text format protobuf from a FILE into a ProtobufCMessage.">protobuf_c_text_from_file</a>(<span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
 <a name="l01243"></a>01243     FILE *msg_file,
-<a name="l01244"></a>01244     <a class="code" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a> *result,
+<a name="l01244"></a>01244     <a class="code" href="struct_protobuf_c_text_error.html" title="Structure for reporting API errors.">ProtobufCTextError</a> *result,
 <a name="l01245"></a>01245     ProtobufCAllocator *allocator)
 <a name="l01246"></a>01246 {
 <a name="l01247"></a>01247   <a class="code" href="struct_scanner.html" title="Maintains state for successive calls to scan() .">Scanner</a> scanner;
 <a name="l01248"></a>01248 
 <a name="l01249"></a>01249   <a class="code" href="group__lexer.html#ga22caa4f6efef273f99a3327bd75f8f0e" title="Initialise a Scanner from a FILE.">scanner_init_file</a>(&amp;scanner, msg_file);
-<a name="l01250"></a>01250   <span class="keywordflow">return</span> <a class="code" href="group__base-parse.html#ga939ff1c3f084e9532827a9dd3b214fda" title="Base function for the API functions.">protobuf_c_text_parse</a>(descriptor, &amp;scanner, result, allocator);
+<a name="l01250"></a>01250   <span class="keywordflow">return</span> <a class="code" href="group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions.">protobuf_c_text_parse</a>(descriptor, &amp;scanner, result, allocator);
 <a name="l01251"></a>01251 }
 <a name="l01252"></a>01252 
 <a name="l01253"></a>01253 ProtobufCMessage *
-<a name="l01254"></a><a class="code" href="group__api.html#gac8be61c88376cebc36ab8712b85a1e65">01254</a> <a class="code" href="group__api.html#gac8be61c88376cebc36ab8712b85a1e65" title="Import a text format protobuf from a string into a ProtobufCMessage.">protobuf_c_text_from_string</a>(<span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
+<a name="l01254"></a><a class="code" href="group__api.html#ga5f9ce0b2adb704390e37c66a81cbbfb6">01254</a> <a class="code" href="group__api.html#ga5f9ce0b2adb704390e37c66a81cbbfb6" title="Import a text format protobuf from a string into a ProtobufCMessage.">protobuf_c_text_from_string</a>(<span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
 <a name="l01255"></a>01255     <span class="keywordtype">char</span> *msg,
-<a name="l01256"></a>01256     <a class="code" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a> *result,
+<a name="l01256"></a>01256     <a class="code" href="struct_protobuf_c_text_error.html" title="Structure for reporting API errors.">ProtobufCTextError</a> *result,
 <a name="l01257"></a>01257     ProtobufCAllocator *allocator)
 <a name="l01258"></a>01258 {
 <a name="l01259"></a>01259   <a class="code" href="struct_scanner.html" title="Maintains state for successive calls to scan() .">Scanner</a> scanner;
 <a name="l01260"></a>01260 
 <a name="l01261"></a>01261   <a class="code" href="group__lexer.html#gae183ec02aa3ed40b3b3c5f17a455d1a9" title="Initialise a Scanner from a string.">scanner_init_string</a>(&amp;scanner, msg);
-<a name="l01262"></a>01262   <span class="keywordflow">return</span> <a class="code" href="group__base-parse.html#ga939ff1c3f084e9532827a9dd3b214fda" title="Base function for the API functions.">protobuf_c_text_parse</a>(descriptor, &amp;scanner, result, allocator);
+<a name="l01262"></a>01262   <span class="keywordflow">return</span> <a class="code" href="group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions.">protobuf_c_text_parse</a>(descriptor, &amp;scanner, result, allocator);
 <a name="l01263"></a>01263 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
@@ -1068,7 +1068,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 3 2014 19:22:33 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 3 2014 22:25:10 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

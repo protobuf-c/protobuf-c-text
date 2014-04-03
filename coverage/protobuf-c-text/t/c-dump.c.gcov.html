@@ -91,50 +91,50 @@
 <span class="lineNum">      13 </span>                :            : Tutorial__AddressBook *ab;
 <a name="14"><span class="lineNum">      14 </span>                :            : </a>
 <span class="lineNum">      15 </span>                :            : Tutorial__AddressBook *
-<span class="lineNum">      16 </span>                :<span class="lineCov">        301 : read_addressbook(char *filename)</span>
+<span class="lineNum">      16 </span>                :<span class="lineCov">         33 : read_addressbook(char *filename)</span>
 <span class="lineNum">      17 </span>                :            : {
 <span class="lineNum">      18 </span>                :            :   FILE *f;
-<span class="lineNum">      19 </span>                :<span class="lineCov">        301 :   int bufsize = 0, bytes, bytes_total = 0;</span>
-<span class="lineNum">      20 </span>                :<span class="lineCov">        301 :   char *buf = NULL;</span>
+<span class="lineNum">      19 </span>                :<span class="lineCov">         33 :   int bufsize = 0, bytes, bytes_total = 0;</span>
+<span class="lineNum">      20 </span>                :<span class="lineCov">         33 :   char *buf = NULL;</span>
 <span class="lineNum">      21 </span>                :            :   Tutorial__AddressBook *ab;
 <span class="lineNum">      22 </span>                :            : 
-<span class="lineNum">      23 </span>                :<span class="lineCov">        301 :   f = fopen(filename, &quot;r&quot;);</span>
-<span class="lineNum">      24 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 301 times"> + </span>]:<span class="lineCov">        301 :   if (!f) {</span>
+<span class="lineNum">      23 </span>                :<span class="lineCov">         33 :   f = fopen(filename, &quot;r&quot;);</span>
+<span class="lineNum">      24 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 33 times"> + </span>]:<span class="lineCov">         33 :   if (!f) {</span>
 <span class="lineNum">      25 </span>                :<span class="lineNoCov">          0 :     printf(&quot;Can't open addressbook file '%s'.\n&quot;, filename);</span>
 <span class="lineNum">      26 </span>                :<span class="lineNoCov">          0 :     exit(1);</span>
 <span class="lineNum">      27 </span>                :            :   }
 <span class="lineNum">      28 </span>                :            :   do {
-<span class="lineNum">      29 </span>                :<span class="lineCov">        301 :     bufsize += CHUNK;</span>
-<span class="lineNum">      30 </span>                :<span class="lineCov">        301 :     buf = realloc(buf, bufsize);</span>
-<span class="lineNum">      31 </span>                :<span class="lineCov">        301 :     bytes = fread(buf + bytes_total, 1, CHUNK, f);</span>
-<span class="lineNum">      32 </span>                :<span class="lineCov">        301 :     bytes_total += bytes;</span>
-<span class="lineNum">      33 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 301 times"> + </span>]:<span class="lineCov">        301 :   } while (bytes == CHUNK);</span>
-<span class="lineNum">      34 </span>                :<span class="lineCov">        301 :   ab = tutorial__address_book__unpack(NULL, bytes_total, buf);</span>
-<span class="lineNum">      35 </span>                :<span class="lineCov">        301 :   free(buf);</span>
-<span class="lineNum">      36 </span>                :<span class="lineCov">        301 :   return ab;</span>
+<span class="lineNum">      29 </span>                :<span class="lineCov">         33 :     bufsize += CHUNK;</span>
+<span class="lineNum">      30 </span>                :<span class="lineCov">         33 :     buf = realloc(buf, bufsize);</span>
+<span class="lineNum">      31 </span>                :<span class="lineCov">         33 :     bytes = fread(buf + bytes_total, 1, CHUNK, f);</span>
+<span class="lineNum">      32 </span>                :<span class="lineCov">         33 :     bytes_total += bytes;</span>
+<span class="lineNum">      33 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 33 times"> + </span>]:<span class="lineCov">         33 :   } while (bytes == CHUNK);</span>
+<span class="lineNum">      34 </span>                :<span class="lineCov">         33 :   ab = tutorial__address_book__unpack(NULL, bytes_total, buf);</span>
+<span class="lineNum">      35 </span>                :<span class="lineCov">         33 :   free(buf);</span>
+<span class="lineNum">      36 </span>                :<span class="lineCov">         33 :   return ab;</span>
 <span class="lineNum">      37 </span>                :            : }
 <a name="38"><span class="lineNum">      38 </span>                :            : </a>
 <span class="lineNum">      39 </span>                :            : int
-<span class="lineNum">      40 </span>                :<span class="lineCov">        301 : main(int argc, char *argv[])</span>
+<span class="lineNum">      40 </span>                :<span class="lineCov">         33 : main(int argc, char *argv[])</span>
 <span class="lineNum">      41 </span>                :            : {
 <span class="lineNum">      42 </span>                :            :   char *s;
 <span class="lineNum">      43 </span>                :            : 
-<span class="lineNum">      44 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 301 times"> + </span>]:<span class="lineCov">        301 :   if (argc != 2) {</span>
+<span class="lineNum">      44 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 33 times"> + </span>]:<span class="lineCov">         33 :   if (argc != 2) {</span>
 <span class="lineNum">      45 </span>                :<span class="lineNoCov">          0 :     printf(&quot;Must supply address book file.\n&quot;);</span>
 <span class="lineNum">      46 </span>                :<span class="lineNoCov">          0 :     exit(1);</span>
 <span class="lineNum">      47 </span>                :            :   }
 <span class="lineNum">      48 </span>                :            : 
-<span class="lineNum">      49 </span>                :<span class="lineCov">        301 :   ab = read_addressbook(argv[1]);</span>
+<span class="lineNum">      49 </span>                :<span class="lineCov">         33 :   ab = read_addressbook(argv[1]);</span>
 <span class="lineNum">      50 </span>                :            : 
-<span class="lineNum">      51 </span>                :<span class="lineCov">        301 :   s = protobuf_c_text_to_string((ProtobufCMessage *)ab, &amp;broken_allocator);</span>
-<span class="lineNum">      52 </span>        [<span class="branchCov" title="Branch 0 was taken 271 times"> + </span><span class="branchCov" title="Branch 1 was taken 30 times"> + </span>]:<span class="lineCov">        301 :   if (s) {</span>
-<span class="lineNum">      53 </span>                :<span class="lineCov">        271 :     printf(&quot;%s&quot;, s);</span>
-<span class="lineNum">      54 </span>                :<span class="lineCov">        271 :     free(s);</span>
+<span class="lineNum">      51 </span>                :<span class="lineCov">         33 :   s = protobuf_c_text_to_string((ProtobufCMessage *)ab, &amp;broken_allocator);</span>
+<span class="lineNum">      52 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 31 times"> + </span>]:<span class="lineCov">         33 :   if (s) {</span>
+<span class="lineNum">      53 </span>                :<span class="lineCov">          2 :     printf(&quot;%s&quot;, s);</span>
+<span class="lineNum">      54 </span>                :<span class="lineCov">          2 :     free(s);</span>
 <span class="lineNum">      55 </span>                :            :   } else {
-<span class="lineNum">      56 </span>                :<span class="lineCov">         30 :     printf(&quot;ERROR: Failed to generate text format.\n&quot;);</span>
+<span class="lineNum">      56 </span>                :<span class="lineCov">         31 :     printf(&quot;ERROR: Failed to generate text format.\n&quot;);</span>
 <span class="lineNum">      57 </span>                :            :   }
 <span class="lineNum">      58 </span>                :            : 
-<span class="lineNum">      59 </span>                :<span class="lineCov">        301 :   return 0;</span>
+<span class="lineNum">      59 </span>                :<span class="lineCov">         33 :   return 0;</span>
 <span class="lineNum">      60 </span>                :            : }
 </pre>
       </td>

@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__base-parse.html#ga939ff1c3f084e9532827a9dd3b214fda" title="Base function for the API functions." alt="" coords="239,139,388,168"/>
+<area shape="rect" id="node3" href="$group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions." alt="" coords="239,139,388,168"/>
 <area shape="rect" id="node17" href="$group__lexer.html#gae183ec02aa3ed40b3b3c5f17a455d1a9" title="Initialise a Scanner from a string." alt="" coords="248,192,379,221"/>
 <area shape="rect" id="node5" href="$group__lexer.html#ga2236f93417b0b61c385caccc1cd96018" title="Generated lexer." alt="" coords="461,5,512,35"/>
 <area shape="rect" id="node7" href="$group__lexer.html#ga94db8310f699ee3766ae89362d34d706" title="Free data internal to the Scanner instance." alt="" coords="439,59,535,88"/>

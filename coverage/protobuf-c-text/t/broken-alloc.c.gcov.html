@@ -31,9 +31,9 @@
             <td class="headerValue">PB-C-TEXT Code Coverage</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">13</td>
-            <td class="headerCovTableEntry">14</td>
-            <td class="headerCovTableEntryHi">92.9 %</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">17</td>
+            <td class="headerCovTableEntryHi">94.1 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
@@ -56,9 +56,9 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">9</td>
-            <td class="headerCovTableEntry">10</td>
-            <td class="headerCovTableEntryHi">90.0 %</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntryMed">85.7 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -83,41 +83,45 @@
 <span class="lineNum">       5 </span>                :            : #include &lt;stdlib.h&gt;
 <span class="lineNum">       6 </span>                :            : #include &lt;unistd.h&gt;
 <span class="lineNum">       7 </span>                :            : #include &lt;google/protobuf-c/protobuf-c.h&gt;
-<span class="lineNum">       8 </span>                :            : 
-<a name="9"><span class="lineNum">       9 </span>                :            : </a>
-<span class="lineNum">      10 </span>                :            : static void *
-<span class="lineNum">      11 </span>                :<span class="lineCov">      73674 : broken_alloc(void *allocator_data, size_t size)</span>
-<span class="lineNum">      12 </span>                :            : {
-<span class="lineNum">      13 </span>                :            :   static int not_broken = -1;
-<span class="lineNum">      14 </span>                :<span class="lineCov">      73674 :   char *$BROKEN_MALLOC = getenv(&quot;BROKEN_MALLOC&quot;);</span>
-<span class="lineNum">      15 </span>                :            : 
-<span class="lineNum">      16 </span>[<span class="branchCov" title="Branch 0 was taken 2888 times"> + </span><span class="branchCov" title="Branch 1 was taken 70786 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 1202 times"> + </span><span class="branchCov" title="Branch 3 was taken 1686 times"> + </span>]:<span class="lineCov">      73674 :   if (not_broken &lt; 0 &amp;&amp; $BROKEN_MALLOC) {</span>
-<span class="lineNum">      17 </span>                :<span class="lineCov">       1202 :     not_broken = atoi($BROKEN_MALLOC);</span>
-<span class="lineNum">      18 </span>                :            :   }
-<span class="lineNum">      19 </span>        [<span class="branchCov" title="Branch 0 was taken 71988 times"> + </span><span class="branchCov" title="Branch 1 was taken 1686 times"> + </span>]:<span class="lineCov">      73674 :   if ($BROKEN_MALLOC) {</span>
-<span class="lineNum">      20 </span>                :<span class="lineCov">      71988 :     not_broken--;</span>
-<span class="lineNum">      21 </span>                :            :   }
-<span class="lineNum">      22 </span>        [<span class="branchCov" title="Branch 0 was taken 73369 times"> + </span><span class="branchCov" title="Branch 1 was taken 305 times"> + </span>]:<span class="lineCov">      73674 :   if (not_broken) {</span>
-<span class="lineNum">      23 </span>                :<span class="lineCov">      73369 :     return malloc(size);</span>
-<span class="lineNum">      24 </span>                :            :   } else {
-<span class="lineNum">      25 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 305 times"> + </span>]:<span class="lineCov">        305 :     if (getenv(&quot;BROKEN_MALLOC_SEGV&quot;)) {</span>
-<span class="lineNum">      26 </span>                :<span class="lineNoCov">          0 :       kill(getpid(), SIGSEGV);</span>
-<span class="lineNum">      27 </span>                :            :     }
-<span class="lineNum">      28 </span>                :<span class="lineCov">      73674 :     return NULL;</span>
-<span class="lineNum">      29 </span>                :            :   }
-<span class="lineNum">      30 </span>                :            : }
-<a name="31"><span class="lineNum">      31 </span>                :            : </a>
-<span class="lineNum">      32 </span>                :            : static void
-<span class="lineNum">      33 </span>                :<span class="lineCov">      70113 : broken_free(void *allocator_data, void *data)</span>
-<span class="lineNum">      34 </span>                :            : {
-<span class="lineNum">      35 </span>                :<span class="lineCov">      70113 :   free(data);</span>
-<span class="lineNum">      36 </span>                :<span class="lineCov">      70113 : }</span>
-<span class="lineNum">      37 </span>                :            : 
-<span class="lineNum">      38 </span>                :            : ProtobufCAllocator broken_allocator = {
-<span class="lineNum">      39 </span>                :            :         .alloc = &amp;broken_alloc,
-<span class="lineNum">      40 </span>                :            :         .free = &amp;broken_free,
-<span class="lineNum">      41 </span>                :            :         .allocator_data = NULL,
-<span class="lineNum">      42 </span>                :            : };
+<a name="8"><span class="lineNum">       8 </span>                :            : </a>
+<span class="lineNum">       9 </span>                :            : static void *
+<span class="lineNum">      10 </span>                :<span class="lineCov">      21261 : broken_alloc(void *allocator_data, size_t size)</span>
+<span class="lineNum">      11 </span>                :            : {
+<span class="lineNum">      12 </span>                :            :   static int not_broken = -1;
+<span class="lineNum">      13 </span>                :<span class="lineCov">      21261 :   char *$BROKEN_MALLOC = getenv(&quot;BROKEN_MALLOC&quot;);</span>
+<span class="lineNum">      14 </span>                :            : 
+<span class="lineNum">      15 </span>[<span class="branchCov" title="Branch 0 was taken 1995 times"> + </span><span class="branchCov" title="Branch 1 was taken 19266 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 309 times"> + </span><span class="branchCov" title="Branch 3 was taken 1686 times"> + </span>]:<span class="lineCov">      21261 :   if (not_broken &lt; 0 &amp;&amp; $BROKEN_MALLOC) {</span>
+<span class="lineNum">      16 </span>                :<span class="lineCov">        309 :     not_broken = atoi($BROKEN_MALLOC);</span>
+<span class="lineNum">      17 </span>                :            :   }
+<span class="lineNum">      18 </span>[<span class="branchCov" title="Branch 0 was taken 19575 times"> + </span><span class="branchCov" title="Branch 1 was taken 1686 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 19543 times"> + </span><span class="branchCov" title="Branch 3 was taken 32 times"> + </span>]:<span class="lineCov">      21261 :   if ($BROKEN_MALLOC &amp;&amp; not_broken &gt; 0) {</span>
+<span class="lineNum">      19 </span>                :<span class="lineCov">      19543 :     not_broken--;</span>
+<span class="lineNum">      20 </span>                :            :   }
+<span class="lineNum">      21 </span>        [<span class="branchCov" title="Branch 0 was taken 20926 times"> + </span><span class="branchCov" title="Branch 1 was taken 335 times"> + </span>]:<span class="lineCov">      21261 :   if (not_broken) {</span>
+<span class="lineNum">      22 </span>                :<span class="lineCov">      20926 :     return malloc(size);</span>
+<span class="lineNum">      23 </span>                :            :   } else {
+<span class="lineNum">      24 </span>                :<span class="lineCov">        335 :     char *$BROKEN_MALLOC_SENTINAL = getenv(&quot;BROKEN_MALLOC_SENTINAL&quot;);</span>
+<span class="lineNum">      25 </span>                :            : 
+<span class="lineNum">      26 </span>        [<span class="branchCov" title="Branch 0 was taken 335 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        335 :     if ($BROKEN_MALLOC_SENTINAL) {</span>
+<span class="lineNum">      27 </span>                :<span class="lineCov">        335 :       unlink($BROKEN_MALLOC_SENTINAL);</span>
+<span class="lineNum">      28 </span>                :            :     }
+<span class="lineNum">      29 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 335 times"> + </span>]:<span class="lineCov">        335 :     if (getenv(&quot;BROKEN_MALLOC_SEGV&quot;)) {</span>
+<span class="lineNum">      30 </span>                :<span class="lineNoCov">          0 :       kill(getpid(), SIGSEGV);</span>
+<span class="lineNum">      31 </span>                :            :     }
+<span class="lineNum">      32 </span>                :<span class="lineCov">      21261 :     return NULL;</span>
+<span class="lineNum">      33 </span>                :            :   }
+<span class="lineNum">      34 </span>                :            : }
+<a name="35"><span class="lineNum">      35 </span>                :            : </a>
+<span class="lineNum">      36 </span>                :            : static void
+<span class="lineNum">      37 </span>                :<span class="lineCov">      17585 : broken_free(void *allocator_data, void *data)</span>
+<span class="lineNum">      38 </span>                :            : {
+<span class="lineNum">      39 </span>                :<span class="lineCov">      17585 :   free(data);</span>
+<span class="lineNum">      40 </span>                :<span class="lineCov">      17585 : }</span>
+<span class="lineNum">      41 </span>                :            : 
+<span class="lineNum">      42 </span>                :            : ProtobufCAllocator broken_allocator = {
+<span class="lineNum">      43 </span>                :            :         .alloc = &amp;broken_alloc,
+<span class="lineNum">      44 </span>                :            :         .free = &amp;broken_free,
+<span class="lineNum">      45 </span>                :            :         .allocator_data = NULL,
+<span class="lineNum">      46 </span>                :            : };
 </pre>
       </td>
     </tr>

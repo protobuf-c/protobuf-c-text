@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['textformatresult',['TextFormatResult',['../struct_text_format_result.html',1,'']]],
   ['tok_5fbareword',['TOK_BAREWORD',['../group__lexer.html#gga770ae4c17b0067d74732cb004981f7dca72557a50ead7660f278b3677d6a5ecdb',1,'parse.re']]],
   ['tok_5fboolean',['TOK_BOOLEAN',['../group__lexer.html#gga770ae4c17b0067d74732cb004981f7dca86e6652aa292c8e978b68ace2b0f1300',1,'parse.re']]],
   ['tok_5fcbrace',['TOK_CBRACE',['../group__lexer.html#gga770ae4c17b0067d74732cb004981f7dcaa6edf75b0f2b32280ead5ff8dbcf34e6',1,'parse.re']]],

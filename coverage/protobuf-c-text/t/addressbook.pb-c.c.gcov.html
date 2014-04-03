@@ -84,18 +84,18 @@
 <span class="lineNum">       6 </span>                :            : #endif
 <a name="7"><span class="lineNum">       7 </span>                :            : </a>
 <span class="lineNum">       8 </span>                :            : #include &quot;addressbook.pb-c.h&quot;
-<span class="lineNum">       9 </span>                :<span class="lineCov">       1656 : void   tutorial__person__phone_number__init</span>
+<span class="lineNum">       9 </span>                :<span class="lineCov">        357 : void   tutorial__person__phone_number__init</span>
 <span class="lineNum">      10 </span>                :            :                      (Tutorial__Person__PhoneNumber         *message)
 <span class="lineNum">      11 </span>                :            : {
 <span class="lineNum">      12 </span>                :            :   static Tutorial__Person__PhoneNumber init_value = TUTORIAL__PERSON__PHONE_NUMBER__INIT;
-<a name="13"><span class="lineNum">      13 </span>                :<span class="lineCov">       1656 :   *message = init_value;</span></a>
-<span class="lineNum">      14 </span>                :<span class="lineCov">       1656 : }</span>
-<span class="lineNum">      15 </span>                :<span class="lineCov">       1656 : void   tutorial__person__init</span>
+<a name="13"><span class="lineNum">      13 </span>                :<span class="lineCov">        357 :   *message = init_value;</span></a>
+<span class="lineNum">      14 </span>                :<span class="lineCov">        357 : }</span>
+<span class="lineNum">      15 </span>                :<span class="lineCov">        357 : void   tutorial__person__init</span>
 <span class="lineNum">      16 </span>                :            :                      (Tutorial__Person         *message)
 <span class="lineNum">      17 </span>                :            : {
 <span class="lineNum">      18 </span>                :            :   static Tutorial__Person init_value = TUTORIAL__PERSON__INIT;
-<a name="19"><span class="lineNum">      19 </span>                :<span class="lineCov">       1656 :   *message = init_value;</span></a>
-<span class="lineNum">      20 </span>                :<span class="lineCov">       1656 : }</span>
+<a name="19"><span class="lineNum">      19 </span>                :<span class="lineCov">        357 :   *message = init_value;</span></a>
+<span class="lineNum">      20 </span>                :<span class="lineCov">        357 : }</span>
 <span class="lineNum">      21 </span>                :<span class="lineNoCov">          0 : size_t tutorial__person__get_packed_size</span>
 <span class="lineNum">      22 </span>                :            :                      (const Tutorial__Person *message)
 <span class="lineNum">      23 </span>                :            : {
@@ -133,24 +133,24 @@
 <span class="lineNum">      55 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__person__descriptor);</span>
 <a name="56"><span class="lineNum">      56 </span>                :<span class="lineNoCov">          0 :   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);</span></a>
 <span class="lineNum">      57 </span>                :<span class="lineNoCov">          0 : }</span>
-<span class="lineNum">      58 </span>                :<span class="lineCov">        629 : void   tutorial__address_book__init</span>
+<span class="lineNum">      58 </span>                :<span class="lineCov">        196 : void   tutorial__address_book__init</span>
 <span class="lineNum">      59 </span>                :            :                      (Tutorial__AddressBook         *message)
 <span class="lineNum">      60 </span>                :            : {
 <span class="lineNum">      61 </span>                :            :   static Tutorial__AddressBook init_value = TUTORIAL__ADDRESS_BOOK__INIT;
-<a name="62"><span class="lineNum">      62 </span>                :<span class="lineCov">        629 :   *message = init_value;</span></a>
-<span class="lineNum">      63 </span>                :<span class="lineCov">        629 : }</span>
-<span class="lineNum">      64 </span>                :<span class="lineCov">        167 : size_t tutorial__address_book__get_packed_size</span>
+<a name="62"><span class="lineNum">      62 </span>                :<span class="lineCov">        196 :   *message = init_value;</span></a>
+<span class="lineNum">      63 </span>                :<span class="lineCov">        196 : }</span>
+<span class="lineNum">      64 </span>                :<span class="lineCov">          2 : size_t tutorial__address_book__get_packed_size</span>
 <span class="lineNum">      65 </span>                :            :                      (const Tutorial__AddressBook *message)
 <span class="lineNum">      66 </span>                :            : {
-<span class="lineNum">      67 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 167 times"> + </span>]:<span class="lineCov">        167 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__address_book__descriptor);</span>
-<a name="68"><span class="lineNum">      68 </span>                :<span class="lineCov">        167 :   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));</span></a>
+<span class="lineNum">      67 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__address_book__descriptor);</span>
+<a name="68"><span class="lineNum">      68 </span>                :<span class="lineCov">          2 :   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));</span></a>
 <span class="lineNum">      69 </span>                :            : }
-<span class="lineNum">      70 </span>                :<span class="lineCov">        167 : size_t tutorial__address_book__pack</span>
+<span class="lineNum">      70 </span>                :<span class="lineCov">          2 : size_t tutorial__address_book__pack</span>
 <span class="lineNum">      71 </span>                :            :                      (const Tutorial__AddressBook *message,
 <span class="lineNum">      72 </span>                :            :                       uint8_t       *out)
 <span class="lineNum">      73 </span>                :            : {
-<span class="lineNum">      74 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 167 times"> + </span>]:<span class="lineCov">        167 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__address_book__descriptor);</span>
-<a name="75"><span class="lineNum">      75 </span>                :<span class="lineCov">        167 :   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);</span></a>
+<span class="lineNum">      74 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__address_book__descriptor);</span>
+<a name="75"><span class="lineNum">      75 </span>                :<span class="lineCov">          2 :   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);</span></a>
 <span class="lineNum">      76 </span>                :            : }
 <span class="lineNum">      77 </span>                :<span class="lineNoCov">          0 : size_t tutorial__address_book__pack_to_buffer</span>
 <span class="lineNum">      78 </span>                :            :                      (const Tutorial__AddressBook *message,
@@ -160,46 +160,46 @@
 <span class="lineNum">      82 </span>                :<span class="lineNoCov">          0 :   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);</span>
 <a name="83"><span class="lineNum">      83 </span>                :            : }</a>
 <span class="lineNum">      84 </span>                :            : Tutorial__AddressBook *
-<span class="lineNum">      85 </span>                :<span class="lineCov">        301 :        tutorial__address_book__unpack</span>
+<span class="lineNum">      85 </span>                :<span class="lineCov">         33 :        tutorial__address_book__unpack</span>
 <span class="lineNum">      86 </span>                :            :                      (ProtobufCAllocator  *allocator,
 <span class="lineNum">      87 </span>                :            :                       size_t               len,
 <span class="lineNum">      88 </span>                :            :                       const uint8_t       *data)
 <span class="lineNum">      89 </span>                :            : {
-<span class="lineNum">      90 </span>                :<span class="lineCov">        301 :   return (Tutorial__AddressBook *)</span>
+<span class="lineNum">      90 </span>                :<span class="lineCov">         33 :   return (Tutorial__AddressBook *)</span>
 <span class="lineNum">      91 </span>                :            :      protobuf_c_message_unpack (&amp;tutorial__address_book__descriptor,
 <a name="92"><span class="lineNum">      92 </span>                :            :                                 allocator, len, data);</a>
 <span class="lineNum">      93 </span>                :            : }
-<span class="lineNum">      94 </span>                :<span class="lineCov">        167 : void   tutorial__address_book__free_unpacked</span>
+<span class="lineNum">      94 </span>                :<span class="lineCov">          2 : void   tutorial__address_book__free_unpacked</span>
 <span class="lineNum">      95 </span>                :            :                      (Tutorial__AddressBook *message,
 <span class="lineNum">      96 </span>                :            :                       ProtobufCAllocator *allocator)
 <span class="lineNum">      97 </span>                :            : {
-<span class="lineNum">      98 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 167 times"> + </span>]:<span class="lineCov">        167 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__address_book__descriptor);</span>
-<a name="99"><span class="lineNum">      99 </span>                :<span class="lineCov">        167 :   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);</span></a>
-<span class="lineNum">     100 </span>                :<span class="lineCov">        167 : }</span>
-<span class="lineNum">     101 </span>                :<span class="lineCov">        344 : void   tutorial__test__test_msg__init</span>
+<span class="lineNum">      98 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__address_book__descriptor);</span>
+<a name="99"><span class="lineNum">      99 </span>                :<span class="lineCov">          2 :   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);</span></a>
+<span class="lineNum">     100 </span>                :<span class="lineCov">          2 : }</span>
+<span class="lineNum">     101 </span>                :<span class="lineCov">         24 : void   tutorial__test__test_msg__init</span>
 <span class="lineNum">     102 </span>                :            :                      (Tutorial__Test__TestMsg         *message)
 <span class="lineNum">     103 </span>                :            : {
 <span class="lineNum">     104 </span>                :            :   static Tutorial__Test__TestMsg init_value = TUTORIAL__TEST__TEST_MSG__INIT;
-<a name="105"><span class="lineNum">     105 </span>                :<span class="lineCov">        344 :   *message = init_value;</span></a>
-<span class="lineNum">     106 </span>                :<span class="lineCov">        344 : }</span>
-<span class="lineNum">     107 </span>                :<span class="lineCov">        305 : void   tutorial__test__init</span>
+<a name="105"><span class="lineNum">     105 </span>                :<span class="lineCov">         24 :   *message = init_value;</span></a>
+<span class="lineNum">     106 </span>                :<span class="lineCov">         24 : }</span>
+<span class="lineNum">     107 </span>                :<span class="lineCov">        145 : void   tutorial__test__init</span>
 <span class="lineNum">     108 </span>                :            :                      (Tutorial__Test         *message)
 <span class="lineNum">     109 </span>                :            : {
 <span class="lineNum">     110 </span>                :            :   static Tutorial__Test init_value = TUTORIAL__TEST__INIT;
-<a name="111"><span class="lineNum">     111 </span>                :<span class="lineCov">        305 :   *message = init_value;</span></a>
-<span class="lineNum">     112 </span>                :<span class="lineCov">        305 : }</span>
-<span class="lineNum">     113 </span>                :<span class="lineCov">        162 : size_t tutorial__test__get_packed_size</span>
+<a name="111"><span class="lineNum">     111 </span>                :<span class="lineCov">        145 :   *message = init_value;</span></a>
+<span class="lineNum">     112 </span>                :<span class="lineCov">        145 : }</span>
+<span class="lineNum">     113 </span>                :<span class="lineCov">          2 : size_t tutorial__test__get_packed_size</span>
 <span class="lineNum">     114 </span>                :            :                      (const Tutorial__Test *message)
 <span class="lineNum">     115 </span>                :            : {
-<span class="lineNum">     116 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 162 times"> + </span>]:<span class="lineCov">        162 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__test__descriptor);</span>
-<a name="117"><span class="lineNum">     117 </span>                :<span class="lineCov">        162 :   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));</span></a>
+<span class="lineNum">     116 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__test__descriptor);</span>
+<a name="117"><span class="lineNum">     117 </span>                :<span class="lineCov">          2 :   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));</span></a>
 <span class="lineNum">     118 </span>                :            : }
-<span class="lineNum">     119 </span>                :<span class="lineCov">        162 : size_t tutorial__test__pack</span>
+<span class="lineNum">     119 </span>                :<span class="lineCov">          2 : size_t tutorial__test__pack</span>
 <span class="lineNum">     120 </span>                :            :                      (const Tutorial__Test *message,
 <span class="lineNum">     121 </span>                :            :                       uint8_t       *out)
 <span class="lineNum">     122 </span>                :            : {
-<span class="lineNum">     123 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 162 times"> + </span>]:<span class="lineCov">        162 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__test__descriptor);</span>
-<a name="124"><span class="lineNum">     124 </span>                :<span class="lineCov">        162 :   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);</span></a>
+<span class="lineNum">     123 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__test__descriptor);</span>
+<a name="124"><span class="lineNum">     124 </span>                :<span class="lineCov">          2 :   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);</span></a>
 <span class="lineNum">     125 </span>                :            : }
 <span class="lineNum">     126 </span>                :<span class="lineNoCov">          0 : size_t tutorial__test__pack_to_buffer</span>
 <span class="lineNum">     127 </span>                :            :                      (const Tutorial__Test *message,
@@ -218,19 +218,19 @@
 <span class="lineNum">     140 </span>                :            :      protobuf_c_message_unpack (&amp;tutorial__test__descriptor,
 <a name="141"><span class="lineNum">     141 </span>                :            :                                 allocator, len, data);</a>
 <span class="lineNum">     142 </span>                :            : }
-<span class="lineNum">     143 </span>                :<span class="lineCov">        162 : void   tutorial__test__free_unpacked</span>
+<span class="lineNum">     143 </span>                :<span class="lineCov">          2 : void   tutorial__test__free_unpacked</span>
 <span class="lineNum">     144 </span>                :            :                      (Tutorial__Test *message,
 <span class="lineNum">     145 </span>                :            :                       ProtobufCAllocator *allocator)
 <span class="lineNum">     146 </span>                :            : {
-<span class="lineNum">     147 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 162 times"> + </span>]:<span class="lineCov">        162 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__test__descriptor);</span>
-<a name="148"><span class="lineNum">     148 </span>                :<span class="lineCov">        162 :   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);</span></a>
-<span class="lineNum">     149 </span>                :<span class="lineCov">        162 : }</span>
-<span class="lineNum">     150 </span>                :<span class="lineCov">        167 : void   tutorial__short__init</span>
+<span class="lineNum">     147 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__test__descriptor);</span>
+<a name="148"><span class="lineNum">     148 </span>                :<span class="lineCov">          2 :   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);</span></a>
+<span class="lineNum">     149 </span>                :<span class="lineCov">          2 : }</span>
+<span class="lineNum">     150 </span>                :<span class="lineCov">          2 : void   tutorial__short__init</span>
 <span class="lineNum">     151 </span>                :            :                      (Tutorial__Short         *message)
 <span class="lineNum">     152 </span>                :            : {
 <span class="lineNum">     153 </span>                :            :   static Tutorial__Short init_value = TUTORIAL__SHORT__INIT;
-<a name="154"><span class="lineNum">     154 </span>                :<span class="lineCov">        167 :   *message = init_value;</span></a>
-<span class="lineNum">     155 </span>                :<span class="lineCov">        167 : }</span>
+<a name="154"><span class="lineNum">     154 </span>                :<span class="lineCov">          2 :   *message = init_value;</span></a>
+<span class="lineNum">     155 </span>                :<span class="lineCov">          2 : }</span>
 <span class="lineNum">     156 </span>                :<span class="lineNoCov">          0 : size_t tutorial__short__get_packed_size</span>
 <span class="lineNum">     157 </span>                :            :                      (const Tutorial__Short *message)
 <span class="lineNum">     158 </span>                :            : {
@@ -261,13 +261,13 @@
 <span class="lineNum">     183 </span>                :            :      protobuf_c_message_unpack (&amp;tutorial__short__descriptor,
 <a name="184"><span class="lineNum">     184 </span>                :            :                                 allocator, len, data);</a>
 <span class="lineNum">     185 </span>                :            : }
-<span class="lineNum">     186 </span>                :<span class="lineCov">        167 : void   tutorial__short__free_unpacked</span>
+<span class="lineNum">     186 </span>                :<span class="lineCov">          2 : void   tutorial__short__free_unpacked</span>
 <span class="lineNum">     187 </span>                :            :                      (Tutorial__Short *message,
 <span class="lineNum">     188 </span>                :            :                       ProtobufCAllocator *allocator)
 <span class="lineNum">     189 </span>                :            : {
-<span class="lineNum">     190 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 167 times"> + </span>]:<span class="lineCov">        167 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__short__descriptor);</span>
-<a name="191"><span class="lineNum">     191 </span>                :<span class="lineCov">        167 :   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);</span></a>
-<span class="lineNum">     192 </span>                :<span class="lineCov">        167 : }</span>
+<span class="lineNum">     190 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :   PROTOBUF_C_ASSERT (message-&gt;base.descriptor == &amp;tutorial__short__descriptor);</span>
+<a name="191"><span class="lineNum">     191 </span>                :<span class="lineCov">          2 :   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);</span></a>
+<span class="lineNum">     192 </span>                :<span class="lineCov">          2 : }</span>
 <span class="lineNum">     193 </span>                :<span class="lineCov">         16 : void   tutorial__recurse__init</span>
 <span class="lineNum">     194 </span>                :            :                      (Tutorial__Recurse         *message)
 <span class="lineNum">     195 </span>                :            : {

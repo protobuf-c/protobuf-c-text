@@ -83,27 +83,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_text_format_result.html">TextFormatResult</a></td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure for reporting API errors.  <a href="struct_text_format_result.html#details">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_protobuf_c_text_error.html">ProtobufCTextError</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure for reporting API errors.  <a href="struct_protobuf_c_text_error.html#details">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__api.html#ga1dc8d12e5f0e5e071fec894d9ddad648">protobuf_c_text_to_string</a> (ProtobufCMessage *m, ProtobufCAllocator *allocator)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a <code>ProtobufCMessage</code> to a string.  <a href="#ga1dc8d12e5f0e5e071fec894d9ddad648"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">ProtobufCMessage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__api.html#gac8be61c88376cebc36ab8712b85a1e65">protobuf_c_text_from_string</a> (const ProtobufCMessageDescriptor *descriptor, char *msg, <a class="el" href="struct_text_format_result.html">TextFormatResult</a> *result, ProtobufCAllocator *allocator)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Import a text format protobuf from a string into a <code>ProtobufCMessage</code>.  <a href="#gac8be61c88376cebc36ab8712b85a1e65"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">ProtobufCMessage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__api.html#gaf6fc77446596a7a5cc7987f9906cbe52">protobuf_c_text_from_file</a> (const ProtobufCMessageDescriptor *descriptor, FILE *msg_file, <a class="el" href="struct_text_format_result.html">TextFormatResult</a> *result, ProtobufCAllocator *allocator)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Import a text format protobuf from a <code>FILE</code> into a <code>ProtobufCMessage</code>.  <a href="#gaf6fc77446596a7a5cc7987f9906cbe52"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">ProtobufCMessage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__api.html#ga5f9ce0b2adb704390e37c66a81cbbfb6">protobuf_c_text_from_string</a> (const ProtobufCMessageDescriptor *descriptor, char *msg, <a class="el" href="struct_protobuf_c_text_error.html">ProtobufCTextError</a> *result, ProtobufCAllocator *allocator)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Import a text format protobuf from a string into a <code>ProtobufCMessage</code>.  <a href="#ga5f9ce0b2adb704390e37c66a81cbbfb6"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">ProtobufCMessage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__api.html#ga2801ad7b57ea6dfb51eab72ac20df725">protobuf_c_text_from_file</a> (const ProtobufCMessageDescriptor *descriptor, FILE *msg_file, <a class="el" href="struct_protobuf_c_text_error.html">ProtobufCTextError</a> *result, ProtobufCAllocator *allocator)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Import a text format protobuf from a <code>FILE</code> into a <code>ProtobufCMessage</code>.  <a href="#ga2801ad7b57ea6dfb51eab72ac20df725"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <p>These functions supplement the generated code from <code>protoc-c</code> to allow you to import and export <code>ProtobufCMessage</code> structures from/to the protobuf text mode serialisation. </p>
 <p>These will work with any code generated from <code>protoc-c</code>. </p>
 <hr/><h2>Function Documentation</h2>
-<a class="anchor" id="gaf6fc77446596a7a5cc7987f9906cbe52"></a><!-- doxytag: member="protobuf&#45;c&#45;text.h::protobuf_c_text_from_file" ref="gaf6fc77446596a7a5cc7987f9906cbe52" args="(const ProtobufCMessageDescriptor *descriptor, FILE *msg_file, TextFormatResult *result, ProtobufCAllocator *allocator)" -->
+<a class="anchor" id="ga2801ad7b57ea6dfb51eab72ac20df725"></a><!-- doxytag: member="protobuf&#45;c&#45;text.h::protobuf_c_text_from_file" ref="ga2801ad7b57ea6dfb51eab72ac20df725" args="(const ProtobufCMessageDescriptor *descriptor, FILE *msg_file, ProtobufCTextError *result, ProtobufCAllocator *allocator)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ProtobufCMessage* <a class="el" href="group__api.html#gaf6fc77446596a7a5cc7987f9906cbe52">protobuf_c_text_from_file</a> </td>
+          <td class="memname">ProtobufCMessage* <a class="el" href="group__api.html#ga2801ad7b57ea6dfb51eab72ac20df725">protobuf_c_text_from_file</a> </td>
           <td>(</td>
           <td class="paramtype">const ProtobufCMessageDescriptor *&#160;</td>
           <td class="paramname"><em>descriptor</em>, </td>
@@ -117,7 +117,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_text_format_result.html">TextFormatResult</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_protobuf_c_text_error.html">ProtobufCTextError</a> *&#160;</td>
           <td class="paramname"><em>result</em>, </td>
         </tr>
         <tr>
@@ -156,20 +156,20 @@ Functions</h2></td></tr>
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="group__api_gaf6fc77446596a7a5cc7987f9906cbe52_cgraph.png" border="0" usemap="#group__api_gaf6fc77446596a7a5cc7987f9906cbe52_cgraph" alt=""/></div>
-<map name="group__api_gaf6fc77446596a7a5cc7987f9906cbe52_cgraph" id="group__api_gaf6fc77446596a7a5cc7987f9906cbe52_cgraph">
-<area shape="rect" id="node3" href="group__base-parse.html#ga939ff1c3f084e9532827a9dd3b214fda" title="Base function for the API functions." alt="" coords="225,139,375,168"/><area shape="rect" id="node17" href="group__lexer.html#ga22caa4f6efef273f99a3327bd75f8f0e" title="Initialise a Scanner from a FILE." alt="" coords="243,192,357,221"/><area shape="rect" id="node5" href="group__lexer.html#ga2236f93417b0b61c385caccc1cd96018" title="Generated lexer." alt="" coords="448,5,499,35"/><area shape="rect" id="node7" href="group__lexer.html#ga94db8310f699ee3766ae89362d34d706" title="Free data internal to the Scanner instance." alt="" coords="425,59,521,88"/><area shape="rect" id="node9" href="group__state.html#ga17dd60cf1ed75d012394a46803c39c05" title="Handle an error in the FSM." alt="" coords="432,112,515,141"/><area shape="rect" id="node11" href="group__state.html#gad47c89d0626c1012c7a8465a41da6ea6" title="Free internal data in a State struct." alt="" coords="433,165,513,195"/><area shape="rect" id="node13" href="group__state.html#gab4364f83c27b569c0b1431a8b0ea5c79" title="Initialise a State struct." alt="" coords="436,219,511,248"/><area shape="rect" id="node15" href="group__lexer.html#ga398d3363d0a261109e93b26e20d60d4b" title="Frees memory allocated in a Token instance." alt="" coords="432,272,515,301"/></map>
+<div class="center"><img src="group__api_ga2801ad7b57ea6dfb51eab72ac20df725_cgraph.png" border="0" usemap="#group__api_ga2801ad7b57ea6dfb51eab72ac20df725_cgraph" alt=""/></div>
+<map name="group__api_ga2801ad7b57ea6dfb51eab72ac20df725_cgraph" id="group__api_ga2801ad7b57ea6dfb51eab72ac20df725_cgraph">
+<area shape="rect" id="node3" href="group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions." alt="" coords="225,139,375,168"/><area shape="rect" id="node17" href="group__lexer.html#ga22caa4f6efef273f99a3327bd75f8f0e" title="Initialise a Scanner from a FILE." alt="" coords="243,192,357,221"/><area shape="rect" id="node5" href="group__lexer.html#ga2236f93417b0b61c385caccc1cd96018" title="Generated lexer." alt="" coords="448,5,499,35"/><area shape="rect" id="node7" href="group__lexer.html#ga94db8310f699ee3766ae89362d34d706" title="Free data internal to the Scanner instance." alt="" coords="425,59,521,88"/><area shape="rect" id="node9" href="group__state.html#ga17dd60cf1ed75d012394a46803c39c05" title="Handle an error in the FSM." alt="" coords="432,112,515,141"/><area shape="rect" id="node11" href="group__state.html#gad47c89d0626c1012c7a8465a41da6ea6" title="Free internal data in a State struct." alt="" coords="433,165,513,195"/><area shape="rect" id="node13" href="group__state.html#gab4364f83c27b569c0b1431a8b0ea5c79" title="Initialise a State struct." alt="" coords="436,219,511,248"/><area shape="rect" id="node15" href="group__lexer.html#ga398d3363d0a261109e93b26e20d60d4b" title="Frees memory allocated in a Token instance." alt="" coords="432,272,515,301"/></map>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="gac8be61c88376cebc36ab8712b85a1e65"></a><!-- doxytag: member="protobuf&#45;c&#45;text.h::protobuf_c_text_from_string" ref="gac8be61c88376cebc36ab8712b85a1e65" args="(const ProtobufCMessageDescriptor *descriptor, char *msg, TextFormatResult *result, ProtobufCAllocator *allocator)" -->
+<a class="anchor" id="ga5f9ce0b2adb704390e37c66a81cbbfb6"></a><!-- doxytag: member="protobuf&#45;c&#45;text.h::protobuf_c_text_from_string" ref="ga5f9ce0b2adb704390e37c66a81cbbfb6" args="(const ProtobufCMessageDescriptor *descriptor, char *msg, ProtobufCTextError *result, ProtobufCAllocator *allocator)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ProtobufCMessage* <a class="el" href="group__api.html#gac8be61c88376cebc36ab8712b85a1e65">protobuf_c_text_from_string</a> </td>
+          <td class="memname">ProtobufCMessage* <a class="el" href="group__api.html#ga5f9ce0b2adb704390e37c66a81cbbfb6">protobuf_c_text_from_string</a> </td>
           <td>(</td>
           <td class="paramtype">const ProtobufCMessageDescriptor *&#160;</td>
           <td class="paramname"><em>descriptor</em>, </td>
@@ -183,7 +183,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_text_format_result.html">TextFormatResult</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_protobuf_c_text_error.html">ProtobufCTextError</a> *&#160;</td>
           <td class="paramname"><em>result</em>, </td>
         </tr>
         <tr>
@@ -222,9 +222,9 @@ Here is the call graph for this function:</div>
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="group__api_gac8be61c88376cebc36ab8712b85a1e65_cgraph.png" border="0" usemap="#group__api_gac8be61c88376cebc36ab8712b85a1e65_cgraph" alt=""/></div>
-<map name="group__api_gac8be61c88376cebc36ab8712b85a1e65_cgraph" id="group__api_gac8be61c88376cebc36ab8712b85a1e65_cgraph">
-<area shape="rect" id="node3" href="group__base-parse.html#ga939ff1c3f084e9532827a9dd3b214fda" title="Base function for the API functions." alt="" coords="239,139,388,168"/><area shape="rect" id="node17" href="group__lexer.html#gae183ec02aa3ed40b3b3c5f17a455d1a9" title="Initialise a Scanner from a string." alt="" coords="248,192,379,221"/><area shape="rect" id="node5" href="group__lexer.html#ga2236f93417b0b61c385caccc1cd96018" title="Generated lexer." alt="" coords="461,5,512,35"/><area shape="rect" id="node7" href="group__lexer.html#ga94db8310f699ee3766ae89362d34d706" title="Free data internal to the Scanner instance." alt="" coords="439,59,535,88"/><area shape="rect" id="node9" href="group__state.html#ga17dd60cf1ed75d012394a46803c39c05" title="Handle an error in the FSM." alt="" coords="445,112,528,141"/><area shape="rect" id="node11" href="group__state.html#gad47c89d0626c1012c7a8465a41da6ea6" title="Free internal data in a State struct." alt="" coords="447,165,527,195"/><area shape="rect" id="node13" href="group__state.html#gab4364f83c27b569c0b1431a8b0ea5c79" title="Initialise a State struct." alt="" coords="449,219,524,248"/><area shape="rect" id="node15" href="group__lexer.html#ga398d3363d0a261109e93b26e20d60d4b" title="Frees memory allocated in a Token instance." alt="" coords="445,272,528,301"/></map>
+<div class="center"><img src="group__api_ga5f9ce0b2adb704390e37c66a81cbbfb6_cgraph.png" border="0" usemap="#group__api_ga5f9ce0b2adb704390e37c66a81cbbfb6_cgraph" alt=""/></div>
+<map name="group__api_ga5f9ce0b2adb704390e37c66a81cbbfb6_cgraph" id="group__api_ga5f9ce0b2adb704390e37c66a81cbbfb6_cgraph">
+<area shape="rect" id="node3" href="group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions." alt="" coords="239,139,388,168"/><area shape="rect" id="node17" href="group__lexer.html#gae183ec02aa3ed40b3b3c5f17a455d1a9" title="Initialise a Scanner from a string." alt="" coords="248,192,379,221"/><area shape="rect" id="node5" href="group__lexer.html#ga2236f93417b0b61c385caccc1cd96018" title="Generated lexer." alt="" coords="461,5,512,35"/><area shape="rect" id="node7" href="group__lexer.html#ga94db8310f699ee3766ae89362d34d706" title="Free data internal to the Scanner instance." alt="" coords="439,59,535,88"/><area shape="rect" id="node9" href="group__state.html#ga17dd60cf1ed75d012394a46803c39c05" title="Handle an error in the FSM." alt="" coords="445,112,528,141"/><area shape="rect" id="node11" href="group__state.html#gad47c89d0626c1012c7a8465a41da6ea6" title="Free internal data in a State struct." alt="" coords="447,165,527,195"/><area shape="rect" id="node13" href="group__state.html#gab4364f83c27b569c0b1431a8b0ea5c79" title="Initialise a State struct." alt="" coords="449,219,524,248"/><area shape="rect" id="node15" href="group__lexer.html#ga398d3363d0a261109e93b26e20d60d4b" title="Frees memory allocated in a Token instance." alt="" coords="445,272,528,301"/></map>
 </div>
 </p>
 
@@ -301,7 +301,7 @@ Here is the call graph for this function:</div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 3 2014 19:22:33 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 3 2014 22:25:10 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
