@@ -2,9 +2,14 @@
 
 # Protobuf Text Format Support for C
 
-Python, C++ and Java protobufs support text format but C protobufs do not.
-This is a project to try and fix that. The end goal is to merge this
-into the [protobuf-c](https://github.com/protobuf-c) project.
+Python, C++ and Java protobufs support text format but C protobufs did not.
+This is a project that fixed that. It is a supplement to the
+`libprotobuf-c` library in the [protobuf-c](https://github.com/protobuf-c)
+project.
+
+If you want to just get started using it, grab the code, run
+`./configure && make && sudo make install` and then read the
+[docs](http://text.protobuf-c.io/).
 
 ## Contents
 
