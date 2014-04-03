@@ -11,9 +11,9 @@ generated code.
 .sp
 .BI "char * protobuf_c_text_to_string(ProtobufCMessage *" m ", ProtobufCAllocator *" allocator);
 .sp
-.BI "ProtobufCMessage *protobuf_c_text_from_string(const ProtobufCMessageDescriptor *" descriptor ", char *" msg ", TextFormatResult *" result ", ProtobufCAllocator *" allocator);
+.BI "ProtobufCMessage *protobuf_c_text_from_string(const ProtobufCMessageDescriptor *" descriptor ", char *" msg ", ProtobufCTextError *" result ", ProtobufCAllocator *" allocator);
 .sp
-.BI "ProtobufCMessage *protobuf_c_text_from_file(const ProtobufCMessageDescriptor *" descriptor ", FILE *" msg_file ", TextFormatResult *" result ", ProtobufCAllocator *" allocator);
+.BI "ProtobufCMessage *protobuf_c_text_from_file(const ProtobufCMessageDescriptor *" descriptor ", FILE *" msg_file ", ProtobufCTextError *" result ", ProtobufCAllocator *" allocator);
 .sp
 .SH DESCRIPTION
 These functions supplement the generated code from

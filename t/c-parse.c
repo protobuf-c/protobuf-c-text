@@ -14,7 +14,7 @@
 int
 main(int argc, char *argv[])
 {
-  TextFormatResult tf_res;
+  ProtobufCTextError tf_res;
   Tutorial__AddressBook *ab;
   size_t len;
   uint8_t *buf;

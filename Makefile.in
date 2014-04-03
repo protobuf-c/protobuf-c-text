@@ -1603,6 +1603,19 @@ clean-gcno:
 @DX_COND_doc_TRUE@	rm -rf @DX_DOCDIR@
 @DX_COND_doc_TRUE@	$(DX_ENV) $(DX_DOXYGEN) $(srcdir)/$(DX_CONFIG)
 
+.PHONY: gh-pages
+@HAVE_GCOV_TRUE@gh-pages: doxygen-doc coverage-html
+@HAVE_GCOV_TRUE@	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout gh-pages
+@HAVE_GCOV_TRUE@	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout .nojekyll
+@HAVE_GCOV_TRUE@	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout CNAME
+@HAVE_GCOV_TRUE@	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html add .
+@HAVE_GCOV_TRUE@	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html ls-files --deleted | GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages xargs git --work-tree $(PWD)/docs/html rm
+@HAVE_GCOV_TRUE@	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/doxygen/html commit -m "Update docs."
+@HAVE_GCOV_TRUE@	git checkout master
+@HAVE_GCOV_FALSE@gh-pages:
+@HAVE_GCOV_FALSE@	@echo "ERROR: Need to run ./configure --enable-gcov"
+@HAVE_GCOV_FALSE@	@false
+
 .PHONY: changelog
 changelog:
 	@git shortlog --pretty='* [%h] %s' -e `git log -n 1 --pretty='%H' -- ChangeLog`..HEAD > ChangeLog.new

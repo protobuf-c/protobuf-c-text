@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 #include "ponycopter.pb-c.h"
 
 int main(int argc, char *argv[]) {
-  TextFormatResult tf_res;
+  ProtobufCTextError tf_res;
   Ponycopter *pc;
 
   pc = (Ponycopter *)protobuf_c_text_from_file(
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
  * API call fails it will return \c NULL.  More detail on why it failed
  * can be found in the parameter with this type.
  */
-typedef struct _TextFormatResult {
+typedef struct _ProtobufCTextError {
   int *error;       /**< Error code. 0 for success, >0 for failure. */
   char *error_txt;  /**< String with error message. */
   int complete;     /**< Reports whether the message is complete
@@ -127,7 +127,7 @@ typedef struct _TextFormatResult {
                                happens if your libprotobuf-c is too old.
                          - 0: The message was incomplete.
                          - >0: Message has all required fields set. */
-} TextFormatResult;
+} ProtobufCTextError;
 
 /** Convert a \c ProtobufCMessage to a string.
  *
@@ -173,7 +173,7 @@ extern char *protobuf_c_text_to_string(ProtobufCMessage *m,
 extern ProtobufCMessage *protobuf_c_text_from_string(
     const ProtobufCMessageDescriptor *descriptor,
     char *msg,
-    TextFormatResult *result,
+    ProtobufCTextError *result,
     ProtobufCAllocator *allocator);
 
 /** Import a text format protobuf from a \c FILE into a \c ProtobufCMessage.
@@ -198,7 +198,7 @@ extern ProtobufCMessage *protobuf_c_text_from_string(
 extern ProtobufCMessage *protobuf_c_text_from_file(
     const ProtobufCMessageDescriptor *descriptor,
     FILE *msg_file,
-    TextFormatResult *result,
+    ProtobufCTextError *result,
     ProtobufCAllocator *allocator);
 
 /** @} */   /* End of API group. */

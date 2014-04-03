@@ -1178,7 +1178,7 @@ static StateId(* states[])(State *, Token *) = {
  *                       want to deserialise.
  * \param[in] scanner A \c Scanner which will be used by the FSM to parse
  *                    the text format protobuf.
- * \param[in,out] result A \c TextFormatResult instance to record any
+ * \param[in,out] result A \c ProtobufCTextError instance to record any
  *                       errors.  It is not an option to pass \c NULL for
  *                       this and it must be checked for errors.
  * \param[in] allocator Allocator functions.
@@ -1188,7 +1188,7 @@ static StateId(* states[])(State *, Token *) = {
 static ProtobufCMessage *
 protobuf_c_text_parse(const ProtobufCMessageDescriptor *descriptor,
     Scanner *scanner,
-    TextFormatResult *result,
+    ProtobufCTextError *result,
     ProtobufCAllocator *allocator)
 {
   Token token;
@@ -1241,7 +1241,7 @@ protobuf_c_text_parse(const ProtobufCMessageDescriptor *descriptor,
 ProtobufCMessage *
 protobuf_c_text_from_file(const ProtobufCMessageDescriptor *descriptor,
     FILE *msg_file,
-    TextFormatResult *result,
+    ProtobufCTextError *result,
     ProtobufCAllocator *allocator)
 {
   Scanner scanner;
@@ -1253,7 +1253,7 @@ protobuf_c_text_from_file(const ProtobufCMessageDescriptor *descriptor,
 ProtobufCMessage *
 protobuf_c_text_from_string(const ProtobufCMessageDescriptor *descriptor,
     char *msg,
-    TextFormatResult *result,
+    ProtobufCTextError *result,
     ProtobufCAllocator *allocator)
 {
   Scanner scanner;

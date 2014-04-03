@@ -13,7 +13,7 @@
 
 START_TEST(test_deep_nesting)
 {
-  TextFormatResult tf_res;
+  ProtobufCTextError tf_res;
   Tutorial__Recurse *msg;
   
   msg = (Tutorial__Recurse *)protobuf_c_text_from_string(

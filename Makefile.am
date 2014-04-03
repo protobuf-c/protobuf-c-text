@@ -114,6 +114,22 @@ AM_V_RE2C_0 = @echo "  RE2C  " $<;
 include am/aminclude_coverage.am
 include am/aminclude_doxygen.am
 
+.PHONY: gh-pages
+if HAVE_GCOV
+gh-pages: doxygen-doc coverage-html
+	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout gh-pages
+	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout .nojekyll
+	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout CNAME
+	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html add .
+	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html ls-files --deleted | GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages xargs git --work-tree $(PWD)/docs/html rm
+	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/doxygen/html commit -m "Update docs."
+	git checkout master
+else
+gh-pages:
+	@echo "ERROR: Need to run ./configure --enable-gcov"
+	@false
+endif # HAVE_GCOV
+
 .PHONY: changelog
 changelog:
 	@git shortlog --pretty='* [%h] %s' -e `git log -n 1 --pretty='%H' -- ChangeLog`..HEAD > ChangeLog.new
