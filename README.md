@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/lyda/protobuf-c-text.png?branch=master)](https://travis-ci.org/lyda/protobuf-c-text)
+[![Build Status](https://travis-ci.org/protobuf-c/protobuf-c-text.png?branch=master)](https://travis-ci.org/protobuf-c/protobuf-c-text)
 
 # Protobuf Text Format Support for C
 
@@ -55,6 +55,7 @@ Subsequent updates are done like so (starting in `master`):
 make clean doxygen-doc coverage-html
 GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html checkout gh-pages
 GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html checkout .nojekyll
+GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html checkout CNAME
 GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html add .
 GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/html ls-files --deleted | GIT_INDEX_FILE=$PWD/.git/index.gh-pages xargs git --work-tree $PWD/docs/html
 GIT_INDEX_FILE=$PWD/.git/index.gh-pages git --work-tree $PWD/docs/doxygen/html commit -m "Update docs."
