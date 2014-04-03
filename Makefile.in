@@ -1605,6 +1605,8 @@ clean-gcno:
 
 .PHONY: gh-pages
 @HAVE_GCOV_TRUE@gh-pages: doxygen-doc coverage-html
+@HAVE_GCOV_TRUE@	test `git rev-parse --abbrev-ref HEAD` = master
+@HAVE_GCOV_TRUE@	rm -f $(PWD)/.git/index.gh-pages
 @HAVE_GCOV_TRUE@	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout gh-pages
 @HAVE_GCOV_TRUE@	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout .nojekyll
 @HAVE_GCOV_TRUE@	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout CNAME

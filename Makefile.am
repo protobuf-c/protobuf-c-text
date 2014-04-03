@@ -117,6 +117,8 @@ include am/aminclude_doxygen.am
 .PHONY: gh-pages
 if HAVE_GCOV
 gh-pages: doxygen-doc coverage-html
+	test `git rev-parse --abbrev-ref HEAD` = master
+	rm -f $(PWD)/.git/index.gh-pages
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout gh-pages
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout .nojekyll
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout CNAME
