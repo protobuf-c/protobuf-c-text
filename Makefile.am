@@ -18,9 +18,6 @@ dist_man3_MANS = man/libprotobuf-c-text.3 \
 		 man/text_format_from_string.3 \
 		 man/text_format_to_string.3
 
-valgrind: $(check_PROGRAMS)
-	@t/valgrind.test_generation.sh
-
 # Libraries.
 nodist_protobuf_c_text_libprotobuf_c_text_la_SOURCES = \
     protobuf-c-text/parse.c
@@ -35,7 +32,8 @@ protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 #    set revision and age to 0 and increment current (c:r:a becomes c+1:0:0).
 # 3. If interfaces have only been added since the last release, set
 #    release to 0 and increment release and age (c:r:a becomes c+1:0:a+1).
-protobuf_c_text_libprotobuf_c_text_la_LDFLAGS = $(COVERAGE_LDFLAGS) -version-info 0:0:0
+protobuf_c_text_libprotobuf_c_text_la_LDFLAGS = \
+	$(COVERAGE_LDFLAGS) -version-info 1:0:0
 
 # Headers for libraries.
 libprotobuf_c_textdir = $(includedir)/google/protobuf-c
@@ -83,7 +81,8 @@ t_c_parse2_LDFLAGS = -static
 t_test_msgs_SOURCES = t/test_msgs.c
 nodist_t_test_msgs_SOURCES = $(PROTOBUF_C_TEST_SRCS)
 t_test_msgs_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS) -I t @CHECK_CFLAGS@
-t_test_msgs_LDADD = protobuf-c-text/libprotobuf-c-text.la $(COVERAGE_LDFLAGS) @CHECK_LIBS@
+t_test_msgs_LDADD = protobuf-c-text/libprotobuf-c-text.la \
+		    $(COVERAGE_LDFLAGS) @CHECK_LIBS@
 t_test_msgs_LDFLAGS = -static
 
 EXTRA_DIST = t/addressbook.proto \
@@ -142,4 +141,3 @@ MOSTLYCLEANFILES = $(DX_CLEANFILES) \
 		   t/tutorial_test.c.data \
 		   t/tutorial_test.c.text \
 		   t/tutorial_test.protoc_c.text
-

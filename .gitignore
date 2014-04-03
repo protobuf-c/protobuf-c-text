@@ -24,12 +24,6 @@ config.cache
 *.la
 protobuf-c-text/libprotobuf-c-text.pc
 
-# Code coverage files.
-/coverage.info
-/htmlcov/
-*.gcda
-*.gcno
-
 # Test generated cruft.
 /t/addressbook.c.data
 /t/addressbook.c.text
@@ -52,4 +46,9 @@ protobuf-c-text/libprotobuf-c-text.pc
 protobuf-c-text/parse.c
 
 # Doxygen output.
-/docs/doxygen/
+/docs
+
+# Code coverage files.
+/coverage.info
+*.gcda
+*.gcno

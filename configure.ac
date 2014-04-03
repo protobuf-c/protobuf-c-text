@@ -6,7 +6,8 @@
 #     autoreconf -vif
 
 AC_PREREQ([2.68])
-AC_INIT([protobuf-c-text], [0.1], [https://github.com/lyda/protobuf-c-text/])
+AC_INIT([protobuf-c-text], [1.0.0-pre],
+        [https://github.com/protobuf-c/protobuf-c-text/])
 AC_CONFIG_SRCDIR([protobuf-c-text/protobuf-c-text.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -47,7 +48,7 @@ AC_SUBST(COVERAGE_LDFLAGS)
 DX_PDF_FEATURE(OFF)
 DX_PS_FEATURE(OFF)
 DX_DOT_FEATURE(ON)
-DX_INIT_DOXYGEN([protobuf-c-text], [docs/Doxyfile], [docs/doxygen])
+DX_INIT_DOXYGEN([protobuf-c-text], [Doxyfile], [docs])
 AS_IF([test -z "$DX_DOXYGEN"], [have_doxygen=no], [have_doxygen=yes])
 
 # Checks for libraries.  Each defines a with_LIB var that can be
