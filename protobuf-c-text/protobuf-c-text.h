@@ -52,6 +52,8 @@
  *       https://github.com/protobuf-c/protobuf-c-rpc
  *     - Protobuf for C text format code:
  *       https://github.com/protobuf-c/protobuf-c-text
+ *     - Protobuf for C text format
+ *       <a href=coverage/index.html>test coverage</a>
  *
  * \section example Examples
  *

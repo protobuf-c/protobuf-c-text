@@ -1545,7 +1545,7 @@ clean-gcno:
 @HAVE_GCOV_TRUE@generate-coverage-html:
 @HAVE_GCOV_TRUE@	@echo Collecting coverage data
 @HAVE_GCOV_TRUE@	$(LCOV) --directory $(top_builddir) -b $(top_builddir) --capture --output-file coverage.info --no-checksum --compat-libtool
-@HAVE_GCOV_TRUE@	LANG=C $(GENHTML) --prefix $(top_builddir) --output-directory docs/html/coverage --title "PB-C-TEXT Code Coverage" --legend --show-details coverage.info
+@HAVE_GCOV_TRUE@	LANG=C $(GENHTML) --output-directory docs/html/coverage --title "PB-C-TEXT Code Coverage" --legend --show-details coverage.info
 
 @HAVE_GCOV_TRUE@clean-coverage-html: clean-gcda
 @HAVE_GCOV_TRUE@	@$(LCOV) --directory $(top_builddir) -z
