@@ -21,10 +21,7 @@
  * \date   March 2014
  */
 
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <errno.h>
-#include <fcntl.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>

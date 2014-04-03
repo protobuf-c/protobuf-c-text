@@ -13,7 +13,7 @@ libtool
 .deps/
 .dirstamp
 .libs/
-protobuf-c-text/libprotobuf-c-text.pc
+config.cache
 
 # Build products.
 *.pb-c.[ch]
@@ -22,6 +22,7 @@ protobuf-c-text/libprotobuf-c-text.pc
 *.lo
 *.o
 *.la
+protobuf-c-text/libprotobuf-c-text.pc
 
 # Code coverage files.
 /coverage.info

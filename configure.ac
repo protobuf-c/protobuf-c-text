@@ -20,17 +20,15 @@ AC_SUBST([LIBTOOL_DEPS])
 
 # Checks for programs.
 AC_PROG_CC
-AC_PROG_CXX
+AM_PROG_CC_C_O
 AC_PROG_INSTALL
 AC_PROG_GREP
-AC_PROG_MAKE_SET
 AC_ARG_VAR(PROTOC_C, [Protobuf C compiler.])
 AC_ARG_VAR(RE2C, [re2c lexical scanner C pre-processor.])
 AC_CHECK_PROG(PROTOC_C, protoc-c, protoc-c)
 AC_CHECK_PROG(RE2C, re2c, re2c)
 AS_IF([test -z "$RE2C"],
       [AC_MSG_ERROR([re2c is required!])])
-AM_PROG_CC_C_O
 PKG_PROG_PKG_CONFIG
 AS_IF([test -n "$PKG_CONFIG"],
   [ # Kludge for systems where the pkg-config install dir is simply wrong!
@@ -62,23 +60,20 @@ AC_CHECK_LIB([protobuf-c], [protobuf_c_message_get_packed_size],
 AC_CHECK_FUNCS([protobuf_c_message_check])
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h stdint.h stdlib.h string.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([stdint.h stdlib.h string.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
 AC_TYPE_INT32_T
 AC_TYPE_INT64_T
 AC_TYPE_SIZE_T
-AC_TYPE_UINT16_T
 AC_TYPE_UINT32_T
 AC_TYPE_UINT64_T
 AC_TYPE_UINT8_T
 
 # Checks for library functions.
-AC_FUNC_ERROR_AT_LINE
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
-AC_CHECK_FUNCS([memset strtoull strtod])
+AC_FUNC_STRTOD
+AC_CHECK_FUNCS([memset strtoull])
 
 # Generate files.
 AC_CONFIG_FILES([Makefile protobuf-c-text/libprotobuf-c-text.pc])

@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: libprotobuf-c-test
+Name: libprotobuf-c-text
 Description: Protobuf text format routines for C library
 Requires: libprotobuf-c
 Version: @VERSION@
