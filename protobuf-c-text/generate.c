@@ -102,8 +102,8 @@ rs_append(ReturnString *rs, int guess,
  * Add escape characters to strings for problematic characters.
  *
  * \param[in] src The unescaped string to process.
- * \param[in] len Length of \c str. Note that \str might have ASCII \c NULs
- *                so strlen() isn't good enough here.
+ * \param[in] len Length of \c src. Note that \c src might have ASCII
+ *                \c NULs so strlen() isn't good enough here.
  * \param[in] allocator allocator functions.
  * \return The fully escaped string, or \c NULL if there has been an
  *         allocation error.
