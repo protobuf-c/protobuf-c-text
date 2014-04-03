@@ -30,9 +30,9 @@ command you need to issue to reproduce the error.
 
 These can be generated locally in `docs/doxygen/html`. From time to time
 they are
-[published to the `gh-pages` branch](https://github.com/lyda/protobuf-c-text).
-Unfortunately I haven't yet automated this so the steps are rather
-involved.
+[published](http://lyda.github.io/protobuf-c-text/)
+to the `gh-pages` branch.  Unfortunately I haven't yet automated this
+so the steps are rather involved.
 
 The initial steps was done as follows.  This should not need to be repeated
 but is documented here for future projects.
