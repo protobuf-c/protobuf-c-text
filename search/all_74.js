@@ -1,10 +1,5 @@
 var searchData=
 [
-  ['text_5fformat_5ffrom_5ffile',['text_format_from_file',['../group__api.html#gab7ecd4f9cf489c74179a670256a7875f',1,'text_format_from_file(const ProtobufCMessageDescriptor *descriptor, FILE *msg_file, TextFormatResult *result, ProtobufCAllocator *allocator):&#160;parse.re'],['../group__api.html#gab7ecd4f9cf489c74179a670256a7875f',1,'text_format_from_file(const ProtobufCMessageDescriptor *descriptor, FILE *msg_file, TextFormatResult *result, ProtobufCAllocator *allocator):&#160;parse.re']]],
-  ['text_5fformat_5ffrom_5fstring',['text_format_from_string',['../group__api.html#ga396d614bbe2c076ca30052f47b783464',1,'text_format_from_string(const ProtobufCMessageDescriptor *descriptor, char *msg, TextFormatResult *result, ProtobufCAllocator *allocator):&#160;parse.re'],['../group__api.html#ga396d614bbe2c076ca30052f47b783464',1,'text_format_from_string(const ProtobufCMessageDescriptor *descriptor, char *msg, TextFormatResult *result, ProtobufCAllocator *allocator):&#160;parse.re']]],
-  ['text_5fformat_5fparse',['text_format_parse',['../group__base-parse.html#gaae7a840b93bd36e6779605f2336f99c3',1,'parse.re']]],
-  ['text_5fformat_5fto_5fstring',['text_format_to_string',['../group__api.html#ga629c40b009763a3bed04eff4452ac04b',1,'text_format_to_string(ProtobufCMessage *m, ProtobufCAllocator *allocator):&#160;generate.c'],['../group__api.html#ga629c40b009763a3bed04eff4452ac04b',1,'text_format_to_string(ProtobufCMessage *m, ProtobufCAllocator *allocator):&#160;generate.c']]],
-  ['text_5fformat_5fto_5fstring_5finternal',['text_format_to_string_internal',['../group__generate.html#gad1ef144587ba84afc6ff846fc77a7927',1,'generate.c']]],
   ['textformatresult',['TextFormatResult',['../struct_text_format_result.html',1,'']]],
   ['tok_5fbareword',['TOK_BAREWORD',['../group__lexer.html#gga770ae4c17b0067d74732cb004981f7dca72557a50ead7660f278b3677d6a5ecdb',1,'parse.re']]],
   ['tok_5fboolean',['TOK_BOOLEAN',['../group__lexer.html#gga770ae4c17b0067d74732cb004981f7dca86e6652aa292c8e978b68ace2b0f1300',1,'parse.re']]],

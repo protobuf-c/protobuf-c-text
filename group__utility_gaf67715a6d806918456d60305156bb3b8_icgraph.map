@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__generate.html#gad1ef144587ba84afc6ff846fc77a7927" title="Internal function to back API function." alt="" coords="136,5,331,35"/>
-<area shape="rect" id="node5" href="$group__api.html#ga629c40b009763a3bed04eff4452ac04b" title="Convert a ProtobufCMessage to a string." alt="" coords="380,5,524,35"/>
+<area shape="rect" id="node3" href="$group__generate.html#ga2e1ef254417a19863190fa840af64b5e" title="Internal function to back API function." alt="" coords="136,5,355,35"/>
+<area shape="rect" id="node5" href="$group__api.html#ga1dc8d12e5f0e5e071fec894d9ddad648" title="Convert a ProtobufCMessage to a string." alt="" coords="404,5,572,35"/>
 </map>

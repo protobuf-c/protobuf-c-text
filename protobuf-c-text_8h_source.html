@@ -80,35 +80,46 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">protobuf-c-text/protobuf-c-text.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="protobuf-c-text_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
-<a name="l00046"></a>00046 <span class="preprocessor">#ifndef PROTOBUF_C_TEXT_H</span>
-<a name="l00047"></a>00047 <span class="preprocessor"></span><span class="preprocessor">#define PROTOBUF_C_TEXT_H</span>
-<a name="l00048"></a>00048 <span class="preprocessor"></span>
-<a name="l00049"></a>00049 <span class="preprocessor">#include &lt;google/protobuf-c/protobuf-c.h&gt;</span>
-<a name="l00050"></a>00050 
-<a name="l00067"></a><a class="code" href="struct_text_format_result.html">00067</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>_TextFormatResult {
-<a name="l00068"></a><a class="code" href="struct_text_format_result.html#a9f78f554769ebd2721d2db8c8c6d4cce">00068</a>   <span class="keywordtype">int</span> *<a class="code" href="struct_text_format_result.html#a9f78f554769ebd2721d2db8c8c6d4cce" title="Error code.">error</a>;       
-<a name="l00069"></a><a class="code" href="struct_text_format_result.html#a483740f426017d0df4db1026a848e206">00069</a>   <span class="keywordtype">char</span> *<a class="code" href="struct_text_format_result.html#a483740f426017d0df4db1026a848e206" title="String with error message.">error_txt</a>;  
-<a name="l00070"></a><a class="code" href="struct_text_format_result.html#a520408f4775914f7510cc59db5a60b38">00070</a>   <span class="keywordtype">int</span> complete;     
-<a name="l00076"></a>00076 } <a class="code" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a>;
-<a name="l00077"></a>00077 
-<a name="l00097"></a>00097 <span class="keyword">extern</span> <span class="keywordtype">char</span> *<a class="code" href="group__api.html#ga629c40b009763a3bed04eff4452ac04b" title="Convert a ProtobufCMessage to a string.">text_format_to_string</a>(ProtobufCMessage *m,
-<a name="l00098"></a>00098     ProtobufCAllocator *allocator);
-<a name="l00099"></a>00099 
-<a name="l00114"></a>00114 <span class="keyword">extern</span> ProtobufCMessage *<a class="code" href="group__api.html#ga396d614bbe2c076ca30052f47b783464" title="Import a text format protobuf from a string into a ProtobufCMessage.">text_format_from_string</a>(
-<a name="l00115"></a>00115     <span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
-<a name="l00116"></a>00116     <span class="keywordtype">char</span> *msg,
-<a name="l00117"></a>00117     <a class="code" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a> *result,
-<a name="l00118"></a>00118     ProtobufCAllocator *allocator);
-<a name="l00119"></a>00119 
-<a name="l00134"></a>00134 <span class="keyword">extern</span> ProtobufCMessage *<a class="code" href="group__api.html#gab7ecd4f9cf489c74179a670256a7875f" title="Import a text format protobuf from a FILE into a ProtobufCMessage.">text_format_from_file</a>(
-<a name="l00135"></a>00135     <span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
-<a name="l00136"></a>00136     FILE *msg_file,
-<a name="l00137"></a>00137     <a class="code" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a> *result,
-<a name="l00138"></a>00138     ProtobufCAllocator *allocator);
-<a name="l00139"></a>00139    <span class="comment">/* End of API group. */</span>
-<a name="l00141"></a>00141 
-<a name="l00142"></a>00142 <span class="preprocessor">#endif </span><span class="comment">/* PROTOBUF_C_TEXT_H */</span>
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef PROTOBUF_C_TEXT_H</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define PROTOBUF_C_TEXT_H</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
+<a name="l00004"></a>00004 <span class="comment">/*</span>
+<a name="l00005"></a>00005 <span class="comment"> * \file</span>
+<a name="l00006"></a>00006 <span class="comment"> * Library header file.</span>
+<a name="l00007"></a>00007 <span class="comment"> * This is the header file for the text format protobuf routines.</span>
+<a name="l00008"></a>00008 <span class="comment"> * It contains declarations of all functions and data types exported by</span>
+<a name="l00009"></a>00009 <span class="comment"> * the library.</span>
+<a name="l00010"></a>00010 <span class="comment"> *</span>
+<a name="l00011"></a>00011 <span class="comment"> * \author Kevin Lyda &lt;kevin@ie.suberic.net&gt;</span>
+<a name="l00012"></a>00012 <span class="comment"> * \date   March 2014</span>
+<a name="l00013"></a>00013 <span class="comment"> *</span>
+<a name="l00014"></a>00014 <span class="comment"> */</span>
+<a name="l00015"></a>00015 
+<a name="l00103"></a>00103 <span class="preprocessor">#include &lt;google/protobuf-c/protobuf-c.h&gt;</span>
+<a name="l00104"></a>00104 
+<a name="l00121"></a><a class="code" href="struct_text_format_result.html">00121</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>_TextFormatResult {
+<a name="l00122"></a><a class="code" href="struct_text_format_result.html#a9f78f554769ebd2721d2db8c8c6d4cce">00122</a>   <span class="keywordtype">int</span> *<a class="code" href="struct_text_format_result.html#a9f78f554769ebd2721d2db8c8c6d4cce" title="Error code.">error</a>;       
+<a name="l00123"></a><a class="code" href="struct_text_format_result.html#a483740f426017d0df4db1026a848e206">00123</a>   <span class="keywordtype">char</span> *<a class="code" href="struct_text_format_result.html#a483740f426017d0df4db1026a848e206" title="String with error message.">error_txt</a>;  
+<a name="l00124"></a><a class="code" href="struct_text_format_result.html#a520408f4775914f7510cc59db5a60b38">00124</a>   <span class="keywordtype">int</span> complete;     
+<a name="l00130"></a>00130 } <a class="code" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a>;
+<a name="l00131"></a>00131 
+<a name="l00151"></a>00151 <span class="keyword">extern</span> <span class="keywordtype">char</span> *<a class="code" href="group__api.html#ga1dc8d12e5f0e5e071fec894d9ddad648" title="Convert a ProtobufCMessage to a string.">protobuf_c_text_to_string</a>(ProtobufCMessage *m,
+<a name="l00152"></a>00152     ProtobufCAllocator *allocator);
+<a name="l00153"></a>00153 
+<a name="l00173"></a>00173 <span class="keyword">extern</span> ProtobufCMessage *<a class="code" href="group__api.html#gac8be61c88376cebc36ab8712b85a1e65" title="Import a text format protobuf from a string into a ProtobufCMessage.">protobuf_c_text_from_string</a>(
+<a name="l00174"></a>00174     <span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
+<a name="l00175"></a>00175     <span class="keywordtype">char</span> *msg,
+<a name="l00176"></a>00176     <a class="code" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a> *result,
+<a name="l00177"></a>00177     ProtobufCAllocator *allocator);
+<a name="l00178"></a>00178 
+<a name="l00198"></a>00198 <span class="keyword">extern</span> ProtobufCMessage *<a class="code" href="group__api.html#gaf6fc77446596a7a5cc7987f9906cbe52" title="Import a text format protobuf from a FILE into a ProtobufCMessage.">protobuf_c_text_from_file</a>(
+<a name="l00199"></a>00199     <span class="keyword">const</span> ProtobufCMessageDescriptor *descriptor,
+<a name="l00200"></a>00200     FILE *msg_file,
+<a name="l00201"></a>00201     <a class="code" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a> *result,
+<a name="l00202"></a>00202     ProtobufCAllocator *allocator);
+<a name="l00203"></a>00203    <span class="comment">/* End of API group. */</span>
+<a name="l00205"></a>00205 
+<a name="l00206"></a>00206 <span class="preprocessor">#endif </span><span class="comment">/* PROTOBUF_C_TEXT_H */</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -127,7 +138,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 2 2014 23:13:36 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 3 2014 19:22:33 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

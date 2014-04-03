@@ -87,16 +87,16 @@ Collaboration diagram for Base parsing function:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static ProtobufCMessage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__base-parse.html#gaae7a840b93bd36e6779605f2336f99c3">text_format_parse</a> (const ProtobufCMessageDescriptor *descriptor, <a class="el" href="struct_scanner.html">Scanner</a> *scanner, <a class="el" href="struct_text_format_result.html">TextFormatResult</a> *result, ProtobufCAllocator *allocator)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Base function for the API functions.  <a href="#gaae7a840b93bd36e6779605f2336f99c3"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static ProtobufCMessage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__base-parse.html#ga939ff1c3f084e9532827a9dd3b214fda">protobuf_c_text_parse</a> (const ProtobufCMessageDescriptor *descriptor, <a class="el" href="struct_scanner.html">Scanner</a> *scanner, <a class="el" href="struct_text_format_result.html">TextFormatResult</a> *result, ProtobufCAllocator *allocator)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Base function for the API functions.  <a href="#ga939ff1c3f084e9532827a9dd3b214fda"></a><br/></td></tr>
 </table>
 <hr/><h2>Function Documentation</h2>
-<a class="anchor" id="gaae7a840b93bd36e6779605f2336f99c3"></a><!-- doxytag: member="parse.re::text_format_parse" ref="gaae7a840b93bd36e6779605f2336f99c3" args="(const ProtobufCMessageDescriptor *descriptor, Scanner *scanner, TextFormatResult *result, ProtobufCAllocator *allocator)" -->
+<a class="anchor" id="ga939ff1c3f084e9532827a9dd3b214fda"></a><!-- doxytag: member="parse.re::protobuf_c_text_parse" ref="ga939ff1c3f084e9532827a9dd3b214fda" args="(const ProtobufCMessageDescriptor *descriptor, Scanner *scanner, TextFormatResult *result, ProtobufCAllocator *allocator)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static ProtobufCMessage* <a class="el" href="group__base-parse.html#gaae7a840b93bd36e6779605f2336f99c3">text_format_parse</a> </td>
+          <td class="memname">static ProtobufCMessage* <a class="el" href="group__base-parse.html#ga939ff1c3f084e9532827a9dd3b214fda">protobuf_c_text_parse</a> </td>
           <td>(</td>
           <td class="paramtype">const ProtobufCMessageDescriptor *&#160;</td>
           <td class="paramname"><em>descriptor</em>, </td>
@@ -129,39 +129,39 @@ Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Base function for the API functions. </p>
-<p>The API functions take a string or a <code>FILE</code>. This function takes an appropriately initialised <code><a class="el" href="struct_scanner.html" title="Maintains state for successive calls to scan() .">Scanner</a></code> instead. After that it works the same as the text_format_from* family of functions.</p>
+<p>The API functions take a string or a <code>FILE</code>. This function takes an appropriately initialised <code><a class="el" href="struct_scanner.html" title="Maintains state for successive calls to scan() .">Scanner</a></code> instead. After that it works the same as the protobuf_c_text_from* family of functions.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramdir"></td><td class="paramname">descriptor</td><td>a <code>ProtobufCMessageDescriptor</code> of a message you want to deserialise. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">scanner</td><td>A <code><a class="el" href="struct_scanner.html" title="Maintains state for successive calls to scan() .">Scanner</a></code> which will be used by the FSM to parse the text format protobuf. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">result</td><td>A <code><a class="el" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a></code> instance to record any errors. It is not an option to pass NULL for this and it must be checked for errors. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">descriptor</td><td>a <code>ProtobufCMessageDescriptor</code> of a message you want to deserialise. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">scanner</td><td>A <code><a class="el" href="struct_scanner.html" title="Maintains state for successive calls to scan() .">Scanner</a></code> which will be used by the FSM to parse the text format protobuf. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">result</td><td>A <code><a class="el" href="struct_text_format_result.html" title="Structure for reporting API errors.">TextFormatResult</a></code> instance to record any errors. It is not an option to pass <code>NULL</code> for this and it must be checked for errors. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">allocator</td><td>Allocator functions. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd><code>NULL</code> on error. A <code>ProtobufCMessage</code> representation of the text format protobuf on success. </dd></dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l01188">1188</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l01189">1189</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>References <a class="el" href="protobuf-c-text_8h_source.html#l00070">TextFormatResult::complete</a>, <a class="el" href="parse_8re_source.html#l00493">State::error</a>, <a class="el" href="parse_8re_source.html#l00494">State::error_str</a>, <a class="el" href="protobuf-c-text_8h_source.html#l00069">TextFormatResult::error_txt</a>, <a class="el" href="parse_8re_source.html#l00108">Token::id</a>, <a class="el" href="parse_8re_source.html#l00490">State::msgs</a>, <a class="el" href="parse_8re_source.html#l00390">scan()</a>, <a class="el" href="parse_8re_source.html#l00232">scanner_free()</a>, <a class="el" href="parse_8re_source.html#l00473">STATE_DONE</a>, <a class="el" href="parse_8re_source.html#l00576">state_error()</a>, <a class="el" href="parse_8re_source.html#l00550">state_free()</a>, <a class="el" href="parse_8re_source.html#l00506">state_init()</a>, <a class="el" href="parse_8re_source.html#l00469">STATE_OPEN</a>, <a class="el" href="parse_8re_source.html#l01157">states</a>, <a class="el" href="parse_8re_source.html#l00099">TOK_MALLOC_ERR</a>, and <a class="el" href="parse_8re_source.html#l00160">token_free()</a>.</p>
+<p>References <a class="el" href="protobuf-c-text_8h_source.html#l00124">TextFormatResult::complete</a>, <a class="el" href="parse_8re_source.html#l00494">State::error</a>, <a class="el" href="parse_8re_source.html#l00495">State::error_str</a>, <a class="el" href="protobuf-c-text_8h_source.html#l00123">TextFormatResult::error_txt</a>, <a class="el" href="parse_8re_source.html#l00109">Token::id</a>, <a class="el" href="parse_8re_source.html#l00491">State::msgs</a>, <a class="el" href="parse_8re_source.html#l00391">scan()</a>, <a class="el" href="parse_8re_source.html#l00233">scanner_free()</a>, <a class="el" href="parse_8re_source.html#l00474">STATE_DONE</a>, <a class="el" href="parse_8re_source.html#l00577">state_error()</a>, <a class="el" href="parse_8re_source.html#l00551">state_free()</a>, <a class="el" href="parse_8re_source.html#l00507">state_init()</a>, <a class="el" href="parse_8re_source.html#l00470">STATE_OPEN</a>, <a class="el" href="parse_8re_source.html#l01158">states</a>, <a class="el" href="parse_8re_source.html#l00100">TOK_MALLOC_ERR</a>, and <a class="el" href="parse_8re_source.html#l00161">token_free()</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01241">text_format_from_file()</a>, and <a class="el" href="parse_8re_source.html#l01253">text_format_from_string()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01242">protobuf_c_text_from_file()</a>, and <a class="el" href="parse_8re_source.html#l01254">protobuf_c_text_from_string()</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="group__base-parse_gaae7a840b93bd36e6779605f2336f99c3_cgraph.png" border="0" usemap="#group__base-parse_gaae7a840b93bd36e6779605f2336f99c3_cgraph" alt=""/></div>
-<map name="group__base-parse_gaae7a840b93bd36e6779605f2336f99c3_cgraph" id="group__base-parse_gaae7a840b93bd36e6779605f2336f99c3_cgraph">
-<area shape="rect" id="node3" href="group__lexer.html#ga2236f93417b0b61c385caccc1cd96018" title="Generated lexer." alt="" coords="205,5,256,35"/><area shape="rect" id="node5" href="group__lexer.html#ga94db8310f699ee3766ae89362d34d706" title="Free data internal to the Scanner instance." alt="" coords="183,59,279,88"/><area shape="rect" id="node7" href="group__state.html#ga17dd60cf1ed75d012394a46803c39c05" title="Handle an error in the FSM." alt="" coords="189,112,272,141"/><area shape="rect" id="node9" href="group__state.html#gad47c89d0626c1012c7a8465a41da6ea6" title="Free internal data in a State struct." alt="" coords="191,165,271,195"/><area shape="rect" id="node11" href="group__state.html#gab4364f83c27b569c0b1431a8b0ea5c79" title="Initialise a State struct." alt="" coords="193,219,268,248"/><area shape="rect" id="node13" href="group__lexer.html#ga398d3363d0a261109e93b26e20d60d4b" title="Frees memory allocated in a Token instance." alt="" coords="189,272,272,301"/></map>
+<div class="center"><img src="group__base-parse_ga939ff1c3f084e9532827a9dd3b214fda_cgraph.png" border="0" usemap="#group__base-parse_ga939ff1c3f084e9532827a9dd3b214fda_cgraph" alt=""/></div>
+<map name="group__base-parse_ga939ff1c3f084e9532827a9dd3b214fda_cgraph" id="group__base-parse_ga939ff1c3f084e9532827a9dd3b214fda_cgraph">
+<area shape="rect" id="node3" href="group__lexer.html#ga2236f93417b0b61c385caccc1cd96018" title="Generated lexer." alt="" coords="229,5,280,35"/><area shape="rect" id="node5" href="group__lexer.html#ga94db8310f699ee3766ae89362d34d706" title="Free data internal to the Scanner instance." alt="" coords="207,59,303,88"/><area shape="rect" id="node7" href="group__state.html#ga17dd60cf1ed75d012394a46803c39c05" title="Handle an error in the FSM." alt="" coords="213,112,296,141"/><area shape="rect" id="node9" href="group__state.html#gad47c89d0626c1012c7a8465a41da6ea6" title="Free internal data in a State struct." alt="" coords="215,165,295,195"/><area shape="rect" id="node11" href="group__state.html#gab4364f83c27b569c0b1431a8b0ea5c79" title="Initialise a State struct." alt="" coords="217,219,292,248"/><area shape="rect" id="node13" href="group__lexer.html#ga398d3363d0a261109e93b26e20d60d4b" title="Frees memory allocated in a Token instance." alt="" coords="213,272,296,301"/></map>
 </div>
 </p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="group__base-parse_gaae7a840b93bd36e6779605f2336f99c3_icgraph.png" border="0" usemap="#group__base-parse_gaae7a840b93bd36e6779605f2336f99c3_icgraph" alt=""/></div>
-<map name="group__base-parse_gaae7a840b93bd36e6779605f2336f99c3_icgraph" id="group__base-parse_gaae7a840b93bd36e6779605f2336f99c3_icgraph">
-<area shape="rect" id="node3" href="group__api.html#gab7ecd4f9cf489c74179a670256a7875f" title="Import a text format protobuf from a FILE into a ProtobufCMessage." alt="" coords="189,5,333,35"/><area shape="rect" id="node5" href="group__api.html#ga396d614bbe2c076ca30052f47b783464" title="Import a text format protobuf from a string into a ProtobufCMessage." alt="" coords="181,59,341,88"/></map>
+<div class="center"><img src="group__base-parse_ga939ff1c3f084e9532827a9dd3b214fda_icgraph.png" border="0" usemap="#group__base-parse_ga939ff1c3f084e9532827a9dd3b214fda_icgraph" alt=""/></div>
+<map name="group__base-parse_ga939ff1c3f084e9532827a9dd3b214fda_icgraph" id="group__base-parse_ga939ff1c3f084e9532827a9dd3b214fda_icgraph">
+<area shape="rect" id="node3" href="group__api.html#gaf6fc77446596a7a5cc7987f9906cbe52" title="Import a text format protobuf from a FILE into a ProtobufCMessage." alt="" coords="213,5,381,35"/><area shape="rect" id="node5" href="group__api.html#gac8be61c88376cebc36ab8712b85a1e65" title="Import a text format protobuf from a string into a ProtobufCMessage." alt="" coords="205,59,389,88"/></map>
 </div>
 </p>
 
@@ -185,7 +185,7 @@ Here is the caller graph for this function:</div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 2 2014 23:13:36 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 3 2014 19:22:33 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

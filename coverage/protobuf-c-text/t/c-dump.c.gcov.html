@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - PB-C-TEXT Code Coverage - protobuf-c-text/t/c-dump.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">protobuf-c-text/t</a> - c-dump.c<span style="font-size: 80%;"> (source / <a href="c-dump.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">PB-C-TEXT Code Coverage</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">22</td>
+            <td class="headerCovTableEntry">26</td>
+            <td class="headerCovTableEntryMed">84.6 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2014-04-03</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+            | Branches:
+            <span class="coverLegendCov">+</span> taken
+            <span class="coverLegendNoCov">-</span> not taken
+            <span class="coverLegendNoCov">#</span> not executed
+</td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryLo">62.5 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &lt;sys/types.h&gt;</a>
+<span class="lineNum">       2 </span>                :            : #include &lt;unistd.h&gt;
+<span class="lineNum">       3 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">       4 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">       5 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">       6 </span>                :            : #include &lt;google/protobuf-c/protobuf-c.h&gt;
+<span class="lineNum">       7 </span>                :            : #include &quot;protobuf-c-text/protobuf-c-text.h&quot;
+<span class="lineNum">       8 </span>                :            : #include &quot;addressbook.pb-c.h&quot;
+<span class="lineNum">       9 </span>                :            : #include &quot;broken-alloc.h&quot;
+<span class="lineNum">      10 </span>                :            : 
+<span class="lineNum">      11 </span>                :            : #define CHUNK 1024
+<span class="lineNum">      12 </span>                :            : 
+<span class="lineNum">      13 </span>                :            : Tutorial__AddressBook *ab;
+<a name="14"><span class="lineNum">      14 </span>                :            : </a>
+<span class="lineNum">      15 </span>                :            : Tutorial__AddressBook *
+<span class="lineNum">      16 </span>                :<span class="lineCov">        301 : read_addressbook(char *filename)</span>
+<span class="lineNum">      17 </span>                :            : {
+<span class="lineNum">      18 </span>                :            :   FILE *f;
+<span class="lineNum">      19 </span>                :<span class="lineCov">        301 :   int bufsize = 0, bytes, bytes_total = 0;</span>
+<span class="lineNum">      20 </span>                :<span class="lineCov">        301 :   char *buf = NULL;</span>
+<span class="lineNum">      21 </span>                :            :   Tutorial__AddressBook *ab;
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :<span class="lineCov">        301 :   f = fopen(filename, &quot;r&quot;);</span>
+<span class="lineNum">      24 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 301 times"> + </span>]:<span class="lineCov">        301 :   if (!f) {</span>
+<span class="lineNum">      25 </span>                :<span class="lineNoCov">          0 :     printf(&quot;Can't open addressbook file '%s'.\n&quot;, filename);</span>
+<span class="lineNum">      26 </span>                :<span class="lineNoCov">          0 :     exit(1);</span>
+<span class="lineNum">      27 </span>                :            :   }
+<span class="lineNum">      28 </span>                :            :   do {
+<span class="lineNum">      29 </span>                :<span class="lineCov">        301 :     bufsize += CHUNK;</span>
+<span class="lineNum">      30 </span>                :<span class="lineCov">        301 :     buf = realloc(buf, bufsize);</span>
+<span class="lineNum">      31 </span>                :<span class="lineCov">        301 :     bytes = fread(buf + bytes_total, 1, CHUNK, f);</span>
+<span class="lineNum">      32 </span>                :<span class="lineCov">        301 :     bytes_total += bytes;</span>
+<span class="lineNum">      33 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 301 times"> + </span>]:<span class="lineCov">        301 :   } while (bytes == CHUNK);</span>
+<span class="lineNum">      34 </span>                :<span class="lineCov">        301 :   ab = tutorial__address_book__unpack(NULL, bytes_total, buf);</span>
+<span class="lineNum">      35 </span>                :<span class="lineCov">        301 :   free(buf);</span>
+<span class="lineNum">      36 </span>                :<span class="lineCov">        301 :   return ab;</span>
+<span class="lineNum">      37 </span>                :            : }
+<a name="38"><span class="lineNum">      38 </span>                :            : </a>
+<span class="lineNum">      39 </span>                :            : int
+<span class="lineNum">      40 </span>                :<span class="lineCov">        301 : main(int argc, char *argv[])</span>
+<span class="lineNum">      41 </span>                :            : {
+<span class="lineNum">      42 </span>                :            :   char *s;
+<span class="lineNum">      43 </span>                :            : 
+<span class="lineNum">      44 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 301 times"> + </span>]:<span class="lineCov">        301 :   if (argc != 2) {</span>
+<span class="lineNum">      45 </span>                :<span class="lineNoCov">          0 :     printf(&quot;Must supply address book file.\n&quot;);</span>
+<span class="lineNum">      46 </span>                :<span class="lineNoCov">          0 :     exit(1);</span>
+<span class="lineNum">      47 </span>                :            :   }
+<span class="lineNum">      48 </span>                :            : 
+<span class="lineNum">      49 </span>                :<span class="lineCov">        301 :   ab = read_addressbook(argv[1]);</span>
+<span class="lineNum">      50 </span>                :            : 
+<span class="lineNum">      51 </span>                :<span class="lineCov">        301 :   s = protobuf_c_text_to_string((ProtobufCMessage *)ab, &amp;broken_allocator);</span>
+<span class="lineNum">      52 </span>        [<span class="branchCov" title="Branch 0 was taken 271 times"> + </span><span class="branchCov" title="Branch 1 was taken 30 times"> + </span>]:<span class="lineCov">        301 :   if (s) {</span>
+<span class="lineNum">      53 </span>                :<span class="lineCov">        271 :     printf(&quot;%s&quot;, s);</span>
+<span class="lineNum">      54 </span>                :<span class="lineCov">        271 :     free(s);</span>
+<span class="lineNum">      55 </span>                :            :   } else {
+<span class="lineNum">      56 </span>                :<span class="lineCov">         30 :     printf(&quot;ERROR: Failed to generate text format.\n&quot;);</span>
+<span class="lineNum">      57 </span>                :            :   }
+<span class="lineNum">      58 </span>                :            : 
+<span class="lineNum">      59 </span>                :<span class="lineCov">        301 :   return 0;</span>
+<span class="lineNum">      60 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

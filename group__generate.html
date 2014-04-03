@@ -89,8 +89,8 @@ Collaboration diagram for Functions to generate text format proto bufs:</div>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__generate.html#ga3cda708db3cc3794d0bbc3c32519a4e3">esc_str</a> (char *src, int len, ProtobufCAllocator *allocator)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Escape string.  <a href="#ga3cda708db3cc3794d0bbc3c32519a4e3"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__generate.html#gad1ef144587ba84afc6ff846fc77a7927">text_format_to_string_internal</a> (<a class="el" href="struct_return_string.html">ReturnString</a> *rs, int level, ProtobufCMessage *m, const ProtobufCMessageDescriptor *d, ProtobufCAllocator *allocator)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal function to back API function.  <a href="#gad1ef144587ba84afc6ff846fc77a7927"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__generate.html#ga2e1ef254417a19863190fa840af64b5e">protobuf_c_text_to_string_internal</a> (<a class="el" href="struct_return_string.html">ReturnString</a> *rs, int level, ProtobufCMessage *m, const ProtobufCMessageDescriptor *d, ProtobufCAllocator *allocator)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal function to back API function.  <a href="#ga2e1ef254417a19863190fa840af64b5e"></a><br/></td></tr>
 </table>
 <hr/><h2>Function Documentation</h2>
 <a class="anchor" id="ga3cda708db3cc3794d0bbc3c32519a4e3"></a><!-- doxytag: member="generate.c::esc_str" ref="ga3cda708db3cc3794d0bbc3c32519a4e3" args="(char *src, int len, ProtobufCAllocator *allocator)" -->
@@ -129,34 +129,34 @@ Functions</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">src</td><td>The unescaped string to process. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">len</td><td>Length of <code>str</code>. Note that  might have ASCII <code>NULs</code> so strlen() isn't good enough here. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">len</td><td>Length of <code>src</code>. Note that <code>src</code> might have ASCII <code>NULs</code> so strlen() isn't good enough here. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">allocator</td><td>allocator functions. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The fully escaped string, or <code>NULL</code> if there has been an allocation error. </dd></dl>
 
-<p>Definition at line <a class="el" href="generate_8c_source.html#l00113">113</a> of file <a class="el" href="generate_8c_source.html">generate.c</a>.</p>
+<p>Definition at line <a class="el" href="generate_8c_source.html#l00112">112</a> of file <a class="el" href="generate_8c_source.html">generate.c</a>.</p>
 
-<p>Referenced by <a class="el" href="generate_8c_source.html#l00185">text_format_to_string_internal()</a>.</p>
+<p>Referenced by <a class="el" href="generate_8c_source.html#l00184">protobuf_c_text_to_string_internal()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__generate_ga3cda708db3cc3794d0bbc3c32519a4e3_icgraph.png" border="0" usemap="#group__generate_ga3cda708db3cc3794d0bbc3c32519a4e3_icgraph" alt=""/></div>
 <map name="group__generate_ga3cda708db3cc3794d0bbc3c32519a4e3_icgraph" id="group__generate_ga3cda708db3cc3794d0bbc3c32519a4e3_icgraph">
-<area shape="rect" id="node3" href="group__generate.html#gad1ef144587ba84afc6ff846fc77a7927" title="Internal function to back API function." alt="" coords="120,5,315,35"/><area shape="rect" id="node5" href="group__api.html#ga629c40b009763a3bed04eff4452ac04b" title="Convert a ProtobufCMessage to a string." alt="" coords="364,5,508,35"/></map>
+<area shape="rect" id="node3" href="group__generate.html#ga2e1ef254417a19863190fa840af64b5e" title="Internal function to back API function." alt="" coords="120,5,339,35"/><area shape="rect" id="node5" href="group__api.html#ga1dc8d12e5f0e5e071fec894d9ddad648" title="Convert a ProtobufCMessage to a string." alt="" coords="388,5,556,35"/></map>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="gad1ef144587ba84afc6ff846fc77a7927"></a><!-- doxytag: member="generate.c::text_format_to_string_internal" ref="gad1ef144587ba84afc6ff846fc77a7927" args="(ReturnString *rs, int level, ProtobufCMessage *m, const ProtobufCMessageDescriptor *d, ProtobufCAllocator *allocator)" -->
+<a class="anchor" id="ga2e1ef254417a19863190fa840af64b5e"></a><!-- doxytag: member="generate.c::protobuf_c_text_to_string_internal" ref="ga2e1ef254417a19863190fa840af64b5e" args="(ReturnString *rs, int level, ProtobufCMessage *m, const ProtobufCMessageDescriptor *d, ProtobufCAllocator *allocator)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static void <a class="el" href="group__generate.html#gad1ef144587ba84afc6ff846fc77a7927">text_format_to_string_internal</a> </td>
+          <td class="memname">static void <a class="el" href="group__generate.html#ga2e1ef254417a19863190fa840af64b5e">protobuf_c_text_to_string_internal</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_return_string.html">ReturnString</a> *&#160;</td>
           <td class="paramname"><em>rs</em>, </td>
@@ -207,27 +207,27 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="generate_8c_source.html#l00185">185</a> of file <a class="el" href="generate_8c_source.html">generate.c</a>.</p>
+<p>Definition at line <a class="el" href="generate_8c_source.html#l00184">184</a> of file <a class="el" href="generate_8c_source.html">generate.c</a>.</p>
 
-<p>References <a class="el" href="generate_8c_source.html#l00113">esc_str()</a>, <a class="el" href="generate_8c_source.html#l00036">ReturnString::malloc_err</a>, <a class="el" href="generate_8c_source.html#l00059">rs_append()</a>, and <a class="el" href="generate_8c_source.html#l00039">ReturnString::s</a>.</p>
+<p>References <a class="el" href="generate_8c_source.html#l00112">esc_str()</a>, <a class="el" href="generate_8c_source.html#l00035">ReturnString::malloc_err</a>, <a class="el" href="generate_8c_source.html#l00058">rs_append()</a>, and <a class="el" href="generate_8c_source.html#l00038">ReturnString::s</a>.</p>
 
-<p>Referenced by <a class="el" href="generate_8c_source.html#l00507">text_format_to_string()</a>.</p>
+<p>Referenced by <a class="el" href="generate_8c_source.html#l00506">protobuf_c_text_to_string()</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="group__generate_gad1ef144587ba84afc6ff846fc77a7927_cgraph.png" border="0" usemap="#group__generate_gad1ef144587ba84afc6ff846fc77a7927_cgraph" alt=""/></div>
-<map name="group__generate_gad1ef144587ba84afc6ff846fc77a7927_cgraph" id="group__generate_gad1ef144587ba84afc6ff846fc77a7927_cgraph">
-<area shape="rect" id="node3" href="group__generate.html#ga3cda708db3cc3794d0bbc3c32519a4e3" title="Escape string." alt="" coords="257,5,321,35"/><area shape="rect" id="node5" href="group__utility.html#gaf67715a6d806918456d60305156bb3b8" title="Append a string to the ReturnString." alt="" coords="248,59,331,88"/></map>
+<div class="center"><img src="group__generate_ga2e1ef254417a19863190fa840af64b5e_cgraph.png" border="0" usemap="#group__generate_ga2e1ef254417a19863190fa840af64b5e_cgraph" alt=""/></div>
+<map name="group__generate_ga2e1ef254417a19863190fa840af64b5e_cgraph" id="group__generate_ga2e1ef254417a19863190fa840af64b5e_cgraph">
+<area shape="rect" id="node3" href="group__generate.html#ga3cda708db3cc3794d0bbc3c32519a4e3" title="Escape string." alt="" coords="281,5,345,35"/><area shape="rect" id="node5" href="group__utility.html#gaf67715a6d806918456d60305156bb3b8" title="Append a string to the ReturnString." alt="" coords="272,59,355,88"/></map>
 </div>
 </p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="group__generate_gad1ef144587ba84afc6ff846fc77a7927_icgraph.png" border="0" usemap="#group__generate_gad1ef144587ba84afc6ff846fc77a7927_icgraph" alt=""/></div>
-<map name="group__generate_gad1ef144587ba84afc6ff846fc77a7927_icgraph" id="group__generate_gad1ef144587ba84afc6ff846fc77a7927_icgraph">
-<area shape="rect" id="node3" href="group__api.html#ga629c40b009763a3bed04eff4452ac04b" title="Convert a ProtobufCMessage to a string." alt="" coords="249,5,393,35"/></map>
+<div class="center"><img src="group__generate_ga2e1ef254417a19863190fa840af64b5e_icgraph.png" border="0" usemap="#group__generate_ga2e1ef254417a19863190fa840af64b5e_icgraph" alt=""/></div>
+<map name="group__generate_ga2e1ef254417a19863190fa840af64b5e_icgraph" id="group__generate_ga2e1ef254417a19863190fa840af64b5e_icgraph">
+<area shape="rect" id="node3" href="group__api.html#ga1dc8d12e5f0e5e071fec894d9ddad648" title="Convert a ProtobufCMessage to a string." alt="" coords="273,5,441,35"/></map>
 </div>
 </p>
 
@@ -251,7 +251,7 @@ Here is the caller graph for this function:</div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 2 2014 23:13:36 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 3 2014 19:22:33 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

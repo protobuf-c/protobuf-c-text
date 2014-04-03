@@ -144,18 +144,18 @@ Functions</h2></td></tr>
 <p>Similar to <code>realloc</code>, but using ProtobufCAllocator functions to do the memory manipulations.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">ptr</td><td>Memory to realloc. </td></tr>
-    <tr><td class="paramname">old_size</td><td>The size of ptr before realloc. </td></tr>
-    <tr><td class="paramname">size</td><td>The desired size of ptr after realloc. </td></tr>
-    <tr><td class="paramname">allocator</td><td>The functions to use to achieve this. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">ptr</td><td>Memory to realloc. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">old_size</td><td>The size of ptr before realloc. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The desired size of ptr after realloc. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">allocator</td><td>The functions to use to achieve this. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>NULL on realloc failure - note <code>ptr</code> isn't freed in this case. The new, <code>size</code> sized pointer (and <code>ptr</code> is freed in this case). </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd><code>NULL</code> on realloc failure - note <code>ptr</code> isn't freed in this case. The new, <code>size</code> sized pointer (and <code>ptr</code> is freed in this case). </dd></dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00055">55</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00056">56</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l00664">state_assignment()</a>, and <a class="el" href="parse_8re_source.html#l00772">state_value()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l00665">state_assignment()</a>, and <a class="el" href="parse_8re_source.html#l00773">state_value()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -224,16 +224,16 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="generate_8c_source.html#l00059">59</a> of file <a class="el" href="generate_8c_source.html">generate.c</a>.</p>
+<p>Definition at line <a class="el" href="generate_8c_source.html#l00058">58</a> of file <a class="el" href="generate_8c_source.html">generate.c</a>.</p>
 
-<p>Referenced by <a class="el" href="generate_8c_source.html#l00185">text_format_to_string_internal()</a>.</p>
+<p>Referenced by <a class="el" href="generate_8c_source.html#l00184">protobuf_c_text_to_string_internal()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__utility_gaf67715a6d806918456d60305156bb3b8_icgraph.png" border="0" usemap="#group__utility_gaf67715a6d806918456d60305156bb3b8_icgraph" alt=""/></div>
 <map name="group__utility_gaf67715a6d806918456d60305156bb3b8_icgraph" id="group__utility_gaf67715a6d806918456d60305156bb3b8_icgraph">
-<area shape="rect" id="node3" href="group__generate.html#gad1ef144587ba84afc6ff846fc77a7927" title="Internal function to back API function." alt="" coords="136,5,331,35"/><area shape="rect" id="node5" href="group__api.html#ga629c40b009763a3bed04eff4452ac04b" title="Convert a ProtobufCMessage to a string." alt="" coords="380,5,524,35"/></map>
+<area shape="rect" id="node3" href="group__generate.html#ga2e1ef254417a19863190fa840af64b5e" title="Internal function to back API function." alt="" coords="136,5,355,35"/><area shape="rect" id="node5" href="group__api.html#ga1dc8d12e5f0e5e071fec894d9ddad648" title="Convert a ProtobufCMessage to a string." alt="" coords="404,5,572,35"/></map>
 </div>
 </p>
 
@@ -257,7 +257,7 @@ Here is the caller graph for this function:</div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 2 2014 23:13:36 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 3 2014 19:22:33 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
