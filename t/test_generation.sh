@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-if [[ -z "$srcdir" ]]; then
+if [ -z "$srcdir" ]; then
   srcdir=.
 fi
 
@@ -28,15 +28,15 @@ fi
 
 echo -n "Testing broken malloc"
 i=0
-exit_code=1
-# while [[ $exit_code -ne 0 && $i -lt 100 ]]; do
-while [[ $i -lt 300 ]]; do
+export BROKEN_MALLOC_SENTINAL=.broken_malloc
+while [ $i -lt 300 ]; do
   echo -n .
   rm -f t/broken.text
+  touch "$BROKEN_MALLOC_SENTINAL"
   BROKEN_MALLOC=$i ./t/c-dump $srcdir/t/addressbook.data \
     > t/broken.text
   exit_code=$?
-  if [[ $exit_code -ne 0 ]]; then
+  if [ $exit_code -ne 0 ]; then
     if ! $GREP ERROR t/broken.text > /dev/null 2>&1; then
       cat << EOF
 ERROR: This should have failed.
@@ -45,10 +45,18 @@ Debug:
 BROKEN_MALLOC=$i gdb ./t/c-dump
 run $srcdir/t/addressbook.data > t/broken.text
 EOF
+      rm "$BROKEN_MALLOC_SENTINAL"
+      echo
       exit 1
     fi
   fi
-  i=$(($i + 1))
+  i=`expr $i + 1`
   rm t/broken.text
+  if [ -f "$BROKEN_MALLOC_SENTINAL" ]; then
+    rm "$BROKEN_MALLOC_SENTINAL"
+    echo
+    exit 0
+  fi
 done
 echo
+rm "$BROKEN_MALLOC_SENTINAL"

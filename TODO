@@ -1,6 +1,4 @@
 Memory allocation:
-  * Have broken malloc set a sentinal file which it removes when it makes
-    malloc fail.  Loop until the sentinal file remains.
   * Script this for the tests:
     https://www.gnu.org/software/libc/manual/html_node/Allocation-Debugging.html
 
@@ -8,9 +6,3 @@ Error propogation:
   * Use TextFormatResult to propagate errors in generate.c.
   * Set error in TextFormatResult.  (done?)
   * Rename TextFormatResult to TextFormatError.
-
-Documentation:
-  * On the \mainpage provide the following:
-    * An example .proto  (PonyCoptor class)
-    * An example text format protobuf based on that.
-    * Code to read and write it.

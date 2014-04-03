@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <google/protobuf-c/protobuf-c.h>
 
-
 static void *
 broken_alloc(void *allocator_data, size_t size)
 {
@@ -16,12 +15,17 @@ broken_alloc(void *allocator_data, size_t size)
   if (not_broken < 0 && $BROKEN_MALLOC) {
     not_broken = atoi($BROKEN_MALLOC);
   }
-  if ($BROKEN_MALLOC) {
+  if ($BROKEN_MALLOC && not_broken > 0) {
     not_broken--;
   }
   if (not_broken) {
     return malloc(size);
   } else {
+    char *$BROKEN_MALLOC_SENTINAL = getenv("BROKEN_MALLOC_SENTINAL");
+
+    if ($BROKEN_MALLOC_SENTINAL) {
+      unlink($BROKEN_MALLOC_SENTINAL);
+    }
     if (getenv("BROKEN_MALLOC_SEGV")) {
       kill(getpid(), SIGSEGV);
     }
