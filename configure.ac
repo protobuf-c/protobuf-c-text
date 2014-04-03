@@ -22,6 +22,7 @@ AC_SUBST([LIBTOOL_DEPS])
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
+AC_PROG_GREP
 AC_PROG_MAKE_SET
 AC_ARG_VAR(PROTOC_C, [Protobuf C compiler.])
 AC_ARG_VAR(RE2C, [re2c lexical scanner C pre-processor.])
@@ -34,7 +35,7 @@ PKG_PROG_PKG_CONFIG
 AS_IF([test -n "$PKG_CONFIG"],
   [ # Kludge for systems where the pkg-config install dir is simply wrong!
     AS_IF([$PKG_CONFIG --variable=pc_path pkg-config 2>/dev/null \
-                       | grep -q /libdata/],
+                       | $(GREP) /libdata/ 2>&1 > /dev/null],
           [PKG_INSTALLDIR(['${prefix}/libdata/pkgconfig'])],
           [PKG_INSTALLDIR])],
   [ # This should never be reached.

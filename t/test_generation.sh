@@ -37,7 +37,7 @@ while [[ $i -lt 300 ]]; do
     > t/broken.text
   exit_code=$?
   if [[ $exit_code -ne 0 ]]; then
-    if ! grep -q ERROR t/broken.text; then
+    if ! $GREP ERROR t/broken.text > /dev/null 2>&1; then
       cat << EOF
 ERROR: This should have failed.
 BROKEN_MALLOC=$i ./t/c-dump $srcdir/t/addressbook.data \

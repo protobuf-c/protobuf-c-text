@@ -1513,6 +1513,7 @@ uninstall-man: uninstall-man3
 	uninstall-libprotobuf_c_textHEADERS uninstall-man \
 	uninstall-man3 uninstall-pkgconfigDATA
 
+export GREP
 
 valgrind: $(check_PROGRAMS)
 	@t/valgrind.test_generation.sh

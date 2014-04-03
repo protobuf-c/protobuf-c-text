@@ -21,7 +21,7 @@ fi
 rm -f t/broken_parse.data
 for text in $srcdir/t/broken/*.text; do
   ./t/c-parse t/broken_parse.data < $text > t/broken_parse.out
-  if ! grep -q ERROR t/broken_parse.out; then
+  if ! $GREP ERROR t/broken_parse.out > /dev/null 2>&1; then
     echo "./t/c-parse t/broken_parse.data < $text"
     echo "This didn't fail as expected."
     exit 1;
@@ -56,7 +56,7 @@ fi
 rm -f t/broken_parse.data
 for text in $srcdir/t/broken2/*.text; do
   ./t/c-parse2 t/broken_parse.data < $text > t/broken_parse.out
-  if ! grep -q ERROR t/broken_parse.out; then
+  if ! $GREP ERROR t/broken_parse.out > /dev/null 2>&1; then
     echo "./t/c-parse2 t/broken_parse.data < $text"
     echo "This didn't fail as expected."
     exit 1;
@@ -80,7 +80,7 @@ while [[ $i -lt 300 ]]; do
     < t/addressbook.c.text > t/broken_parse.out
   exit_code=$?
   if [[ $exit_code -ne 0 ]]; then
-    if ! grep -q ERROR t/broken_parse.out; then
+    if ! $GREP ERROR t/broken_parse.out > /dev/null 2>&1; then
       cat << EOF
 ERROR: This should have failed.
 Debug:
@@ -95,7 +95,7 @@ EOF
     < t/tutorial_test.c.text > t/broken_parse.out
   exit_code=$?
   if [[ $exit_code -ne 0 ]]; then
-    if ! grep -q ERROR t/broken_parse.out; then
+    if ! $GREP ERROR t/broken_parse.out > /dev/null 2>&1; then
       cat << EOF
 ERROR: This should have failed.
 Debug:

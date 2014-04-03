@@ -3,6 +3,7 @@ PROTOBUF_C_TEST_SRCS = t/addressbook.pb-c.c
 PROTOBUF_C_TEST_HDRS = $(patsubst %.c,%.h,$(PROTOBUF_C_TEST_SRCS) \
 				          $(PROTOBUF_C_TEST_SRCS))
 AM_CFLAGS = -I $(srcdir)/protobuf-c-text
+export GREP
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
 TESTS = $(srcdir)/t/test_generation.sh $(srcdir)/t/test_parse.sh t/test_msgs
