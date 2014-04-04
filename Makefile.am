@@ -31,9 +31,9 @@ protobuf_c_text_libprotobuf_c_text_la_CFLAGS = $(AM_CFLAGS) $(COVERAGE_CFLAGS)
 # 2. If any interfaces have been removed or changed since the last release,
 #    set revision and age to 0 and increment current (c:r:a becomes c+1:0:0).
 # 3. If interfaces have only been added since the last release, set
-#    release to 0 and increment release and age (c:r:a becomes c+1:0:a+1).
+#    release to 0 and increment current and age (c:r:a becomes c+1:0:a+1).
 protobuf_c_text_libprotobuf_c_text_la_LDFLAGS = \
-	$(COVERAGE_LDFLAGS) -version-info 1:0:0
+	$(COVERAGE_LDFLAGS) -version-info 2:0:0
 
 # Headers for libraries.
 libprotobuf_c_textdir = $(includedir)/google/protobuf-c

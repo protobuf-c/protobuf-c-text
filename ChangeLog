@@ -1,0 +1,5 @@
+protobuf-c-text (1.0.0-rc1)
+
+  [ Kevin Lyda ]
+  * [27c10e0..147bfcc] First pass at text format protobuf support.
+  * Published docs at http://text.protobuf-c.io/
