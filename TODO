@@ -1,3 +1,7 @@
 Memory allocation:
   * Script this for the tests:
     https://www.gnu.org/software/libc/manual/html_node/Allocation-Debugging.html
+
+Packaging:
+  * Ubuntu PPA?
+  * homebrew?

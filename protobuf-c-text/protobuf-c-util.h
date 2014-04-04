@@ -17,12 +17,15 @@
 
 /* These are lifted from the protobuf-c lib */
 
+/** Used to define STRUCT_MEMBER() and STRUCT_MEMBER_PTR(). */
 #define STRUCT_MEMBER_P(struct_p, struct_offset) \
       ((void *) ((uint8_t *) (struct_p) + (struct_offset)))
 
+/** Return a field from a message based on offset and type. */
 #define STRUCT_MEMBER(member_type, struct_p, struct_offset) \
       (*(member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))
 
+/** Return a pointer to a field in a message based on offset and type. */
 #define STRUCT_MEMBER_PTR(member_type, struct_p, struct_offset) \
       ((member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))
 

@@ -18,7 +18,8 @@ are in `t/`.
 
 ## Dependencies
 
-The `re2c` parser is required to generate the lexer (`parser.re`).
+The [re2c](http://re2c.org/) parser is required to generate the
+lexer (`parser.re`).
 
 ## Testing
 

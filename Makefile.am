@@ -41,7 +41,7 @@ libprotobuf_c_text_HEADERS = protobuf-c-text/protobuf-c-text.h
 pkgconfig_DATA = protobuf-c-text/libprotobuf-c-text.pc
 
 # Static analysis.
-analyze_srcs = $(protobuf_c_text_libprotobuf_c_text_la_SOURCES)
+analyze_srcs = protobuf-c-text/generate.c protobuf-c-text/parse.c
 .PHONY: analyze
 analyze: all
 	@for f in $(analyze_srcs); do \

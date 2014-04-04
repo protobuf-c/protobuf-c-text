@@ -323,6 +323,7 @@ unesc_str_error:
   return NULL;
 }
 
+/** Amount of data to read from a file each time. */
 #define CHUNK 4096
 
 /** Function to request more data from input source in \c Scanner.
@@ -374,9 +375,11 @@ fill(Scanner *scanner, ProtobufCAllocator *allocator)
   return scanner->limit >= scanner->cursor? 1: 0;
 }
 
+/** Return the token. */
 #define RETURN(tt) { t.id = tt; return t; }
+/** Retrieves more input if available. */
 #define YYFILL(n) { fill_result = fill(scanner, allocator); \
-                    if (fill_result <=0) \
+                    if (fill_result <= 0) \
                       RETURN((fill_result == -1? TOK_MALLOC_ERR: TOK_EOF)); }
 
 /** Generated lexer.
@@ -474,7 +477,9 @@ typedef enum {
   STATE_DONE        /**< Nothing more to read or there's been an error. */
 } StateId;
 
+/** Max size of an error message. */
 #define STATE_ERROR_STR_MAX 160
+
 /** Maintain state for the FSM.
  *
  * Tracks the current state of the FSM.
@@ -499,6 +504,7 @@ typedef struct {
  * \param[in,out] state A state struct pointer - the is the state
  *                      for the FSM.
  * \param[in,out] scanner The state struct for the scanner.
+ * \param[in] descriptor Message descriptor.
  * \param[in] allocator Allocator functions.
  * \return Success (1) or failure (0). Failure is due to out of
  *         memory errors.

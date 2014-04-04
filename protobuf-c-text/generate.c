@@ -24,6 +24,7 @@
  * @{
  */
 
+/** Quick macro to call \c allocator->free. */
 #define PBC_FREE(ptr) allocator->free(allocator->allocator_data, ptr)
 
 /** A dynamic string struct.
