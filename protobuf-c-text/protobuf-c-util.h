@@ -1,3 +1,6 @@
+#ifndef PROTOBUF_C_UTIL_H
+#define PROTOBUF_C_UTIL_H
+
 /** \file
  * Internal utility header file.
  * Macros used by the generator and parser parts of the library.
@@ -11,9 +14,6 @@
  * These are the functions and data structures used internally.  They are
  * not exported and are not useable by users of \c libprotobuf-c-text.
  */
-
-#ifndef PROTOBUF_C_UTIL_H
-#define PROTOBUF_C_UTIL_H
 
 /* These are lifted from the protobuf-c lib */
 
