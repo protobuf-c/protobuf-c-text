@@ -125,7 +125,7 @@ gh-pages: clean
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout .nojekyll
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html checkout CNAME
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html add .
-	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html ls-files --deleted | GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages xargs git --work-tree $(PWD)/docs/html rm
+	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html ls-files --deleted | GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages xargs -r git --work-tree $(PWD)/docs/html rm
 	GIT_INDEX_FILE=$(PWD)/.git/index.gh-pages git --work-tree $(PWD)/docs/html commit -m "Update docs."
 	git checkout master
 else
