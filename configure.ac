@@ -6,7 +6,7 @@
 #     autoreconf -vif
 
 AC_PREREQ([2.68])
-AC_INIT([protobuf-c-text], [1.0.0-rc1],
+AC_INIT([protobuf-c-text], [1.0.0],
         [https://github.com/protobuf-c/protobuf-c-text/])
 AC_CONFIG_SRCDIR([protobuf-c-text/protobuf-c-text.h])
 AC_CONFIG_MACRO_DIR([m4])
