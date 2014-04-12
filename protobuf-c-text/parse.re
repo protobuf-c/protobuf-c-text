@@ -1240,7 +1240,7 @@ protobuf_c_text_parse(const ProtobufCMessageDescriptor *descriptor,
   return msg;
 }
 
-/** @} */  /* End of state group. */
+/** @} */  /* End of base-parse group. */
 
 /* See .h file for API docs. */
 
