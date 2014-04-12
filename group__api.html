@@ -143,7 +143,7 @@ Functions</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">descriptor</td><td>The descriptor from the generated code. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">msg_file</td><td>The <code>FILE</code> containing the text format protobuf. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">result</td><td>This structure contains information on any error that halted processing. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">allocator</td><td>The <code>ProtobufCAllocator</code> struct. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">allocator</td><td>This is the same <code>ProtobufCAllocator</code> type used by the <code>libprotobuf-c</code> library. You can set it to <code>NULL</code> to accept <code>protobuf_c_default_allocator</code> - the default allocator. </td></tr>
   </table>
   </dd>
 </dl>
@@ -209,7 +209,7 @@ Here is the call graph for this function:</div>
     <tr><td class="paramdir">[in]</td><td class="paramname">descriptor</td><td>The descriptor from the generated code. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">msg</td><td>The string containing the text format protobuf. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">result</td><td>This structure contains information on any error that halted processing. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">allocator</td><td>The <code>ProtobufCAllocator</code> struct. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">allocator</td><td>This is the same <code>ProtobufCAllocator</code> type used by the <code>libprotobuf-c</code> library. You can set it to <code>NULL</code> to accept <code>protobuf_c_default_allocator</code> - the default allocator. </td></tr>
   </table>
   </dd>
 </dl>
@@ -301,7 +301,7 @@ Here is the call graph for this function:</div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Apr 12 2014 12:40:34 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 12 2014 21:26:02 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
