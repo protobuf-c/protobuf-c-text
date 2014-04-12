@@ -1,3 +1,8 @@
+protobuf-c-text (1.0.0)
+
+  [ Kevin Lyda ]
+  * [ce09b9b..ed8f89e] Doc changes, more tests, cleanup fixes.
+
 protobuf-c-text (1.0.0-rc1)
 
   [ Kevin Lyda ]
