@@ -166,7 +166,10 @@ extern char *protobuf_c_text_to_string(ProtobufCMessage *m,
  * \param[in] msg The string containing the text format protobuf.
  * \param[out] result This structure contains information on any error
  *                    that halted processing.
- * \param[in] allocator The \c ProtobufCAllocator struct.
+ * \param[in] allocator This is the same \c ProtobufCAllocator type used
+ *                      by the \c libprotobuf-c library.  You can set it
+ *                      to \c NULL to accept \c protobuf_c_default_allocator -
+ *                      the default allocator.
  * \return The resulting \c ProtobufCMessage . It returns \c NULL on error.
  *         Check \c result->complete to make sure the message is valid.
  */
@@ -191,7 +194,10 @@ extern ProtobufCMessage *protobuf_c_text_from_string(
  * \param[in] msg_file The \c FILE containing the text format protobuf.
  * \param[out] result This structure contains information on any error
  *                    that halted processing.
- * \param[in] allocator The \c ProtobufCAllocator struct.
+ * \param[in] allocator This is the same \c ProtobufCAllocator type used
+ *                      by the \c libprotobuf-c library.  You can set it
+ *                      to \c NULL to accept \c protobuf_c_default_allocator -
+ *                      the default allocator.
  * \return The resulting \c ProtobufCMessage . It returns \c NULL on error.
  *         Check \c result->complete to make sure the message is valid.
  */
