@@ -96,11 +96,12 @@ Data Structures</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Maintains state for successive calls to <a class="el" href="group__lexer.html#ga2236f93417b0b61c385caccc1cd96018" title="Generated lexer.">scan()</a> .  <a href="struct_scanner.html#details">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="define-members"></a>
 Defines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga25022864dfc8ec428e7128282e57b136"></a><!-- doxytag: member="lexer::CHUNK" ref="ga25022864dfc8ec428e7128282e57b136" args="" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>CHUNK</b>&#160;&#160;&#160;4096</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga0e952522dbc06b83b7b44ea363cb9b47"></a><!-- doxytag: member="lexer::RETURN" ref="ga0e952522dbc06b83b7b44ea363cb9b47" args="(tt)" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>RETURN</b>(tt)&#160;&#160;&#160;{ t.id = tt; return t; }</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>YYFILL</b>(n)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lexer.html#ga25022864dfc8ec428e7128282e57b136">CHUNK</a>&#160;&#160;&#160;4096</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Amount of data to read from a file each time.  <a href="#ga25022864dfc8ec428e7128282e57b136"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lexer.html#ga0e952522dbc06b83b7b44ea363cb9b47">RETURN</a>(tt)&#160;&#160;&#160;{ t.id = tt; return t; }</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the token.  <a href="#ga0e952522dbc06b83b7b44ea363cb9b47"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lexer.html#ga9f6301310226eae6a3234c0e6863f0b5">YYFILL</a>(n)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves more input if available.  <a href="#ga9f6301310226eae6a3234c0e6863f0b5"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lexer.html#ga770ae4c17b0067d74732cb004981f7dc">TokenId</a> { <br/>
@@ -138,12 +139,52 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Generated lexer.  <a href="#ga2236f93417b0b61c385caccc1cd96018"></a><br/></td></tr>
 </table>
 <hr/><h2>Define Documentation</h2>
+<a class="anchor" id="ga25022864dfc8ec428e7128282e57b136"></a><!-- doxytag: member="parse.re::CHUNK" ref="ga25022864dfc8ec428e7128282e57b136" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define <a class="el" href="group__lexer.html#ga25022864dfc8ec428e7128282e57b136">CHUNK</a>&#160;&#160;&#160;4096</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Amount of data to read from a file each time. </p>
+
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00327">327</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+
+<p>Referenced by <a class="el" href="parse_8re_source.html#l00343">fill()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga0e952522dbc06b83b7b44ea363cb9b47"></a><!-- doxytag: member="parse.re::RETURN" ref="ga0e952522dbc06b83b7b44ea363cb9b47" args="(tt)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define <a class="el" href="group__lexer.html#ga0e952522dbc06b83b7b44ea363cb9b47">RETURN</a></td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">tt</td><td>)</td>
+          <td>&#160;&#160;&#160;{ t.id = tt; return t; }</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the token. </p>
+
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00379">379</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ga9f6301310226eae6a3234c0e6863f0b5"></a><!-- doxytag: member="parse.re::YYFILL" ref="ga9f6301310226eae6a3234c0e6863f0b5" args="(n)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define YYFILL</td>
+          <td class="memname">#define <a class="el" href="group__lexer.html#ga9f6301310226eae6a3234c0e6863f0b5">YYFILL</a></td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">n</td><td>)</td>
@@ -153,10 +194,12 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <b>Value:</b><div class="fragment"><pre class="fragment">{ fill_result = <a class="code" href="group__lexer.html#ga00b7f91ec3ffdb2845bcc3dfe604a227" title="Function to request more data from input source in Scanner.">fill</a>(scanner, allocator); \
-                    if (fill_result &lt;=0) \
+                    if (fill_result &lt;= 0) \
                       RETURN((fill_result == -1? <a class="code" href="group__lexer.html#gga770ae4c17b0067d74732cb004981f7dcaccf12d2a25786a151d01362acf9c4c28" title="A memory allocation error occurred.">TOK_MALLOC_ERR</a>: <a class="code" href="group__lexer.html#gga770ae4c17b0067d74732cb004981f7dcaee5e9bd304d0b8dba470b61e1643dcd8" title="End of file.">TOK_EOF</a>)); }
 </pre></div>
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00378">378</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Retrieves more input if available. </p>
+
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00381">381</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
 </div>
 </div>
@@ -252,9 +295,9 @@ Functions</h2></td></tr>
 </ul>
 </dd></dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00342">342</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00343">343</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>References <a class="el" href="parse_8re_source.html#l00185">Scanner::buffer</a>, <a class="el" href="parse_8re_source.html#l00183">Scanner::cursor</a>, <a class="el" href="parse_8re_source.html#l00188">Scanner::f</a>, <a class="el" href="parse_8re_source.html#l00186">Scanner::limit</a>, <a class="el" href="parse_8re_source.html#l00184">Scanner::marker</a>, and <a class="el" href="parse_8re_source.html#l00187">Scanner::token</a>.</p>
+<p>References <a class="el" href="parse_8re_source.html#l00185">Scanner::buffer</a>, <a class="el" href="parse_8re_source.html#l00327">CHUNK</a>, <a class="el" href="parse_8re_source.html#l00183">Scanner::cursor</a>, <a class="el" href="parse_8re_source.html#l00188">Scanner::f</a>, <a class="el" href="parse_8re_source.html#l00186">Scanner::limit</a>, <a class="el" href="parse_8re_source.html#l00184">Scanner::marker</a>, and <a class="el" href="parse_8re_source.html#l00187">Scanner::token</a>.</p>
 
 </div>
 </div>
@@ -294,11 +337,11 @@ Functions</h2></td></tr>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Returns the next <code><a class="el" href="struct_token.html" title="A token and its value.">Token</a></code> it finds. </dd></dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00391">391</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00394">394</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
 <p>References <a class="el" href="parse_8re_source.html#l00183">Scanner::cursor</a>, and <a class="el" href="parse_8re_source.html#l00187">Scanner::token</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01189">protobuf_c_text_parse()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01195">protobuf_c_text_parse()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -349,7 +392,7 @@ Here is the caller graph for this function:</div>
 
 <p>References <a class="el" href="parse_8re_source.html#l00185">Scanner::buffer</a>, and <a class="el" href="parse_8re_source.html#l00188">Scanner::f</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01189">protobuf_c_text_parse()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01195">protobuf_c_text_parse()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -401,7 +444,7 @@ Here is the caller graph for this function:</div>
 
 <p>References <a class="el" href="parse_8re_source.html#l00188">Scanner::f</a>, and <a class="el" href="parse_8re_source.html#l00190">Scanner::line</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01242">protobuf_c_text_from_file()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01248">protobuf_c_text_from_file()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -453,7 +496,7 @@ Here is the caller graph for this function:</div>
 
 <p>References <a class="el" href="parse_8re_source.html#l00185">Scanner::buffer</a>, <a class="el" href="parse_8re_source.html#l00183">Scanner::cursor</a>, <a class="el" href="parse_8re_source.html#l00186">Scanner::limit</a>, <a class="el" href="parse_8re_source.html#l00190">Scanner::line</a>, and <a class="el" href="parse_8re_source.html#l00184">Scanner::marker</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01254">protobuf_c_text_from_string()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01260">protobuf_c_text_from_string()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -495,7 +538,7 @@ Here is the caller graph for this function:</div>
 
 <p>References <a class="el" href="parse_8re_source.html#l00112">Token::bareword</a>, <a class="el" href="parse_8re_source.html#l00115">Token::boolean</a>, <a class="el" href="parse_8re_source.html#l00109">Token::id</a>, <a class="el" href="parse_8re_source.html#l00111">Token::number</a>, <a class="el" href="parse_8re_source.html#l00093">TOK_BAREWORD</a>, <a class="el" href="parse_8re_source.html#l00099">TOK_BOOLEAN</a>, <a class="el" href="parse_8re_source.html#l00095">TOK_CBRACE</a>, <a class="el" href="parse_8re_source.html#l00096">TOK_COLON</a>, <a class="el" href="parse_8re_source.html#l00092">TOK_EOF</a>, <a class="el" href="parse_8re_source.html#l00098">TOK_NUMBER</a>, <a class="el" href="parse_8re_source.html#l00094">TOK_OBRACE</a>, and <a class="el" href="parse_8re_source.html#l00097">TOK_QUOTED</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l00665">state_assignment()</a>, <a class="el" href="parse_8re_source.html#l00612">state_open()</a>, and <a class="el" href="parse_8re_source.html#l00773">state_value()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l00671">state_assignment()</a>, <a class="el" href="parse_8re_source.html#l00618">state_open()</a>, and <a class="el" href="parse_8re_source.html#l00779">state_value()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -547,7 +590,7 @@ Here is the caller graph for this function:</div>
 
 <p>References <a class="el" href="parse_8re_source.html#l00112">Token::bareword</a>, <a class="el" href="parse_8re_source.html#l00109">Token::id</a>, <a class="el" href="parse_8re_source.html#l00111">Token::number</a>, <a class="el" href="parse_8re_source.html#l00113">Token::qs</a>, <a class="el" href="parse_8re_source.html#l00093">TOK_BAREWORD</a>, <a class="el" href="parse_8re_source.html#l00098">TOK_NUMBER</a>, and <a class="el" href="parse_8re_source.html#l00097">TOK_QUOTED</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01189">protobuf_c_text_parse()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01195">protobuf_c_text_parse()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -613,7 +656,7 @@ Here is the caller graph for this function:</div>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -625,7 +668,7 @@ Here is the caller graph for this function:</div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 3 2014 22:25:10 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 12 2014 12:40:34 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -93,8 +93,8 @@ Data Structures</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A dynamic string struct.  <a href="struct_return_string.html#details">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="define-members"></a>
 Defines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga16b092d1ff2f0157740a0b8a996ea4f4"></a><!-- doxytag: member="utility::PBC_FREE" ref="ga16b092d1ff2f0157740a0b8a996ea4f4" args="(ptr)" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>PBC_FREE</b>(ptr)&#160;&#160;&#160;allocator-&gt;free(allocator-&gt;allocator_data, ptr)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utility.html#ga16b092d1ff2f0157740a0b8a996ea4f4">PBC_FREE</a>(ptr)&#160;&#160;&#160;allocator-&gt;free(allocator-&gt;allocator_data, ptr)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Quick macro to call <code>allocator-&gt;free</code>.  <a href="#ga16b092d1ff2f0157740a0b8a996ea4f4"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utility.html#gaf67715a6d806918456d60305156bb3b8">rs_append</a> (<a class="el" href="struct_return_string.html">ReturnString</a> *rs, int guess, ProtobufCAllocator *allocator, const char *format,...) __attribute__((format(printf</td></tr>
@@ -102,6 +102,30 @@ Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utility.html#gaa5ca4c4e9afec0a9a602d406ef527fb1">local_realloc</a> (void *ptr, size_t old_size, size_t size, ProtobufCAllocator *allocator)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A realloc implementation using ProtobufCAllocator functions.  <a href="#gaa5ca4c4e9afec0a9a602d406ef527fb1"></a><br/></td></tr>
 </table>
+<hr/><h2>Define Documentation</h2>
+<a class="anchor" id="ga16b092d1ff2f0157740a0b8a996ea4f4"></a><!-- doxytag: member="generate.c::PBC_FREE" ref="ga16b092d1ff2f0157740a0b8a996ea4f4" args="(ptr)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define <a class="el" href="group__utility.html#ga16b092d1ff2f0157740a0b8a996ea4f4">PBC_FREE</a></td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ptr</td><td>)</td>
+          <td>&#160;&#160;&#160;allocator-&gt;free(allocator-&gt;allocator_data, ptr)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Quick macro to call <code>allocator-&gt;free</code>. </p>
+
+<p>Definition at line <a class="el" href="generate_8c_source.html#l00028">28</a> of file <a class="el" href="generate_8c_source.html">generate.c</a>.</p>
+
+<p>Referenced by <a class="el" href="generate_8c_source.html#l00185">protobuf_c_text_to_string_internal()</a>, and <a class="el" href="generate_8c_source.html#l00059">rs_append()</a>.</p>
+
+</div>
+</div>
 <hr/><h2>Function Documentation</h2>
 <a class="anchor" id="gaa5ca4c4e9afec0a9a602d406ef527fb1"></a><!-- doxytag: member="parse.re::local_realloc" ref="gaa5ca4c4e9afec0a9a602d406ef527fb1" args="(void *ptr, size_t old_size, size_t size, ProtobufCAllocator *allocator)" -->
 <div class="memitem">
@@ -155,7 +179,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="parse_8re_source.html#l00056">56</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l00665">state_assignment()</a>, and <a class="el" href="parse_8re_source.html#l00773">state_value()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l00671">state_assignment()</a>, and <a class="el" href="parse_8re_source.html#l00779">state_value()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -224,9 +248,11 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="generate_8c_source.html#l00058">58</a> of file <a class="el" href="generate_8c_source.html">generate.c</a>.</p>
+<p>Definition at line <a class="el" href="generate_8c_source.html#l00059">59</a> of file <a class="el" href="generate_8c_source.html">generate.c</a>.</p>
 
-<p>Referenced by <a class="el" href="generate_8c_source.html#l00184">protobuf_c_text_to_string_internal()</a>.</p>
+<p>References <a class="el" href="generate_8c_source.html#l00028">PBC_FREE</a>.</p>
+
+<p>Referenced by <a class="el" href="generate_8c_source.html#l00185">protobuf_c_text_to_string_internal()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -245,7 +271,7 @@ Here is the caller graph for this function:</div>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -257,7 +283,7 @@ Here is the caller graph for this function:</div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 3 2014 22:25:10 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 12 2014 12:40:34 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

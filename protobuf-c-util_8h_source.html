@@ -80,29 +80,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">protobuf-c-text/protobuf-c-util.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="protobuf-c-util_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
-<a name="l00015"></a>00015 <span class="preprocessor">#ifndef PROTOBUF_C_UTIL_H</span>
-<a name="l00016"></a>00016 <span class="preprocessor"></span><span class="preprocessor">#define PROTOBUF_C_UTIL_H</span>
-<a name="l00017"></a>00017 <span class="preprocessor"></span>
+<a href="protobuf-c-util_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef PROTOBUF_C_UTIL_H</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define PROTOBUF_C_UTIL_H</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
 <a name="l00018"></a>00018 <span class="comment">/* These are lifted from the protobuf-c lib */</span>
 <a name="l00019"></a>00019 
-<a name="l00020"></a>00020 <span class="preprocessor">#define STRUCT_MEMBER_P(struct_p, struct_offset) \</span>
-<a name="l00021"></a>00021 <span class="preprocessor">      ((void *) ((uint8_t *) (struct_p) + (struct_offset)))</span>
-<a name="l00022"></a>00022 <span class="preprocessor"></span>
-<a name="l00023"></a>00023 <span class="preprocessor">#define STRUCT_MEMBER(member_type, struct_p, struct_offset) \</span>
-<a name="l00024"></a>00024 <span class="preprocessor">      (*(member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))</span>
-<a name="l00025"></a>00025 <span class="preprocessor"></span>
-<a name="l00026"></a>00026 <span class="preprocessor">#define STRUCT_MEMBER_PTR(member_type, struct_p, struct_offset) \</span>
-<a name="l00027"></a>00027 <span class="preprocessor">      ((member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))</span>
-<a name="l00028"></a>00028 <span class="preprocessor"></span>
-<a name="l00029"></a>00029 <span class="preprocessor">#endif </span><span class="comment">/* PROTOBUF_C_UTIL_H */</span>
+<a name="l00021"></a><a class="code" href="protobuf-c-util_8h.html#a7c5bad1262770ff703a37f3c1f95543c">00021</a> <span class="preprocessor">#define STRUCT_MEMBER_P(struct_p, struct_offset) \</span>
+<a name="l00022"></a>00022 <span class="preprocessor">      ((void *) ((uint8_t *) (struct_p) + (struct_offset)))</span>
+<a name="l00023"></a>00023 <span class="preprocessor"></span>
+<a name="l00025"></a><a class="code" href="protobuf-c-util_8h.html#ae05476f2662215f94925a822d3d9c727">00025</a> <span class="preprocessor">#define STRUCT_MEMBER(member_type, struct_p, struct_offset) \</span>
+<a name="l00026"></a>00026 <span class="preprocessor">      (*(member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))</span>
+<a name="l00027"></a>00027 <span class="preprocessor"></span>
+<a name="l00029"></a><a class="code" href="protobuf-c-util_8h.html#a208c5dfeba882665d81d2509be55fb1d">00029</a> <span class="preprocessor">#define STRUCT_MEMBER_PTR(member_type, struct_p, struct_offset) \</span>
+<a name="l00030"></a>00030 <span class="preprocessor">      ((member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))</span>
+<a name="l00031"></a>00031 <span class="preprocessor"></span>
+<a name="l00032"></a>00032 <span class="preprocessor">#endif </span><span class="comment">/* PROTOBUF_C_UTIL_H */</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -114,7 +113,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 3 2014 22:25:10 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 12 2014 12:40:34 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

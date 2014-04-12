@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2014-04-03</td>
+            <td class="headerValue">2014-04-12</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -84,59 +84,57 @@
 <span class="lineNum">       6 </span>                :            : #include &lt;google/protobuf-c/protobuf-c.h&gt;
 <span class="lineNum">       7 </span>                :            : #include &quot;protobuf-c-text/protobuf-c-text.h&quot;
 <span class="lineNum">       8 </span>                :            : #include &quot;addressbook.pb-c.h&quot;
-<span class="lineNum">       9 </span>                :            : #include &quot;broken-alloc.h&quot;
-<span class="lineNum">      10 </span>                :            : 
-<span class="lineNum">      11 </span>                :            : #define CHUNK 1024
-<span class="lineNum">      12 </span>                :            : 
-<span class="lineNum">      13 </span>                :            : Tutorial__Test *testmsg;
-<a name="14"><span class="lineNum">      14 </span>                :            : </a>
-<span class="lineNum">      15 </span>                :            : Tutorial__Test *
-<span class="lineNum">      16 </span>                :<span class="lineCov">          1 : read_tutorial_test(char *filename)</span>
-<span class="lineNum">      17 </span>                :            : {
-<span class="lineNum">      18 </span>                :            :   FILE *f;
-<span class="lineNum">      19 </span>                :<span class="lineCov">          1 :   int bufsize = 0, bytes, bytes_total = 0;</span>
-<span class="lineNum">      20 </span>                :<span class="lineCov">          1 :   char *buf = NULL;</span>
-<span class="lineNum">      21 </span>                :            :   Tutorial__Test *testmsg;
-<span class="lineNum">      22 </span>                :            : 
-<span class="lineNum">      23 </span>                :<span class="lineCov">          1 :   f = fopen(filename, &quot;r&quot;);</span>
-<span class="lineNum">      24 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :   if (!f) {</span>
-<span class="lineNum">      25 </span>                :<span class="lineNoCov">          0 :     printf(&quot;Can't open tutorial test message data file '%s'.\n&quot;, filename);</span>
-<span class="lineNum">      26 </span>                :<span class="lineNoCov">          0 :     exit(1);</span>
-<span class="lineNum">      27 </span>                :            :   }
-<span class="lineNum">      28 </span>                :            :   do {
-<span class="lineNum">      29 </span>                :<span class="lineCov">          1 :     bufsize += CHUNK;</span>
-<span class="lineNum">      30 </span>                :<span class="lineCov">          1 :     buf = realloc(buf, bufsize);</span>
-<span class="lineNum">      31 </span>                :<span class="lineCov">          1 :     bytes = fread(buf + bytes_total, 1, CHUNK, f);</span>
-<span class="lineNum">      32 </span>                :<span class="lineCov">          1 :     bytes_total += bytes;</span>
-<span class="lineNum">      33 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :   } while (bytes == CHUNK);</span>
-<span class="lineNum">      34 </span>                :<span class="lineCov">          1 :   testmsg = tutorial__test__unpack(NULL, bytes_total, buf);</span>
-<span class="lineNum">      35 </span>                :<span class="lineCov">          1 :   free(buf);</span>
-<span class="lineNum">      36 </span>                :<span class="lineCov">          1 :   return testmsg;</span>
-<span class="lineNum">      37 </span>                :            : }
-<a name="38"><span class="lineNum">      38 </span>                :            : </a>
-<span class="lineNum">      39 </span>                :            : int
-<span class="lineNum">      40 </span>                :<span class="lineCov">          1 : main(int argc, char *argv[])</span>
-<span class="lineNum">      41 </span>                :            : {
-<span class="lineNum">      42 </span>                :            :   char *s;
-<span class="lineNum">      43 </span>                :            : 
-<span class="lineNum">      44 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :   if (argc != 2) {</span>
-<span class="lineNum">      45 </span>                :<span class="lineNoCov">          0 :     printf(&quot;Must supply tutorial test message data file.\n&quot;);</span>
-<span class="lineNum">      46 </span>                :<span class="lineNoCov">          0 :     exit(1);</span>
-<span class="lineNum">      47 </span>                :            :   }
-<span class="lineNum">      48 </span>                :            : 
-<span class="lineNum">      49 </span>                :<span class="lineCov">          1 :   testmsg = read_tutorial_test(argv[1]);</span>
-<span class="lineNum">      50 </span>                :            : 
-<span class="lineNum">      51 </span>                :<span class="lineCov">          1 :   s = protobuf_c_text_to_string((ProtobufCMessage *)testmsg,</span>
-<span class="lineNum">      52 </span>                :            :       &amp;broken_allocator);
-<span class="lineNum">      53 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :   if (s) {</span>
-<span class="lineNum">      54 </span>                :<span class="lineCov">          1 :     printf(&quot;%s&quot;, s);</span>
-<span class="lineNum">      55 </span>                :<span class="lineCov">          1 :     free(s);</span>
-<span class="lineNum">      56 </span>                :            :   } else {
-<span class="lineNum">      57 </span>                :<span class="lineNoCov">          0 :     printf(&quot;ERROR: Failed to generate text format.\n&quot;);</span>
-<span class="lineNum">      58 </span>                :            :   }
-<span class="lineNum">      59 </span>                :            : 
-<span class="lineNum">      60 </span>                :<span class="lineCov">          1 :   return 0;</span>
-<span class="lineNum">      61 </span>                :            : }
+<span class="lineNum">       9 </span>                :            : 
+<span class="lineNum">      10 </span>                :            : #define CHUNK 1024
+<span class="lineNum">      11 </span>                :            : 
+<span class="lineNum">      12 </span>                :            : Tutorial__Test *testmsg;
+<a name="13"><span class="lineNum">      13 </span>                :            : </a>
+<span class="lineNum">      14 </span>                :            : Tutorial__Test *
+<span class="lineNum">      15 </span>                :<span class="lineCov">          1 : read_tutorial_test(char *filename)</span>
+<span class="lineNum">      16 </span>                :            : {
+<span class="lineNum">      17 </span>                :            :   FILE *f;
+<span class="lineNum">      18 </span>                :<span class="lineCov">          1 :   int bufsize = 0, bytes, bytes_total = 0;</span>
+<span class="lineNum">      19 </span>                :<span class="lineCov">          1 :   char *buf = NULL;</span>
+<span class="lineNum">      20 </span>                :            :   Tutorial__Test *testmsg;
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :<span class="lineCov">          1 :   f = fopen(filename, &quot;r&quot;);</span>
+<span class="lineNum">      23 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :   if (!f) {</span>
+<span class="lineNum">      24 </span>                :<span class="lineNoCov">          0 :     printf(&quot;Can't open tutorial test message data file '%s'.\n&quot;, filename);</span>
+<span class="lineNum">      25 </span>                :<span class="lineNoCov">          0 :     exit(1);</span>
+<span class="lineNum">      26 </span>                :            :   }
+<span class="lineNum">      27 </span>                :            :   do {
+<span class="lineNum">      28 </span>                :<span class="lineCov">          1 :     bufsize += CHUNK;</span>
+<span class="lineNum">      29 </span>                :<span class="lineCov">          1 :     buf = realloc(buf, bufsize);</span>
+<span class="lineNum">      30 </span>                :<span class="lineCov">          1 :     bytes = fread(buf + bytes_total, 1, CHUNK, f);</span>
+<span class="lineNum">      31 </span>                :<span class="lineCov">          1 :     bytes_total += bytes;</span>
+<span class="lineNum">      32 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :   } while (bytes == CHUNK);</span>
+<span class="lineNum">      33 </span>                :<span class="lineCov">          1 :   testmsg = tutorial__test__unpack(NULL, bytes_total, buf);</span>
+<span class="lineNum">      34 </span>                :<span class="lineCov">          1 :   free(buf);</span>
+<span class="lineNum">      35 </span>                :<span class="lineCov">          1 :   return testmsg;</span>
+<span class="lineNum">      36 </span>                :            : }
+<a name="37"><span class="lineNum">      37 </span>                :            : </a>
+<span class="lineNum">      38 </span>                :            : int
+<span class="lineNum">      39 </span>                :<span class="lineCov">          1 : main(int argc, char *argv[])</span>
+<span class="lineNum">      40 </span>                :            : {
+<span class="lineNum">      41 </span>                :            :   char *s;
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :   if (argc != 2) {</span>
+<span class="lineNum">      44 </span>                :<span class="lineNoCov">          0 :     printf(&quot;Must supply tutorial test message data file.\n&quot;);</span>
+<span class="lineNum">      45 </span>                :<span class="lineNoCov">          0 :     exit(1);</span>
+<span class="lineNum">      46 </span>                :            :   }
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :<span class="lineCov">          1 :   testmsg = read_tutorial_test(argv[1]);</span>
+<span class="lineNum">      49 </span>                :            : 
+<span class="lineNum">      50 </span>                :<span class="lineCov">          1 :   s = protobuf_c_text_to_string((ProtobufCMessage *)testmsg, NULL);</span>
+<span class="lineNum">      51 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :   if (s) {</span>
+<span class="lineNum">      52 </span>                :<span class="lineCov">          1 :     printf(&quot;%s&quot;, s);</span>
+<span class="lineNum">      53 </span>                :<span class="lineCov">          1 :     free(s);</span>
+<span class="lineNum">      54 </span>                :            :   } else {
+<span class="lineNum">      55 </span>                :<span class="lineNoCov">          0 :     printf(&quot;ERROR: Failed to generate text format.\n&quot;);</span>
+<span class="lineNum">      56 </span>                :            :   }
+<span class="lineNum">      57 </span>                :            : 
+<span class="lineNum">      58 </span>                :<span class="lineCov">          1 :   return 0;</span>
+<span class="lineNum">      59 </span>                :            : }
 </pre>
       </td>
     </tr>

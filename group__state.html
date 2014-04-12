@@ -95,8 +95,8 @@ Data Structures</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Maintain state for the FSM.  <a href="struct_state.html#details">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="define-members"></a>
 Defines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga209b81a964ff29c94ced5232e3cb9de0"></a><!-- doxytag: member="state::STATE_ERROR_STR_MAX" ref="ga209b81a964ff29c94ced5232e3cb9de0" args="" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>STATE_ERROR_STR_MAX</b>&#160;&#160;&#160;160</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__state.html#ga209b81a964ff29c94ced5232e3cb9de0">STATE_ERROR_STR_MAX</a>&#160;&#160;&#160;160</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Max size of an error message.  <a href="#ga209b81a964ff29c94ced5232e3cb9de0"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__state.html#ga281f4c9dd77f0f9e7b08c7609dcbfffe">StateId</a> { <a class="el" href="group__state.html#gga281f4c9dd77f0f9e7b08c7609dcbfffea733f6f4982429abfa43ff9597d35ce61">STATE_OPEN</a>, 
@@ -124,6 +124,26 @@ Variables</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="group__state.html#ga281f4c9dd77f0f9e7b08c7609dcbfffe">StateId</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__state.html#gac9762aece8bb9fc62bd0986626664b0b">states</a> [])(<a class="el" href="struct_state.html">State</a> *, <a class="el" href="struct_token.html">Token</a> *)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Table of states and actions.  <a href="#gac9762aece8bb9fc62bd0986626664b0b"></a><br/></td></tr>
 </table>
+<hr/><h2>Define Documentation</h2>
+<a class="anchor" id="ga209b81a964ff29c94ced5232e3cb9de0"></a><!-- doxytag: member="parse.re::STATE_ERROR_STR_MAX" ref="ga209b81a964ff29c94ced5232e3cb9de0" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define <a class="el" href="group__state.html#ga209b81a964ff29c94ced5232e3cb9de0">STATE_ERROR_STR_MAX</a>&#160;&#160;&#160;160</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Max size of an error message. </p>
+
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00481">481</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+
+<p>Referenced by <a class="el" href="parse_8re_source.html#l00583">state_error()</a>, and <a class="el" href="parse_8re_source.html#l00513">state_init()</a>.</p>
+
+</div>
+</div>
 <hr/><h2>Enumeration Type Documentation</h2>
 <a class="anchor" id="ga281f4c9dd77f0f9e7b08c7609dcbfffe"></a><!-- doxytag: member="parse.re::StateId" ref="ga281f4c9dd77f0f9e7b08c7609dcbfffe" args="" -->
 <div class="memitem">
@@ -155,7 +175,7 @@ Variables</h2></td></tr>
 </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00469">469</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00472">472</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
 </div>
 </div>
@@ -196,9 +216,9 @@ Variables</h2></td></tr>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A StateID value. </dd></dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00665">665</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00671">671</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>References <a class="el" href="parse_8re_source.html#l00493">State::allocator</a>, <a class="el" href="parse_8re_source.html#l00488">State::current_msg</a>, <a class="el" href="parse_8re_source.html#l00484">State::field</a>, <a class="el" href="parse_8re_source.html#l00109">Token::id</a>, <a class="el" href="parse_8re_source.html#l00056">local_realloc()</a>, <a class="el" href="parse_8re_source.html#l00490">State::max_msg</a>, <a class="el" href="parse_8re_source.html#l00491">State::msgs</a>, <a class="el" href="parse_8re_source.html#l00577">state_error()</a>, <a class="el" href="parse_8re_source.html#l00470">STATE_OPEN</a>, <a class="el" href="parse_8re_source.html#l00473">STATE_VALUE</a>, <a class="el" href="parse_8re_source.html#l00096">TOK_COLON</a>, <a class="el" href="parse_8re_source.html#l00094">TOK_OBRACE</a>, and <a class="el" href="parse_8re_source.html#l00128">token2txt()</a>.</p>
+<p>References <a class="el" href="parse_8re_source.html#l00498">State::allocator</a>, <a class="el" href="parse_8re_source.html#l00493">State::current_msg</a>, <a class="el" href="parse_8re_source.html#l00489">State::field</a>, <a class="el" href="parse_8re_source.html#l00109">Token::id</a>, <a class="el" href="parse_8re_source.html#l00056">local_realloc()</a>, <a class="el" href="parse_8re_source.html#l00495">State::max_msg</a>, <a class="el" href="parse_8re_source.html#l00496">State::msgs</a>, <a class="el" href="parse_8re_source.html#l00583">state_error()</a>, <a class="el" href="parse_8re_source.html#l00473">STATE_OPEN</a>, <a class="el" href="parse_8re_source.html#l00476">STATE_VALUE</a>, <a class="el" href="protobuf-c-util_8h_source.html#l00025">STRUCT_MEMBER</a>, <a class="el" href="parse_8re_source.html#l00096">TOK_COLON</a>, <a class="el" href="parse_8re_source.html#l00094">TOK_OBRACE</a>, and <a class="el" href="parse_8re_source.html#l00128">token2txt()</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -261,11 +281,11 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>This will always return <code>STATE_DONE</code> . </dd></dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00577">577</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00583">583</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>References <a class="el" href="parse_8re_source.html#l00474">STATE_DONE</a>.</p>
+<p>References <a class="el" href="parse_8re_source.html#l00477">STATE_DONE</a>, and <a class="el" href="parse_8re_source.html#l00481">STATE_ERROR_STR_MAX</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01189">protobuf_c_text_parse()</a>, <a class="el" href="parse_8re_source.html#l00665">state_assignment()</a>, <a class="el" href="parse_8re_source.html#l00612">state_open()</a>, and <a class="el" href="parse_8re_source.html#l00773">state_value()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01195">protobuf_c_text_parse()</a>, <a class="el" href="parse_8re_source.html#l00671">state_assignment()</a>, <a class="el" href="parse_8re_source.html#l00618">state_open()</a>, and <a class="el" href="parse_8re_source.html#l00779">state_value()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -303,11 +323,11 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00551">551</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00557">557</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>References <a class="el" href="parse_8re_source.html#l00493">State::allocator</a>, <a class="el" href="parse_8re_source.html#l00494">State::error</a>, <a class="el" href="parse_8re_source.html#l00495">State::error_str</a>, and <a class="el" href="parse_8re_source.html#l00491">State::msgs</a>.</p>
+<p>References <a class="el" href="parse_8re_source.html#l00498">State::allocator</a>, <a class="el" href="parse_8re_source.html#l00499">State::error</a>, <a class="el" href="parse_8re_source.html#l00500">State::error_str</a>, and <a class="el" href="parse_8re_source.html#l00496">State::msgs</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01189">protobuf_c_text_parse()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01195">protobuf_c_text_parse()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -362,17 +382,18 @@ Here is the caller graph for this function:</div>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">state</td><td>A state struct pointer - the is the state for the FSM. </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">scanner</td><td>The state struct for the scanner. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">descriptor</td><td>Message descriptor. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">allocator</td><td>Allocator functions. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Success (1) or failure (0). Failure is due to out of memory errors. </dd></dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00507">507</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00513">513</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>References <a class="el" href="parse_8re_source.html#l00493">State::allocator</a>, <a class="el" href="parse_8re_source.html#l00495">State::error_str</a>, <a class="el" href="parse_8re_source.html#l00490">State::max_msg</a>, <a class="el" href="parse_8re_source.html#l00491">State::msgs</a>, and <a class="el" href="parse_8re_source.html#l00483">State::scanner</a>.</p>
+<p>References <a class="el" href="parse_8re_source.html#l00498">State::allocator</a>, <a class="el" href="parse_8re_source.html#l00500">State::error_str</a>, <a class="el" href="parse_8re_source.html#l00495">State::max_msg</a>, <a class="el" href="parse_8re_source.html#l00496">State::msgs</a>, <a class="el" href="parse_8re_source.html#l00488">State::scanner</a>, and <a class="el" href="parse_8re_source.html#l00481">STATE_ERROR_STR_MAX</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01189">protobuf_c_text_parse()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01195">protobuf_c_text_parse()</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -422,9 +443,9 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A StateID value. </dd></dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00612">612</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00618">618</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>References <a class="el" href="parse_8re_source.html#l00112">Token::bareword</a>, <a class="el" href="parse_8re_source.html#l00488">State::current_msg</a>, <a class="el" href="parse_8re_source.html#l00484">State::field</a>, <a class="el" href="parse_8re_source.html#l00109">Token::id</a>, <a class="el" href="parse_8re_source.html#l00491">State::msgs</a>, <a class="el" href="parse_8re_source.html#l00472">STATE_ASSIGNMENT</a>, <a class="el" href="parse_8re_source.html#l00474">STATE_DONE</a>, <a class="el" href="parse_8re_source.html#l00577">state_error()</a>, <a class="el" href="parse_8re_source.html#l00470">STATE_OPEN</a>, <a class="el" href="parse_8re_source.html#l00093">TOK_BAREWORD</a>, <a class="el" href="parse_8re_source.html#l00095">TOK_CBRACE</a>, <a class="el" href="parse_8re_source.html#l00092">TOK_EOF</a>, and <a class="el" href="parse_8re_source.html#l00128">token2txt()</a>.</p>
+<p>References <a class="el" href="parse_8re_source.html#l00112">Token::bareword</a>, <a class="el" href="parse_8re_source.html#l00493">State::current_msg</a>, <a class="el" href="parse_8re_source.html#l00489">State::field</a>, <a class="el" href="parse_8re_source.html#l00109">Token::id</a>, <a class="el" href="parse_8re_source.html#l00496">State::msgs</a>, <a class="el" href="parse_8re_source.html#l00475">STATE_ASSIGNMENT</a>, <a class="el" href="parse_8re_source.html#l00477">STATE_DONE</a>, <a class="el" href="parse_8re_source.html#l00583">state_error()</a>, <a class="el" href="parse_8re_source.html#l00473">STATE_OPEN</a>, <a class="el" href="parse_8re_source.html#l00093">TOK_BAREWORD</a>, <a class="el" href="parse_8re_source.html#l00095">TOK_CBRACE</a>, <a class="el" href="parse_8re_source.html#l00092">TOK_EOF</a>, and <a class="el" href="parse_8re_source.html#l00128">token2txt()</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -473,9 +494,9 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A StateID value. </dd></dl>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l00773">773</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l00779">779</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>References <a class="el" href="parse_8re_source.html#l00493">State::allocator</a>, <a class="el" href="parse_8re_source.html#l00112">Token::bareword</a>, <a class="el" href="parse_8re_source.html#l00115">Token::boolean</a>, <a class="el" href="parse_8re_source.html#l00488">State::current_msg</a>, <a class="el" href="parse_8re_source.html#l00484">State::field</a>, <a class="el" href="parse_8re_source.html#l00109">Token::id</a>, <a class="el" href="parse_8re_source.html#l00056">local_realloc()</a>, <a class="el" href="parse_8re_source.html#l00491">State::msgs</a>, <a class="el" href="parse_8re_source.html#l00111">Token::number</a>, <a class="el" href="parse_8re_source.html#l00113">Token::qs</a>, <a class="el" href="parse_8re_source.html#l00577">state_error()</a>, <a class="el" href="parse_8re_source.html#l00470">STATE_OPEN</a>, <a class="el" href="parse_8re_source.html#l00093">TOK_BAREWORD</a>, <a class="el" href="parse_8re_source.html#l00099">TOK_BOOLEAN</a>, <a class="el" href="parse_8re_source.html#l00098">TOK_NUMBER</a>, <a class="el" href="parse_8re_source.html#l00097">TOK_QUOTED</a>, and <a class="el" href="parse_8re_source.html#l00128">token2txt()</a>.</p>
+<p>References <a class="el" href="parse_8re_source.html#l00498">State::allocator</a>, <a class="el" href="parse_8re_source.html#l00112">Token::bareword</a>, <a class="el" href="parse_8re_source.html#l00115">Token::boolean</a>, <a class="el" href="parse_8re_source.html#l00493">State::current_msg</a>, <a class="el" href="parse_8re_source.html#l00489">State::field</a>, <a class="el" href="parse_8re_source.html#l00109">Token::id</a>, <a class="el" href="parse_8re_source.html#l00056">local_realloc()</a>, <a class="el" href="parse_8re_source.html#l00496">State::msgs</a>, <a class="el" href="parse_8re_source.html#l00111">Token::number</a>, <a class="el" href="parse_8re_source.html#l00113">Token::qs</a>, <a class="el" href="parse_8re_source.html#l00583">state_error()</a>, <a class="el" href="parse_8re_source.html#l00473">STATE_OPEN</a>, <a class="el" href="protobuf-c-util_8h_source.html#l00025">STRUCT_MEMBER</a>, <a class="el" href="protobuf-c-util_8h_source.html#l00029">STRUCT_MEMBER_PTR</a>, <a class="el" href="parse_8re_source.html#l00093">TOK_BAREWORD</a>, <a class="el" href="parse_8re_source.html#l00099">TOK_BOOLEAN</a>, <a class="el" href="parse_8re_source.html#l00098">TOK_NUMBER</a>, <a class="el" href="parse_8re_source.html#l00097">TOK_QUOTED</a>, and <a class="el" href="parse_8re_source.html#l00128">token2txt()</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -508,9 +529,9 @@ Here is the call graph for this function:</div>
 <p>Table of states and actions. </p>
 <p>This is a table of each state and the action to take when in it. </p>
 
-<p>Definition at line <a class="el" href="parse_8re_source.html#l01158">1158</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
+<p>Definition at line <a class="el" href="parse_8re_source.html#l01164">1164</a> of file <a class="el" href="parse_8re_source.html">parse.re</a>.</p>
 
-<p>Referenced by <a class="el" href="parse_8re_source.html#l01189">protobuf_c_text_parse()</a>.</p>
+<p>Referenced by <a class="el" href="parse_8re_source.html#l01195">protobuf_c_text_parse()</a>.</p>
 
 </div>
 </div>
@@ -520,7 +541,7 @@ Here is the call graph for this function:</div>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -532,7 +553,7 @@ Here is the call graph for this function:</div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 3 2014 22:25:10 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 12 2014 12:40:34 for protobuf-c-text by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
