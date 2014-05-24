@@ -722,9 +722,10 @@ state_assignment(State *state, Token *t)
         if (state->current_msg == state->max_msg) {
           ProtobufCMessage **tmp_msgs;
 
+          state->max_msg += 10;
           tmp_msgs = local_realloc(
-              state->msgs, (state->max_msg) * sizeof(ProtobufCMessage *),
-              (state->max_msg += 10) * sizeof(ProtobufCMessage *),
+              state->msgs, (state->current_msg) * sizeof(ProtobufCMessage *),
+              (state->max_msg) * sizeof(ProtobufCMessage *),
               state->allocator);
           if (!tmp_msgs) {
             return state_error(state, t, "Malloc failure.");
