@@ -20,13 +20,6 @@
 #include "protobuf-c-util.h"
 #include "config.h"
 
-/** \addtogroup utility
- * @{
- */
-
-/** Quick macro to call \c allocator->free. */
-#define PBC_FREE(ptr) allocator->free(allocator->allocator_data, ptr)
-
 /** A dynamic string struct.
  *
  * Used to track additions to a growing string and memory allocation
@@ -70,8 +63,7 @@ rs_append(ReturnString *rs, int guess,
   if (rs->allocated - rs->pos < guess * 2) {
     char *tmp;
 
-    tmp = allocator->alloc(allocator->allocator_data,
-        rs->allocated + guess * 2);
+    tmp = PBC_ALLOC(rs->allocated + guess * 2);
     if (!tmp) {
       PBC_FREE(rs->s);
       rs->s = NULL;
@@ -120,8 +112,7 @@ esc_str(char *src, int len, ProtobufCAllocator *allocator)
       escapes++;
     }
   }
-  dst = allocator->alloc(allocator->allocator_data,
-      (escapes * 4) + ((len - escapes) * 2) + 1);
+  dst = PBC_ALLOC((escapes * 4) + ((len - escapes) * 2) + 1);
   if (!dst) {
     return NULL;
   }
@@ -509,9 +500,6 @@ protobuf_c_text_to_string(ProtobufCMessage *m,
 {
   ReturnString rs = { 0, 0, 0, NULL };
 
-  if (!allocator) {
-    allocator = &protobuf_c_default_allocator;
-  }
   protobuf_c_text_to_string_internal(&rs, 0, m, m->descriptor, allocator);
 
   return rs.s;

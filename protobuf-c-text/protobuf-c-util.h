@@ -29,4 +29,25 @@
 #define STRUCT_MEMBER_PTR(member_type, struct_p, struct_offset) \
       ((member_type *) STRUCT_MEMBER_P((struct_p), (struct_offset)))
 
+/** Free possibly using the pbc allocator. */
+#define PBC_FREE(ptr) (allocator? allocator->free(allocator->allocator_data, \
+                                                  ptr): free(ptr))
+
+/** Allocate possibly using the pbc allocator. */
+#define PBC_ALLOC(size) (allocator? \
+                           allocator->alloc(allocator->allocator_data, size): \
+                           malloc(size))
+
+/** Free possibly using the pbc allocator (state members). */
+#define ST_FREE(ptr) (state->allocator? \
+                        state->allocator->free(state->allocator-> \
+                                               allocator_data, ptr): \
+                        free(ptr))
+
+/** Allocate possibly using the pbc allocator (state members). */
+#define ST_ALLOC(size) (state->allocator? \
+                           state->allocator->alloc(state->allocator-> \
+                                                   allocator_data, size): \
+                           malloc(size))
+
 #endif /* PROTOBUF_C_UTIL_H */

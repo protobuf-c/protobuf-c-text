@@ -60,7 +60,7 @@ local_realloc(void *ptr,
 {
   void *tmp;
 
-  tmp = allocator->alloc(allocator->allocator_data, size);
+  tmp = PBC_ALLOC(size);
   if (!tmp) {
     return NULL;
   }
@@ -72,7 +72,7 @@ local_realloc(void *ptr,
     memcpy(tmp, ptr, size);
   }
 
-  allocator->free(allocator->allocator_data, ptr);
+  PBC_FREE(ptr);
   return tmp;
 }
 
@@ -162,13 +162,13 @@ token_free(Token *t, ProtobufCAllocator *allocator)
 {
   switch (t->id) {
     case TOK_BAREWORD:
-      allocator->free(allocator->allocator_data, t->bareword);
+      PBC_FREE(t->bareword);
       break;
     case TOK_QUOTED:
-      allocator->free(allocator->allocator_data, t->qs->data);
+      PBC_FREE(t->qs->data);
       break;
     case TOK_NUMBER:
-      allocator->free(allocator->allocator_data, t->number);
+      PBC_FREE(t->number);
       break;
     default:
       break;
@@ -233,7 +233,7 @@ static void
 scanner_free(Scanner *scanner, ProtobufCAllocator *allocator)
 {
   if (scanner->f && scanner->buffer)
-    allocator->free(allocator->allocator_data, scanner->buffer);
+    PBC_FREE(scanner->buffer);
   scanner->buffer = NULL;
 }
 
@@ -257,9 +257,8 @@ unesc_str(unsigned char *src, int len, ProtobufCAllocator *allocator)
   int i = 0, dst_len = 0;
   unsigned char oct[4];
 
-  dst_pbbd = allocator->alloc(allocator->allocator_data,
-      sizeof(ProtobufCBinaryData));
-  dst = allocator->alloc(allocator->allocator_data, len + 1);
+  dst_pbbd = PBC_ALLOC(sizeof(ProtobufCBinaryData));
+  dst = PBC_ALLOC(len + 1);
   if (!dst_pbbd || !dst) {
     goto unesc_str_error;
   }
@@ -318,8 +317,8 @@ unesc_str(unsigned char *src, int len, ProtobufCAllocator *allocator)
   return dst_pbbd;
 
 unesc_str_error:
-  allocator->free(allocator->allocator_data, dst);
-  allocator->free(allocator->allocator_data, dst_pbbd);
+  PBC_FREE(dst);
+  PBC_FREE(dst_pbbd);
   return NULL;
 }
 
@@ -352,7 +351,7 @@ fill(Scanner *scanner, ProtobufCAllocator *allocator)
   if (scanner->f && !feof(scanner->f)) {
     oldlen = scanner->limit - scanner->token;
     len = CHUNK + oldlen;
-    buf = allocator->alloc(allocator->allocator_data, len);
+    buf = PBC_ALLOC(len);
     if (!buf) {
       return -1;
     }
@@ -367,7 +366,7 @@ fill(Scanner *scanner, ProtobufCAllocator *allocator)
     scanner->cursor = &buf[scanner->cursor - scanner->token];
     scanner->limit = buf + len;
     scanner->token = buf;
-    allocator->free(allocator->allocator_data, scanner->buffer);
+    PBC_FREE(scanner->buffer);
     scanner->buffer = buf;
     scanner->marker = buf;
   }
@@ -417,8 +416,7 @@ token_start:
   WS = [ \t];
 
   I | F       {
-                t.number = allocator->alloc(allocator->allocator_data,
-                       (scanner->cursor - scanner->token) + 1);
+                t.number = PBC_ALLOC((scanner->cursor - scanner->token) + 1);
                 if (!t.number) {
                   RETURN(TOK_MALLOC_ERR);
                 }
@@ -430,8 +428,7 @@ token_start:
   "true"      { t.boolean=true; RETURN(TOK_BOOLEAN); }
   "false"     { t.boolean=false; RETURN(TOK_BOOLEAN); }
   BW          {
-                t.bareword = allocator->alloc(allocator->allocator_data,
-                       (scanner->cursor - scanner->token) + 1);
+                t.bareword = PBC_ALLOC((scanner->cursor - scanner->token) + 1);
                 if (!t.bareword) {
                   RETURN(TOK_MALLOC_ERR);
                 }
@@ -520,18 +517,14 @@ state_init(State *state,
   memset(state, 0, sizeof(State));
   state->allocator = allocator;
   state->scanner = scanner;
-  state->error_str = state->allocator->alloc(
-      state->allocator->allocator_data, STATE_ERROR_STR_MAX);
-  state->msgs = state->allocator->alloc(state->allocator->allocator_data,
-      10 * sizeof(ProtobufCMessage *));
+  state->error_str = ST_ALLOC(STATE_ERROR_STR_MAX);
+  state->msgs = ST_ALLOC(10 * sizeof(ProtobufCMessage *));
   state->max_msg = 10;
-  msg = state->allocator->alloc(state->allocator->allocator_data,
-      descriptor->sizeof_message);
+  msg = ST_ALLOC(descriptor->sizeof_message);
   if (!state->msgs || !msg || !state->error_str) {
-    state->allocator->free(state->allocator->allocator_data,
-        state->error_str);
-    state->allocator->free(state->allocator->allocator_data, state->msgs);
-    state->allocator->free(state->allocator->allocator_data, msg);
+    ST_FREE(state->error_str);
+    ST_FREE(state->msgs);
+    ST_FREE(msg);
     return 0;
   }
   descriptor->message_init(msg);
@@ -557,10 +550,9 @@ static void
 state_free(State *state)
 {
   if (!state->error) {
-    state->allocator->free(state->allocator->allocator_data,
-        state->error_str);
+    ST_FREE(state->error_str);
   }
-  state->allocator->free(state->allocator->allocator_data, state->msgs);
+  ST_FREE(state->msgs);
 }
 
 /*
@@ -733,8 +725,7 @@ state_assignment(State *state, Token *t)
           state->msgs = tmp_msgs;
         }
         state->msgs[state->current_msg]
-          = state->allocator->alloc(state->allocator->allocator_data,
-              ((ProtobufCMessageDescriptor *)
+          = ST_ALLOC(((ProtobufCMessageDescriptor *)
                state->field->descriptor)->sizeof_message);
         if (!state->msgs[state->current_msg]) {
           return state_error(state, t, "Malloc failure.");
@@ -883,8 +874,7 @@ state_value(State *state, Token *t)
           }
           STRUCT_MEMBER(ProtobufCBinaryData *, msg, state->field->offset)
             = pbbd;
-          pbbd[n_members - 1].data = state->allocator->alloc(
-              state->allocator->allocator_data, t->qs->len);
+          pbbd[n_members - 1].data = ST_ALLOC(t->qs->len);
           if (!pbbd[n_members - 1].data) {
             return state_error(state, t, "Malloc failure.");
           }
@@ -894,8 +884,7 @@ state_value(State *state, Token *t)
         } else {
           pbbd = STRUCT_MEMBER_PTR(ProtobufCBinaryData, msg,
               state->field->offset);
-          pbbd->data = state->allocator->alloc(
-              state->allocator->allocator_data, t->qs->len);
+          pbbd->data = ST_ALLOC(t->qs->len);
           if (!pbbd->data) {
             return state_error(state, t, "Malloc failure.");
           }
@@ -928,8 +917,7 @@ state_value(State *state, Token *t)
             return state_error(state, t, "Malloc failure.");
           }
           STRUCT_MEMBER(unsigned char **, msg, state->field->offset) = s;
-          s[n_members - 1] = state->allocator->alloc(
-              state->allocator->allocator_data, t->qs->len + 1);
+          s[n_members - 1] = ST_ALLOC(t->qs->len + 1);
           if (!s[n_members - 1]) {
             return state_error(state, t, "Malloc failure.");
           }
@@ -939,8 +927,7 @@ state_value(State *state, Token *t)
         } else {
           unsigned char *s;
 
-          s = state->allocator->alloc(state->allocator->allocator_data,
-              t->qs->len + 1);
+          s = ST_ALLOC(t->qs->len + 1);
           if (!s) {
             return state_error(state, t, "Malloc failure.");
           }
@@ -1203,9 +1190,6 @@ protobuf_c_text_parse(const ProtobufCMessageDescriptor *descriptor,
   StateId state_id;
   ProtobufCMessage *msg = NULL;
 
-  if (!allocator) {
-    allocator = &protobuf_c_default_allocator;
-  }
   result->error_txt = NULL;
   result->complete = -1;  /* -1 means the check wasn't performed. */
 
