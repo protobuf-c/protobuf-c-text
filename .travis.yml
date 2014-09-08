@@ -1,12 +1,16 @@
 language: c
+language: cpp
+
+compiler:
+  - gcc
+  - clang
 
 before_install:
     - sudo apt-get update -qq
 
 install:
-    - sudo apt-get -q install protobuf-c-compiler
-      libprotobuf-c0 libprotobuf-c0-dev
-      check re2c
+    - sudo apt-get -q install check re2c autoconf automake libtool
+    - git clone https://github.com/protobuf-c/protobuf-c.git && cd protobuf-c && ./autogen.sh && ./configure && make && sudo make install
 
 script:
     - ./autogen.sh && make -j distcheck && make -j clean
