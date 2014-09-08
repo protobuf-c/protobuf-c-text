@@ -6,7 +6,7 @@ AM_CFLAGS = -I $(srcdir)/protobuf-c-text
 export GREP
 
 lib_LTLIBRARIES = protobuf-c-text/libprotobuf-c-text.la
-TESTS = $(srcdir)/t/test_generation.sh $(srcdir)/t/test_parse.sh t/test_msgs
+TESTS = t/test_generation.sh t/test_parse.sh t/test_msgs
 check_PROGRAMS = t/c-dump t/c-dump2 t/c-parse t/c-parse2 t/test_msgs
 check_SCRIPTS = t/test_generation.sh t/test_parse.sh
 BUILT_SOURCES = $(PROTOBUF_C_TEST_SRCS) $(PROTOBUF_C_TEST_HDRS) \
