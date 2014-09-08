@@ -9,7 +9,7 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get -q install check re2c autoconf automake libtool libprotobuf-dev protobuf-compiler
+  - sudo apt-get -q install check re2c autoconf automake libtool libprotobuf-dev protobuf-compiler libprotoc-dev
   - git clone https://github.com/protobuf-c/protobuf-c.git && cd protobuf-c && ./autogen.sh && ./configure && make && sudo make install
 
 script:
