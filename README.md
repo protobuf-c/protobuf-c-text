@@ -21,6 +21,10 @@ are in `t/`.
 The [re2c](http://re2c.org/) parser is required to generate the
 lexer (`parser.re`).
 
+Coverage needs the `lcov` tool.
+
+Documentation needs the `doxygen` and `graphviz` tools.
+
 ## Testing
 
 The `t/c-*` programs use the `BROKEN_MALLOC` and `BROKEN_MALLOC_SEGV`
