@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <google/protobuf-c/protobuf-c.h>
+#include <protobuf-c/protobuf-c.h>
 
 static void *
 broken_alloc(void *allocator_data, size_t size)

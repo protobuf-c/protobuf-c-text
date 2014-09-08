@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <google/protobuf-c/protobuf-c.h>
+#include <protobuf-c/protobuf-c.h>
 #include "protobuf-c-text.h"
 #include "protobuf-c-util.h"
 #include "config.h"

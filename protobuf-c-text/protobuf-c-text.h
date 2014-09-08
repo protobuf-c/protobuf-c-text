@@ -69,7 +69,7 @@ message Ponycopter {
  * \b Generating
  *
  * \verbatim
-#include <google/protobuf-c/protobuf-c.h>
+#include <protobuf-c/protobuf-c.h>
 #include "ponycopter.pb-c.h"
 
 int main(int argc, char *argv[]) {
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
  * \b Parsing
  *
  * \verbatim
-#include <google/protobuf-c/protobuf-c.h>
+#include <protobuf-c/protobuf-c.h>
 #include "ponycopter.pb-c.h"
 
 int main(int argc, char *argv[]) {
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
  */
 
 #include <stdio.h>  /* for the FILE * data type. */
-#include <google/protobuf-c/protobuf-c.h>
+#include <protobuf-c/protobuf-c.h>
 
 /** \defgroup api Public API for text format protobufs
  *

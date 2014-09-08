@@ -36,9 +36,16 @@ protobuf_c_text_libprotobuf_c_text_la_LDFLAGS = \
 	$(COVERAGE_LDFLAGS) -version-info 2:0:0
 
 # Headers for libraries.
-libprotobuf_c_textdir = $(includedir)/google/protobuf-c
+libprotobuf_c_textdir = $(includedir)/protobuf-c
 libprotobuf_c_text_HEADERS = protobuf-c-text/protobuf-c-text.h
 pkgconfig_DATA = protobuf-c-text/libprotobuf-c-text.pc
+
+# Set up links where people might look for protobuf-related headers.
+install-data-hook:
+	$(MKDIR_P) $(DESTDIR)$(includedir)/google/protobuf-c
+	cd $(DESTDIR)$(includedir)/google/protobuf-c && rm -vf protobuf-c-text.h
+	cd $(DESTDIR)$(includedir)/google/protobuf-c && $(LN_S) \
+	  ../../protobuf-c/protobuf-c-text.h protobuf-c-text.h
 
 # Static analysis.
 analyze_srcs = protobuf-c-text/generate.c protobuf-c-text/parse.c

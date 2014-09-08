@@ -679,7 +679,7 @@ protobuf_c_text_libprotobuf_c_text_la_LDFLAGS = \
 
 
 # Headers for libraries.
-libprotobuf_c_textdir = $(includedir)/google/protobuf-c
+libprotobuf_c_textdir = $(includedir)/protobuf-c
 libprotobuf_c_text_HEADERS = protobuf-c-text/protobuf-c-text.h
 pkgconfig_DATA = protobuf-c-text/libprotobuf-c-text.pc
 
@@ -1757,7 +1757,8 @@ info-am:
 
 install-data-am: install-libprotobuf_c_textHEADERS install-man \
 	install-pkgconfigDATA
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
 
 install-dvi-am:
@@ -1810,7 +1811,8 @@ uninstall-am: uninstall-libLTLIBRARIES \
 
 uninstall-man: uninstall-man3
 
-.MAKE: all check check-am install install-am install-strip
+.MAKE: all check check-am install install-am install-data-am \
+	install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--refresh check check-TESTS \
 	check-am clean clean-checkPROGRAMS clean-cscope clean-generic \
@@ -1821,9 +1823,9 @@ uninstall-man: uninstall-man3
 	distclean-hdr distclean-libtool distclean-local distclean-tags \
 	distcleancheck distdir distuninstallcheck dvi dvi-am html \
 	html-am info info-am install install-am install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-libLTLIBRARIES \
+	install-data-am install-data-hook install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-libLTLIBRARIES \
 	install-libprotobuf_c_textHEADERS install-man install-man3 \
 	install-pdf install-pdf-am install-pkgconfigDATA install-ps \
 	install-ps-am install-strip installcheck installcheck-am \
@@ -1835,6 +1837,13 @@ uninstall-man: uninstall-man3
 	uninstall-man3 uninstall-pkgconfigDATA
 
 export GREP
+
+# Set up links where people might look for protobuf-related headers.
+install-data-hook:
+	$(MKDIR_P) $(DESTDIR)$(includedir)/google/protobuf-c
+	cd $(DESTDIR)$(includedir)/google/protobuf-c && rm -vf protobuf-c-text.h
+	cd $(DESTDIR)$(includedir)/google/protobuf-c && $(LN_S) \
+	  ../../protobuf-c/protobuf-c-text.h protobuf-c-text.h
 .PHONY: analyze
 analyze: all
 	@for f in $(analyze_srcs); do \
