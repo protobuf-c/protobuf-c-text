@@ -1,8 +1,8 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions." alt="" coords="140,32,289,61"/>
-<area shape="rect" id="node9" href="$group__state.html#ga76cec240c181b7b8482d59ec75ac06fd" title="Expect a colon or opening brace." alt="" coords="152,85,277,115"/>
-<area shape="rect" id="node11" href="$group__state.html#ga4e02f271e7eaec766db0b3b72b0bcc93" title="Expect an element name (bareword) or a closing brace." alt="" coords="172,139,257,168"/>
-<area shape="rect" id="node13" href="$group__state.html#ga91d37ec661f5110ede1a786d2fc8c4b2" title="Expect a quoted string, enum (bareword) or boolean." alt="" coords="171,192,259,221"/>
-<area shape="rect" id="node5" href="$group__api.html#ga2801ad7b57ea6dfb51eab72ac20df725" title="Import a text format protobuf from a FILE into a ProtobufCMessage." alt="" coords="347,5,515,35"/>
-<area shape="rect" id="node7" href="$group__api.html#ga5f9ce0b2adb704390e37c66a81cbbfb6" title="Import a text format protobuf from a string into a ProtobufCMessage." alt="" coords="339,59,523,88"/>
+<map id="state_error" name="state_error">
+<area shape="rect" id="node2" href="$group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions. " alt="" coords="139,35,290,61"/>
+<area shape="rect" id="node5" href="$group__state.html#ga76cec240c181b7b8482d59ec75ac06fd" title="Expect a colon or opening brace. " alt="" coords="152,85,277,112"/>
+<area shape="rect" id="node6" href="$group__state.html#ga4e02f271e7eaec766db0b3b72b0bcc93" title="Expect an element name (bareword) or a closing brace. " alt="" coords="171,136,258,163"/>
+<area shape="rect" id="node7" href="$group__state.html#ga91d37ec661f5110ede1a786d2fc8c4b2" title="Expect a quoted string, enum (bareword) or boolean. " alt="" coords="170,187,259,213"/>
+<area shape="rect" id="node3" href="$group__api.html#ga2801ad7b57ea6dfb51eab72ac20df725" title="Import a text format protobuf from a FILE into a ProtobufCMessage. " alt="" coords="339,5,509,32"/>
+<area shape="rect" id="node4" href="$group__api.html#ga5f9ce0b2adb704390e37c66a81cbbfb6" title="Import a text format protobuf from a string into a ProtobufCMessage. " alt="" coords="351,57,497,98"/>
 </map>

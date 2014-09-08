@@ -1,5 +1,5 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions." alt="" coords="153,32,303,61"/>
-<area shape="rect" id="node5" href="$group__api.html#ga2801ad7b57ea6dfb51eab72ac20df725" title="Import a text format protobuf from a FILE into a ProtobufCMessage." alt="" coords="360,5,528,35"/>
-<area shape="rect" id="node7" href="$group__api.html#ga5f9ce0b2adb704390e37c66a81cbbfb6" title="Import a text format protobuf from a string into a ProtobufCMessage." alt="" coords="352,59,536,88"/>
+<map id="scanner_free" name="scanner_free">
+<area shape="rect" id="node2" href="$group__base-parse.html#gad3448fa18d6c523cb2753f2f9569e0ae" title="Base function for the API functions. " alt="" coords="153,35,303,61"/>
+<area shape="rect" id="node3" href="$group__api.html#ga2801ad7b57ea6dfb51eab72ac20df725" title="Import a text format protobuf from a FILE into a ProtobufCMessage. " alt="" coords="353,5,522,32"/>
+<area shape="rect" id="node4" href="$group__api.html#ga5f9ce0b2adb704390e37c66a81cbbfb6" title="Import a text format protobuf from a string into a ProtobufCMessage. " alt="" coords="365,57,510,98"/>
 </map>

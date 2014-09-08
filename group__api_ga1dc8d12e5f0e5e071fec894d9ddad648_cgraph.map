@@ -1,5 +1,5 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__generate.html#ga2e1ef254417a19863190fa840af64b5e" title="Internal function to back API function." alt="" coords="224,32,443,61"/>
-<area shape="rect" id="node5" href="$group__generate.html#ga3cda708db3cc3794d0bbc3c32519a4e3" title="Escape string." alt="" coords="500,5,564,35"/>
-<area shape="rect" id="node7" href="$group__utility.html#gaf67715a6d806918456d60305156bb3b8" title="Append a string to the ReturnString." alt="" coords="491,59,573,88"/>
+<map id="protobuf_c_text_to_string" name="protobuf_c_text_to_string">
+<area shape="rect" id="node2" href="$group__generate.html#ga2e1ef254417a19863190fa840af64b5e" title="Internal function to back API function. " alt="" coords="184,23,315,65"/>
+<area shape="rect" id="node3" href="$group__generate.html#ga3cda708db3cc3794d0bbc3c32519a4e3" title="Escape string. " alt="" coords="371,5,437,32"/>
+<area shape="rect" id="node4" href="$generate_8c.html#af67715a6d806918456d60305156bb3b8" title="Append a string to the ReturnString. " alt="" coords="363,56,445,83"/>
 </map>

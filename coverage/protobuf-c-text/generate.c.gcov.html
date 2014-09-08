@@ -1,0 +1,590 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - PB-C-TEXT Code Coverage - protobuf-c-text/generate.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">protobuf-c-text</a> - generate.c<span style="font-size: 80%;"> (source / <a href="generate.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">PB-C-TEXT Code Coverage</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">212</td>
+            <td class="headerCovTableEntry">223</td>
+            <td class="headerCovTableEntryHi">95.1 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2014-09-08</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+</td>
+            <td></td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /** \file</a>
+<span class="lineNum">       2 </span>            :  * Routines to generate text format protobufs.
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * This file contains the internal support functions as well as the
+<span class="lineNum">       5 </span>            :  * exported functions which are used to generate text format protobufs
+<span class="lineNum">       6 </span>            :  * from C protobuf data types.
+<span class="lineNum">       7 </span>            :  *
+<span class="lineNum">       8 </span>            :  * \author Kevin Lyda &lt;kevin@ie.suberic.net&gt;
+<span class="lineNum">       9 </span>            :  * \date   March 2014
+<span class="lineNum">      10 </span>            :  */
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : #include &lt;sys/types.h&gt;
+<span class="lineNum">      13 </span>            : #include &lt;unistd.h&gt;
+<span class="lineNum">      14 </span>            : #include &lt;stdarg.h&gt;
+<span class="lineNum">      15 </span>            : #include &lt;stdio.h&gt;
+<span class="lineNum">      16 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      17 </span>            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      18 </span>            : #include &lt;protobuf-c/protobuf-c.h&gt;
+<span class="lineNum">      19 </span>            : #include &quot;protobuf-c-text.h&quot;
+<span class="lineNum">      20 </span>            : #include &quot;protobuf-c-util.h&quot;
+<span class="lineNum">      21 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      22 </span>            : 
+<span class="lineNum">      23 </span>            : /** A dynamic string struct.
+<span class="lineNum">      24 </span>            :  *
+<span class="lineNum">      25 </span>            :  * Used to track additions to a growing string and memory allocation
+<span class="lineNum">      26 </span>            :  * errors that occur in processing
+<span class="lineNum">      27 </span>            :  */
+<span class="lineNum">      28 </span>            : typedef struct _ReturnString {
+<span class="lineNum">      29 </span>            :   int malloc_err;  /**&lt; Set to 1 when there's been a malloc error. */
+<span class="lineNum">      30 </span>            :   int allocated;   /**&lt; Size of allocated string. */
+<span class="lineNum">      31 </span>            :   int pos;         /**&lt; Current end of the string. */
+<span class="lineNum">      32 </span>            :   char *s;         /**&lt; The string. */
+<span class="lineNum">      33 </span>            : } ReturnString;
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : /** Append a string to the ReturnString.
+<span class="lineNum">      36 </span>            :  *
+<span class="lineNum">      37 </span>            :  * Append the string built from \c format and its args to the \c rs
+<span class="lineNum">      38 </span>            :  * string. Note that \c malloc_err is checked and if it's true,
+<span class="lineNum">      39 </span>            :  * this function won't do anything.
+<span class="lineNum">      40 </span>            :  *
+<span class="lineNum">      41 </span>            :  * \param[in,out] rs The string to append to.
+<span class="lineNum">      42 </span>            :  * \param[in] guess A guess at the number of chars being added.
+<span class="lineNum">      43 </span>            :  * \param[in] allocator allocator functions.
+<span class="lineNum">      44 </span>            :  * \param[in] format Printf-style format string.
+<span class="lineNum">      45 </span>            :  * \param[in] ... Variable number of args for \c format.
+<span class="lineNum">      46 </span>            :  */
+<span class="lineNum">      47 </span>            : static void rs_append(ReturnString *rs, int guess,
+<span class="lineNum">      48 </span>            :     ProtobufCAllocator *allocator,
+<span class="lineNum">      49 </span>            :     const char *format, ...)
+<a name="50"><span class="lineNum">      50 </span>            :   __attribute__((format(printf, 4, 5)));</a>
+<span class="lineNum">      51 </span>            : static void
+<span class="lineNum">      52 </span><span class="lineCov">       1120 : rs_append(ReturnString *rs, int guess,</span>
+<span class="lineNum">      53 </span>            :     ProtobufCAllocator *allocator,
+<span class="lineNum">      54 </span>            :     const char *format, ...)
+<span class="lineNum">      55 </span>            : {
+<span class="lineNum">      56 </span>            :   va_list args;
+<span class="lineNum">      57 </span>            :   int added;
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span><span class="lineCov">       1120 :   if (rs-&gt;malloc_err) {</span>
+<span class="lineNum">      60 </span><span class="lineCov">        117 :     return;</span>
+<span class="lineNum">      61 </span>            :   }
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineCov">       1003 :   if (rs-&gt;allocated - rs-&gt;pos &lt; guess * 2) {</span>
+<span class="lineNum">      64 </span>            :     char *tmp;
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span><span class="lineCov">        325 :     tmp = PBC_ALLOC(rs-&gt;allocated + guess * 2);</span>
+<span class="lineNum">      67 </span><span class="lineCov">        325 :     if (!tmp) {</span>
+<span class="lineNum">      68 </span><span class="lineCov">         18 :       PBC_FREE(rs-&gt;s);</span>
+<span class="lineNum">      69 </span><span class="lineCov">         18 :       rs-&gt;s = NULL;</span>
+<span class="lineNum">      70 </span><span class="lineCov">         18 :       rs-&gt;malloc_err = 1;</span>
+<span class="lineNum">      71 </span><span class="lineCov">         18 :       return;</span>
+<span class="lineNum">      72 </span>            :     }
+<span class="lineNum">      73 </span><span class="lineCov">        307 :     memcpy(tmp, rs-&gt;s, rs-&gt;allocated);</span>
+<span class="lineNum">      74 </span><span class="lineCov">        307 :     PBC_FREE(rs-&gt;s);</span>
+<span class="lineNum">      75 </span><span class="lineCov">        307 :     rs-&gt;s = tmp;</span>
+<span class="lineNum">      76 </span><span class="lineCov">        307 :     rs-&gt;allocated += guess * 2;</span>
+<span class="lineNum">      77 </span>            :   }
+<span class="lineNum">      78 </span><span class="lineCov">        985 :   va_start(args, format);</span>
+<span class="lineNum">      79 </span><span class="lineCov">        985 :   added = vsnprintf(rs-&gt;s + rs-&gt;pos, rs-&gt;allocated - rs-&gt;pos, format, args);</span>
+<span class="lineNum">      80 </span><span class="lineCov">        985 :   va_end(args);</span>
+<span class="lineNum">      81 </span><span class="lineCov">        985 :   rs-&gt;pos += added;</span>
+<span class="lineNum">      82 </span><span class="lineCov">        985 :   return;</span>
+<span class="lineNum">      83 </span>            : }
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span>            : /** @} */  /* End of utility group. */
+<span class="lineNum">      86 </span>            : 
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span>            : /** \defgroup generate Functions to generate text format proto bufs
+<span class="lineNum">      89 </span>            :  * \ingroup internal
+<span class="lineNum">      90 </span>            :  * @{
+<span class="lineNum">      91 </span>            :  */
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span>            : /** Escape string.
+<span class="lineNum">      94 </span>            :  *
+<span class="lineNum">      95 </span>            :  * Add escape characters to strings for problematic characters.
+<span class="lineNum">      96 </span>            :  *
+<span class="lineNum">      97 </span>            :  * \param[in] src The unescaped string to process.
+<span class="lineNum">      98 </span>            :  * \param[in] len Length of \c src. Note that \c src might have ASCII
+<span class="lineNum">      99 </span>            :  *                \c NULs so strlen() isn't good enough here.
+<span class="lineNum">     100 </span>            :  * \param[in] allocator allocator functions.
+<span class="lineNum">     101 </span>            :  * \return The fully escaped string, or \c NULL if there has been an
+<span class="lineNum">     102 </span>            :  *         allocation error.
+<a name="103"><span class="lineNum">     103 </span>            :  */</a>
+<span class="lineNum">     104 </span>            : static char *
+<span class="lineNum">     105 </span><span class="lineCov">        223 : esc_str(char *src, int len, ProtobufCAllocator *allocator)</span>
+<span class="lineNum">     106 </span>            : {
+<span class="lineNum">     107 </span><span class="lineCov">        223 :   int i, escapes = 0, dst_len = 0;</span>
+<span class="lineNum">     108 </span>            :   unsigned char *dst;
+<span class="lineNum">     109 </span>            : 
+<span class="lineNum">     110 </span><span class="lineCov">       4566 :   for (i = 0; i &lt; len; i++) {</span>
+<span class="lineNum">     111 </span><span class="lineCov">       4343 :     if (!isprint(src[i])) {</span>
+<span class="lineNum">     112 </span><span class="lineCov">        239 :       escapes++;</span>
+<span class="lineNum">     113 </span>            :     }
+<span class="lineNum">     114 </span>            :   }
+<span class="lineNum">     115 </span><span class="lineCov">        223 :   dst = PBC_ALLOC((escapes * 4) + ((len - escapes) * 2) + 1);</span>
+<span class="lineNum">     116 </span><span class="lineCov">        223 :   if (!dst) {</span>
+<span class="lineNum">     117 </span><span class="lineCov">         13 :     return NULL;</span>
+<span class="lineNum">     118 </span>            :   }
+<span class="lineNum">     119 </span>            : 
+<span class="lineNum">     120 </span><span class="lineCov">       3721 :   for (i = 0; i &lt; len; i++) {</span>
+<span class="lineNum">     121 </span><span class="lineCov">       3511 :     switch (src[i]) {</span>
+<span class="lineNum">     122 </span>            :       /* Special cases. */
+<span class="lineNum">     123 </span>            :       case '\'':
+<span class="lineNum">     124 </span><span class="lineCov">          1 :         dst[dst_len++] = '\\';</span>
+<span class="lineNum">     125 </span><span class="lineCov">          1 :         dst[dst_len++] = '\'';</span>
+<span class="lineNum">     126 </span><span class="lineCov">          1 :         break;</span>
+<span class="lineNum">     127 </span>            :       case '\&quot;':
+<span class="lineNum">     128 </span><span class="lineCov">          1 :         dst[dst_len++] = '\\';</span>
+<span class="lineNum">     129 </span><span class="lineCov">          1 :         dst[dst_len++] = '\&quot;';</span>
+<span class="lineNum">     130 </span><span class="lineCov">          1 :         break;</span>
+<span class="lineNum">     131 </span>            :       case '\\':
+<span class="lineNum">     132 </span><span class="lineCov">          5 :         dst[dst_len++] = '\\';</span>
+<span class="lineNum">     133 </span><span class="lineCov">          5 :         dst[dst_len++] = '\\';</span>
+<span class="lineNum">     134 </span><span class="lineCov">          5 :         break;</span>
+<span class="lineNum">     135 </span>            :       case '\n':
+<span class="lineNum">     136 </span><span class="lineCov">         31 :         dst[dst_len++] = '\\';</span>
+<span class="lineNum">     137 </span><span class="lineCov">         31 :         dst[dst_len++] = 'n';</span>
+<span class="lineNum">     138 </span><span class="lineCov">         31 :         break;</span>
+<span class="lineNum">     139 </span>            :       case '\r':
+<span class="lineNum">     140 </span><span class="lineCov">         21 :         dst[dst_len++] = '\\';</span>
+<span class="lineNum">     141 </span><span class="lineCov">         21 :         dst[dst_len++] = 'r';</span>
+<span class="lineNum">     142 </span><span class="lineCov">         21 :         break;</span>
+<span class="lineNum">     143 </span>            :       case '\t':
+<span class="lineNum">     144 </span><span class="lineCov">          5 :         dst[dst_len++] = '\\';</span>
+<span class="lineNum">     145 </span><span class="lineCov">          5 :         dst[dst_len++] = 't';</span>
+<span class="lineNum">     146 </span><span class="lineCov">          5 :         break;</span>
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span>            :       /* Escape with octal if !isprint. */
+<span class="lineNum">     149 </span>            :       default:
+<span class="lineNum">     150 </span><span class="lineCov">       3447 :         if (!isprint(src[i])) {</span>
+<span class="lineNum">     151 </span><span class="lineCov">        134 :           dst_len += sprintf(dst + dst_len, &quot;\\%03o&quot;, src[i]);</span>
+<span class="lineNum">     152 </span>            :         } else {
+<span class="lineNum">     153 </span><span class="lineCov">       3313 :           dst[dst_len++] = src[i];</span>
+<span class="lineNum">     154 </span>            :         }
+<span class="lineNum">     155 </span><span class="lineCov">       3447 :         break;</span>
+<span class="lineNum">     156 </span>            :     }
+<span class="lineNum">     157 </span>            :   }
+<span class="lineNum">     158 </span><span class="lineCov">        210 :   dst[dst_len] = '\0';</span>
+<span class="lineNum">     159 </span>            : 
+<span class="lineNum">     160 </span><span class="lineCov">        210 :   return dst;</span>
+<span class="lineNum">     161 </span>            : }
+<span class="lineNum">     162 </span>            : 
+<span class="lineNum">     163 </span>            : /** Internal function to back API function.
+<span class="lineNum">     164 </span>            :  *
+<span class="lineNum">     165 </span>            :  * Has a few extra params to better enable recursion.  This function gets
+<span class="lineNum">     166 </span>            :  * called for each nested message as the \c ProtobufCMessage struct is
+<span class="lineNum">     167 </span>            :  * traversed.
+<span class="lineNum">     168 </span>            :  *
+<span class="lineNum">     169 </span>            :  * \param[in,out] rs The string being built up for the text format protobuf.
+<span class="lineNum">     170 </span>            :  * \param[in] level Indent level - increments in 2's.
+<span class="lineNum">     171 </span>            :  * \param[in] m The \c ProtobufCMessage being serialised.
+<span class="lineNum">     172 </span>            :  * \param[in] d The descriptor for the \c ProtobufCMessage.
+<span class="lineNum">     173 </span>            :  * \param[in] allocator allocator functions.
+<a name="174"><span class="lineNum">     174 </span>            :  */</a>
+<span class="lineNum">     175 </span>            : static void
+<span class="lineNum">     176 </span><span class="lineCov">        198 : protobuf_c_text_to_string_internal(ReturnString *rs,</span>
+<span class="lineNum">     177 </span>            :     int level,
+<span class="lineNum">     178 </span>            :     ProtobufCMessage *m,
+<span class="lineNum">     179 </span>            :     const ProtobufCMessageDescriptor *d,
+<span class="lineNum">     180 </span>            :     ProtobufCAllocator *allocator)
+<span class="lineNum">     181 </span>            : {
+<span class="lineNum">     182 </span>            :   int i;
+<span class="lineNum">     183 </span>            :   size_t j, quantifier_offset;
+<span class="lineNum">     184 </span>            :   double float_var;
+<span class="lineNum">     185 </span>            :   const ProtobufCFieldDescriptor *f;
+<span class="lineNum">     186 </span>            :   ProtobufCEnumDescriptor *enumd;
+<span class="lineNum">     187 </span>            :   const ProtobufCEnumValue *enumv;
+<span class="lineNum">     188 </span>            : 
+<span class="lineNum">     189 </span><span class="lineCov">        198 :   f = d-&gt;fields;</span>
+<span class="lineNum">     190 </span><span class="lineCov">       1156 :   for (i = 0; i &lt; d-&gt;n_fields; i++) {</span>
+<span class="lineNum">     191 </span><span class="lineCov">       1032 :     if (rs-&gt;malloc_err) {</span>
+<span class="lineNum">     192 </span>            :       /* If there's been a malloc error, go die. */
+<span class="lineNum">     193 </span><span class="lineCov">         61 :       return;</span>
+<span class="lineNum">     194 </span>            :     }
+<span class="lineNum">     195 </span>            : 
+<span class="lineNum">     196 </span>            :     /* Decide if something needs to be done for this field. */
+<span class="lineNum">     197 </span><span class="lineCov">        971 :     switch (f[i].label) {</span>
+<span class="lineNum">     198 </span>            :       case PROTOBUF_C_LABEL_OPTIONAL:
+<span class="lineNum">     199 </span><span class="lineCov">        680 :         if (f[i].type == PROTOBUF_C_TYPE_STRING) {</span>
+<span class="lineNum">     200 </span><span class="lineCov">         90 :           if (!STRUCT_MEMBER(char *, m, f[i].offset)</span>
+<span class="lineNum">     201 </span><span class="lineCov">        124 :               || (STRUCT_MEMBER(char *, m, f[i].offset)</span>
+<span class="lineNum">     202 </span><span class="lineCov">         62 :                 == (char *)f[i].default_value)) {</span>
+<span class="lineNum">     203 </span><span class="lineCov">         28 :             continue;</span>
+<span class="lineNum">     204 </span>            :           }
+<span class="lineNum">     205 </span><span class="lineCov">        590 :         } else if (f[i].type == PROTOBUF_C_TYPE_MESSAGE) {</span>
+<span class="lineNum">     206 </span><span class="lineCov">          2 :           if (!STRUCT_MEMBER(char *, m, f[i].offset)) {</span>
+<span class="lineNum">     207 </span><span class="lineCov">          1 :             continue;</span>
+<span class="lineNum">     208 </span>            :           }
+<span class="lineNum">     209 </span>            :         } else {
+<span class="lineNum">     210 </span><span class="lineCov">        588 :           if (!STRUCT_MEMBER(protobuf_c_boolean, m, f[i].quantifier_offset)) {</span>
+<span class="lineNum">     211 </span><span class="lineCov">         65 :             continue;</span>
+<span class="lineNum">     212 </span>            :           }
+<span class="lineNum">     213 </span>            :         }
+<span class="lineNum">     214 </span><span class="lineCov">        586 :         break;</span>
+<span class="lineNum">     215 </span>            :       case PROTOBUF_C_LABEL_REPEATED:
+<span class="lineNum">     216 </span><span class="lineCov">        100 :         if (!STRUCT_MEMBER(size_t, m, f[i].quantifier_offset)) {</span>
+<span class="lineNum">     217 </span><span class="lineCov">          7 :           continue;</span>
+<span class="lineNum">     218 </span>            :         }
+<span class="lineNum">     219 </span><span class="lineCov">         93 :         break;</span>
+<span class="lineNum">     220 </span>            :     }
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span><span class="lineCov">        870 :     quantifier_offset = STRUCT_MEMBER(size_t, m, f[i].quantifier_offset);</span>
+<span class="lineNum">     223 </span>            :     /* Field exists and has data, dump it. */
+<span class="lineNum">     224 </span><span class="lineCov">        870 :     switch (f[i].type) {</span>
+<span class="lineNum">     225 </span>            :       case PROTOBUF_C_TYPE_INT32:
+<span class="lineNum">     226 </span>            :       case PROTOBUF_C_TYPE_UINT32:
+<span class="lineNum">     227 </span>            :       case PROTOBUF_C_TYPE_FIXED32:
+<span class="lineNum">     228 </span><span class="lineCov">        130 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     229 </span><span class="lineCov">          6 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     230 </span><span class="lineCov">          8 :             rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     231 </span>            :                 allocator,
+<span class="lineNum">     232 </span>            :                 &quot;%*s%s: %u\n&quot;,
+<span class="lineNum">     233 </span><span class="lineCov">          4 :                 level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     234 </span><span class="lineCov">          4 :                 STRUCT_MEMBER(uint32_t *, m, f[i].offset)[j]);</span>
+<span class="lineNum">     235 </span>            :           }
+<span class="lineNum">     236 </span>            :         } else {
+<span class="lineNum">     237 </span><span class="lineCov">        256 :           rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     238 </span>            :               allocator,
+<span class="lineNum">     239 </span>            :               &quot;%*s%s: %u\n&quot;,
+<span class="lineNum">     240 </span><span class="lineCov">        128 :               level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     241 </span><span class="lineCov">        128 :               STRUCT_MEMBER(uint32_t, m, f[i].offset));</span>
+<span class="lineNum">     242 </span>            :         }
+<span class="lineNum">     243 </span><span class="lineCov">        130 :         break;</span>
+<span class="lineNum">     244 </span>            :       case PROTOBUF_C_TYPE_SINT32:
+<span class="lineNum">     245 </span>            :       case PROTOBUF_C_TYPE_SFIXED32:
+<span class="lineNum">     246 </span><span class="lineCov">         73 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     247 </span><span class="lineCov">          6 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     248 </span><span class="lineCov">          8 :             rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     249 </span>            :                 allocator,
+<span class="lineNum">     250 </span>            :                 &quot;%*s%s: %d\n&quot;,
+<span class="lineNum">     251 </span><span class="lineCov">          4 :                 level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     252 </span><span class="lineCov">          4 :                 STRUCT_MEMBER(int32_t *, m, f[i].offset)[j]);</span>
+<span class="lineNum">     253 </span>            :           }
+<span class="lineNum">     254 </span>            :         } else {
+<span class="lineNum">     255 </span><span class="lineCov">        142 :           rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     256 </span>            :               allocator,
+<span class="lineNum">     257 </span>            :               &quot;%*s%s: %d\n&quot;,
+<span class="lineNum">     258 </span><span class="lineCov">         71 :               level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     259 </span><span class="lineCov">         71 :               STRUCT_MEMBER(int32_t, m, f[i].offset));</span>
+<span class="lineNum">     260 </span>            :         }
+<span class="lineNum">     261 </span><span class="lineCov">         73 :         break;</span>
+<span class="lineNum">     262 </span>            :       case PROTOBUF_C_TYPE_INT64:
+<span class="lineNum">     263 </span>            :       case PROTOBUF_C_TYPE_UINT64:
+<span class="lineNum">     264 </span>            :       case PROTOBUF_C_TYPE_FIXED64:
+<span class="lineNum">     265 </span><span class="lineCov">        113 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     266 </span><span class="lineCov">          9 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     267 </span><span class="lineCov">         12 :             rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     268 </span>            :                 allocator,
+<span class="lineNum">     269 </span>            :                 &quot;%*s%s: %lu\n&quot;,
+<span class="lineNum">     270 </span><span class="lineCov">          6 :                 level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     271 </span><span class="lineCov">          6 :                 STRUCT_MEMBER(uint64_t *, m, f[i].offset)[j]);</span>
+<span class="lineNum">     272 </span>            :           }
+<span class="lineNum">     273 </span>            :         } else {
+<span class="lineNum">     274 </span><span class="lineCov">        220 :           rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     275 </span>            :               allocator,
+<span class="lineNum">     276 </span>            :               &quot;%*s%s: %lu\n&quot;,
+<span class="lineNum">     277 </span><span class="lineCov">        110 :               level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     278 </span><span class="lineCov">        110 :               STRUCT_MEMBER(uint64_t, m, f[i].offset));</span>
+<span class="lineNum">     279 </span>            :         }
+<span class="lineNum">     280 </span><span class="lineCov">        113 :         break;</span>
+<span class="lineNum">     281 </span>            :       case PROTOBUF_C_TYPE_SINT64:
+<span class="lineNum">     282 </span>            :       case PROTOBUF_C_TYPE_SFIXED64:
+<span class="lineNum">     283 </span><span class="lineCov">         78 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     284 </span><span class="lineCov">          6 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     285 </span><span class="lineCov">          8 :             rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     286 </span>            :                 allocator,
+<span class="lineNum">     287 </span>            :                 &quot;%*s%s: %ld\n&quot;,
+<span class="lineNum">     288 </span><span class="lineCov">          4 :                 level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     289 </span><span class="lineCov">          4 :                 STRUCT_MEMBER(int64_t *, m, f[i].offset)[j]);</span>
+<span class="lineNum">     290 </span>            :           }
+<span class="lineNum">     291 </span>            :         } else {
+<span class="lineNum">     292 </span><span class="lineCov">        152 :           rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     293 </span>            :               allocator,
+<span class="lineNum">     294 </span>            :               &quot;%*s%s: %ld\n&quot;,
+<span class="lineNum">     295 </span><span class="lineCov">         76 :               level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     296 </span><span class="lineCov">         76 :               STRUCT_MEMBER(int64_t, m, f[i].offset));</span>
+<span class="lineNum">     297 </span>            :         }
+<span class="lineNum">     298 </span><span class="lineCov">         78 :         break;</span>
+<span class="lineNum">     299 </span>            :       case PROTOBUF_C_TYPE_FLOAT:
+<span class="lineNum">     300 </span><span class="lineCov">         40 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     301 </span><span class="lineCov">          3 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     302 </span><span class="lineCov">          2 :             float_var = STRUCT_MEMBER(float *, m, f[i].offset)[j];</span>
+<span class="lineNum">     303 </span><span class="lineCov">          2 :             rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     304 </span>            :                 allocator,
+<span class="lineNum">     305 </span>            :                 &quot;%*s%s: %g\n&quot;,
+<span class="lineNum">     306 </span><span class="lineCov">          2 :                 level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     307 </span>            :                 float_var);
+<span class="lineNum">     308 </span>            :           }
+<span class="lineNum">     309 </span>            :         } else {
+<span class="lineNum">     310 </span><span class="lineCov">         39 :           float_var = STRUCT_MEMBER(float, m, f[i].offset);</span>
+<span class="lineNum">     311 </span><span class="lineCov">         39 :           rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     312 </span>            :               allocator,
+<span class="lineNum">     313 </span>            :               &quot;%*s%s: %g\n&quot;,
+<span class="lineNum">     314 </span><span class="lineCov">         39 :               level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     315 </span>            :               float_var);
+<span class="lineNum">     316 </span>            :         }
+<span class="lineNum">     317 </span><span class="lineCov">         40 :         break;</span>
+<span class="lineNum">     318 </span>            :       case PROTOBUF_C_TYPE_DOUBLE:
+<span class="lineNum">     319 </span><span class="lineCov">         41 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     320 </span><span class="lineCov">          3 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     321 </span><span class="lineCov">          4 :             rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     322 </span>            :                 allocator,
+<span class="lineNum">     323 </span>            :                 &quot;%*s%s: %g\n&quot;,
+<span class="lineNum">     324 </span><span class="lineCov">          2 :                 level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     325 </span><span class="lineCov">          2 :                 STRUCT_MEMBER(double *, m, f[i].offset)[j]);</span>
+<span class="lineNum">     326 </span>            :           }
+<span class="lineNum">     327 </span>            :         } else {
+<span class="lineNum">     328 </span><span class="lineCov">         80 :           rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     329 </span>            :               allocator,
+<span class="lineNum">     330 </span>            :               &quot;%*s%s: %g\n&quot;,
+<span class="lineNum">     331 </span><span class="lineCov">         40 :               level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     332 </span><span class="lineCov">         40 :               STRUCT_MEMBER(double, m, f[i].offset));</span>
+<span class="lineNum">     333 </span>            :         }
+<span class="lineNum">     334 </span><span class="lineCov">         41 :         break;</span>
+<span class="lineNum">     335 </span>            :       case PROTOBUF_C_TYPE_BOOL:
+<span class="lineNum">     336 </span><span class="lineCov">         35 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     337 </span><span class="lineCov">          3 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     338 </span><span class="lineCov">          4 :             rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     339 </span>            :                 allocator,
+<span class="lineNum">     340 </span>            :                 &quot;%*s%s: %s\n&quot;,
+<span class="lineNum">     341 </span><span class="lineCov">          2 :                 level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     342 </span><span class="lineCov">          2 :                 STRUCT_MEMBER(protobuf_c_boolean *, m, f[i].offset)[j]?</span>
+<span class="lineNum">     343 </span>            :                 &quot;true&quot;: &quot;false&quot;);
+<span class="lineNum">     344 </span>            :           }
+<span class="lineNum">     345 </span>            :         } else {
+<span class="lineNum">     346 </span><span class="lineCov">         68 :           rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     347 </span>            :               allocator,
+<span class="lineNum">     348 </span>            :               &quot;%*s%s: %s\n&quot;,
+<span class="lineNum">     349 </span><span class="lineCov">         34 :               level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     350 </span><span class="lineCov">         34 :               STRUCT_MEMBER(protobuf_c_boolean, m, f[i].offset)?</span>
+<span class="lineNum">     351 </span>            :               &quot;true&quot;: &quot;false&quot;);
+<span class="lineNum">     352 </span>            :         }
+<span class="lineNum">     353 </span><span class="lineCov">         35 :         break;</span>
+<span class="lineNum">     354 </span>            :       case PROTOBUF_C_TYPE_ENUM:
+<span class="lineNum">     355 </span><span class="lineCov">         59 :         enumd = (ProtobufCEnumDescriptor *)f[i].descriptor;</span>
+<span class="lineNum">     356 </span><span class="lineCov">         59 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     357 </span><span class="lineCov">          3 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     358 </span><span class="lineCov">          2 :             enumv = protobuf_c_enum_descriptor_get_value(</span>
+<span class="lineNum">     359 </span><span class="lineCov">          2 :                 enumd, STRUCT_MEMBER(int *, m, f[i].offset)[j]);</span>
+<span class="lineNum">     360 </span><span class="lineCov">          4 :             rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     361 </span>            :                 allocator,
+<span class="lineNum">     362 </span>            :                 &quot;%*s%s: %s\n&quot;,
+<span class="lineNum">     363 </span><span class="lineCov">          2 :                 level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     364 </span>            :                 enumv? enumv-&gt;name: &quot;unknown&quot;);
+<span class="lineNum">     365 </span>            :           }
+<span class="lineNum">     366 </span>            :         } else {
+<span class="lineNum">     367 </span><span class="lineCov">         58 :           enumv = protobuf_c_enum_descriptor_get_value(</span>
+<span class="lineNum">     368 </span><span class="lineCov">         58 :               enumd, STRUCT_MEMBER(int, m, f[i].offset));</span>
+<span class="lineNum">     369 </span><span class="lineCov">        116 :           rs_append(rs, level + strlen(f[i].name) + 20,</span>
+<span class="lineNum">     370 </span>            :               allocator,
+<span class="lineNum">     371 </span>            :               &quot;%*s%s: %s\n&quot;,
+<span class="lineNum">     372 </span><span class="lineCov">         58 :               level, &quot;&quot;, f[i].name,</span>
+<span class="lineNum">     373 </span>            :               enumv? enumv-&gt;name: &quot;unknown&quot;);
+<span class="lineNum">     374 </span>            :         }
+<span class="lineNum">     375 </span><span class="lineCov">         59 :         break;</span>
+<span class="lineNum">     376 </span>            :       case PROTOBUF_C_TYPE_STRING:
+<span class="lineNum">     377 </span><span class="lineCov">        184 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     378 </span><span class="lineCov">          3 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     379 </span>            :             unsigned char *escaped;
+<span class="lineNum">     380 </span>            : 
+<span class="lineNum">     381 </span><span class="lineCov">          4 :             escaped = esc_str(</span>
+<span class="lineNum">     382 </span><span class="lineCov">          2 :                 STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j],</span>
+<span class="lineNum">     383 </span><span class="lineCov">          2 :                 strlen(STRUCT_MEMBER(unsigned char **, m, f[i].offset)[j]),</span>
+<span class="lineNum">     384 </span>            :                 allocator);
+<span class="lineNum">     385 </span><span class="lineCov">          2 :             if (!escaped) {</span>
+<span class="lineNum">     386 </span><span class="lineNoCov">          0 :               PBC_FREE(rs-&gt;s);</span>
+<span class="lineNum">     387 </span><span class="lineNoCov">          0 :               rs-&gt;s = NULL;</span>
+<span class="lineNum">     388 </span><span class="lineNoCov">          0 :               rs-&gt;malloc_err = 1;</span>
+<span class="lineNum">     389 </span><span class="lineNoCov">          0 :               return;</span>
+<span class="lineNum">     390 </span>            :             }
+<span class="lineNum">     391 </span><span class="lineCov">          2 :             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,</span>
+<span class="lineNum">     392 </span>            :                 allocator,
+<span class="lineNum">     393 </span><span class="lineCov">          2 :                 &quot;%*s%s: \&quot;%s\&quot;\n&quot;, level, &quot;&quot;, f[i].name, escaped);</span>
+<span class="lineNum">     394 </span><span class="lineCov">          2 :             PBC_FREE(escaped);</span>
+<span class="lineNum">     395 </span>            :           }
+<span class="lineNum">     396 </span>            :         } else {
+<span class="lineNum">     397 </span>            :           unsigned char *escaped;
+<span class="lineNum">     398 </span>            : 
+<span class="lineNum">     399 </span><span class="lineCov">        183 :           escaped = esc_str(STRUCT_MEMBER(unsigned char *, m, f[i].offset),</span>
+<span class="lineNum">     400 </span><span class="lineCov">        183 :               strlen(STRUCT_MEMBER(unsigned char *, m, f[i].offset)),</span>
+<span class="lineNum">     401 </span>            :               allocator);
+<span class="lineNum">     402 </span><span class="lineCov">        183 :           if (!escaped) {</span>
+<span class="lineNum">     403 </span><span class="lineCov">         10 :             PBC_FREE(rs-&gt;s);</span>
+<span class="lineNum">     404 </span><span class="lineCov">         10 :             rs-&gt;s = NULL;</span>
+<span class="lineNum">     405 </span><span class="lineCov">         10 :             rs-&gt;malloc_err = 1;</span>
+<span class="lineNum">     406 </span><span class="lineCov">         10 :             return;</span>
+<span class="lineNum">     407 </span>            :           }
+<span class="lineNum">     408 </span><span class="lineCov">        173 :           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,</span>
+<span class="lineNum">     409 </span>            :               allocator,
+<span class="lineNum">     410 </span><span class="lineCov">        173 :               &quot;%*s%s: \&quot;%s\&quot;\n&quot;, level, &quot;&quot;, f[i].name, escaped);</span>
+<span class="lineNum">     411 </span><span class="lineCov">        173 :           PBC_FREE(escaped);</span>
+<span class="lineNum">     412 </span>            :         }
+<span class="lineNum">     413 </span><span class="lineCov">        174 :         break;</span>
+<span class="lineNum">     414 </span>            :       case PROTOBUF_C_TYPE_BYTES:
+<span class="lineNum">     415 </span><span class="lineCov">         37 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     416 </span><span class="lineCov">          3 :           for (j = 0; j &lt; quantifier_offset; j++) {</span>
+<span class="lineNum">     417 </span>            :             unsigned char *escaped;
+<span class="lineNum">     418 </span>            : 
+<span class="lineNum">     419 </span><span class="lineCov">          4 :             escaped = esc_str(</span>
+<span class="lineNum">     420 </span><span class="lineCov">          2 :                 STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].data,</span>
+<span class="lineNum">     421 </span><span class="lineCov">          2 :                 STRUCT_MEMBER(ProtobufCBinaryData *, m, f[i].offset)[j].len,</span>
+<span class="lineNum">     422 </span>            :                 allocator);
+<span class="lineNum">     423 </span><span class="lineCov">          2 :             if (!escaped) {</span>
+<span class="lineNum">     424 </span><span class="lineNoCov">          0 :               PBC_FREE(rs-&gt;s);</span>
+<span class="lineNum">     425 </span><span class="lineNoCov">          0 :               rs-&gt;s = NULL;</span>
+<span class="lineNum">     426 </span><span class="lineNoCov">          0 :               rs-&gt;malloc_err = 1;</span>
+<span class="lineNum">     427 </span><span class="lineNoCov">          0 :               return;</span>
+<span class="lineNum">     428 </span>            :             }
+<span class="lineNum">     429 </span><span class="lineCov">          2 :             rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,</span>
+<span class="lineNum">     430 </span>            :                 allocator,
+<span class="lineNum">     431 </span><span class="lineCov">          2 :                 &quot;%*s%s: \&quot;%s\&quot;\n&quot;, level, &quot;&quot;, f[i].name, escaped);</span>
+<span class="lineNum">     432 </span><span class="lineCov">          2 :             PBC_FREE(escaped);</span>
+<span class="lineNum">     433 </span>            :           }
+<span class="lineNum">     434 </span>            :         } else {
+<span class="lineNum">     435 </span>            :           unsigned char *escaped;
+<span class="lineNum">     436 </span>            : 
+<span class="lineNum">     437 </span><span class="lineCov">         72 :           escaped = esc_str(</span>
+<span class="lineNum">     438 </span><span class="lineCov">         36 :               STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).data,</span>
+<span class="lineNum">     439 </span><span class="lineCov">         36 :               STRUCT_MEMBER(ProtobufCBinaryData, m, f[i].offset).len,</span>
+<span class="lineNum">     440 </span>            :               allocator);
+<span class="lineNum">     441 </span><span class="lineCov">         36 :           if (!escaped) {</span>
+<span class="lineNum">     442 </span><span class="lineCov">          3 :             PBC_FREE(rs-&gt;s);</span>
+<span class="lineNum">     443 </span><span class="lineCov">          3 :             rs-&gt;s = NULL;</span>
+<span class="lineNum">     444 </span><span class="lineCov">          3 :             rs-&gt;malloc_err = 1;</span>
+<span class="lineNum">     445 </span><span class="lineCov">          3 :             return;</span>
+<span class="lineNum">     446 </span>            :           }
+<span class="lineNum">     447 </span><span class="lineCov">         33 :           rs_append(rs, level + strlen(f[i].name) + strlen(escaped) + 10,</span>
+<span class="lineNum">     448 </span>            :               allocator,
+<span class="lineNum">     449 </span><span class="lineCov">         33 :               &quot;%*s%s: \&quot;%s\&quot;\n&quot;, level, &quot;&quot;, f[i].name, escaped);</span>
+<span class="lineNum">     450 </span><span class="lineCov">         33 :           PBC_FREE(escaped);</span>
+<span class="lineNum">     451 </span>            :         }
+<span class="lineNum">     452 </span><span class="lineCov">         34 :         break;</span>
+<span class="lineNum">     453 </span>            : 
+<span class="lineNum">     454 </span>            :       case PROTOBUF_C_TYPE_MESSAGE:
+<span class="lineNum">     455 </span><span class="lineCov">         80 :         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {</span>
+<span class="lineNum">     456 </span><span class="lineCov">        318 :           for (j = 0;</span>
+<span class="lineNum">     457 </span><span class="lineCov">        240 :               j &lt; STRUCT_MEMBER(size_t, m, f[i].quantifier_offset);</span>
+<span class="lineNum">     458 </span><span class="lineCov">        162 :               j++) {</span>
+<span class="lineNum">     459 </span><span class="lineCov">        162 :             rs_append(rs, level + strlen(f[i].name) + 10,</span>
+<span class="lineNum">     460 </span>            :                 allocator,
+<span class="lineNum">     461 </span><span class="lineCov">        162 :                 &quot;%*s%s {\n&quot;, level, &quot;&quot;, f[i].name);</span>
+<span class="lineNum">     462 </span><span class="lineCov">        162 :             protobuf_c_text_to_string_internal(rs, level + 2,</span>
+<span class="lineNum">     463 </span><span class="lineCov">        162 :                 STRUCT_MEMBER(ProtobufCMessage **, m, f[i].offset)[j],</span>
+<span class="lineNum">     464 </span><span class="lineCov">        162 :                 (ProtobufCMessageDescriptor *)f[i].descriptor,</span>
+<span class="lineNum">     465 </span>            :                 allocator);
+<span class="lineNum">     466 </span><span class="lineCov">        162 :             rs_append(rs, level + 10,</span>
+<span class="lineNum">     467 </span>            :                 allocator,
+<span class="lineNum">     468 </span>            :                 &quot;%*s}\n&quot;, level, &quot;&quot;);
+<span class="lineNum">     469 </span>            :           }
+<span class="lineNum">     470 </span>            :         } else {
+<span class="lineNum">     471 </span><span class="lineCov">          2 :           rs_append(rs, level + strlen(f[i].name) + 10,</span>
+<span class="lineNum">     472 </span>            :               allocator,
+<span class="lineNum">     473 </span><span class="lineCov">          2 :               &quot;%*s%s {\n&quot;, level, &quot;&quot;, f[i].name);</span>
+<span class="lineNum">     474 </span><span class="lineCov">          2 :           protobuf_c_text_to_string_internal(rs, level + 2,</span>
+<span class="lineNum">     475 </span><span class="lineCov">          2 :               STRUCT_MEMBER(ProtobufCMessage *, m, f[i].offset),</span>
+<span class="lineNum">     476 </span><span class="lineCov">          2 :               (ProtobufCMessageDescriptor *)f[i].descriptor,</span>
+<span class="lineNum">     477 </span>            :               allocator);
+<span class="lineNum">     478 </span><span class="lineCov">          2 :           rs_append(rs, level + 10,</span>
+<span class="lineNum">     479 </span>            :               allocator,
+<span class="lineNum">     480 </span>            :               &quot;%*s}\n&quot;, level, &quot;&quot;);
+<span class="lineNum">     481 </span>            :         }
+<span class="lineNum">     482 </span><span class="lineCov">         80 :         break;</span>
+<span class="lineNum">     483 </span>            :       default:
+<span class="lineNum">     484 </span><span class="lineNoCov">          0 :         PBC_FREE(rs-&gt;s);</span>
+<span class="lineNum">     485 </span><span class="lineNoCov">          0 :         rs-&gt;s = NULL;</span>
+<span class="lineNum">     486 </span><span class="lineNoCov">          0 :         return;</span>
+<span class="lineNum">     487 </span>            :         break;
+<span class="lineNum">     488 </span>            :     }
+<span class="lineNum">     489 </span>            : 
+<span class="lineNum">     490 </span>            :   }
+<span class="lineNum">     491 </span>            : }
+<span class="lineNum">     492 </span>            : 
+<span class="lineNum">     493 </span>            : /** @} */  /* End of generate group. */
+<span class="lineNum">     494 </span>            : 
+<span class="lineNum">     495 </span>            : /* See .h file for API docs. */
+<a name="496"><span class="lineNum">     496 </span>            : </a>
+<span class="lineNum">     497 </span>            : char *
+<span class="lineNum">     498 </span><span class="lineCov">         34 : protobuf_c_text_to_string(ProtobufCMessage *m,</span>
+<span class="lineNum">     499 </span>            :     ProtobufCAllocator *allocator)
+<span class="lineNum">     500 </span>            : {
+<span class="lineNum">     501 </span><span class="lineCov">         34 :   ReturnString rs = { 0, 0, 0, NULL };</span>
+<span class="lineNum">     502 </span>            : 
+<span class="lineNum">     503 </span><span class="lineCov">         34 :   protobuf_c_text_to_string_internal(&amp;rs, 0, m, m-&gt;descriptor, allocator);</span>
+<span class="lineNum">     504 </span>            : 
+<span class="lineNum">     505 </span><span class="lineCov">         34 :   return rs.s;</span>
+<span class="lineNum">     506 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
