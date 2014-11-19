@@ -222,7 +222,6 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
     quantifier_offset = STRUCT_MEMBER(size_t, m, f[i].quantifier_offset);
     /* Field exists and has data, dump it. */
     switch (f[i].type) {
-      case PROTOBUF_C_TYPE_INT32:
       case PROTOBUF_C_TYPE_UINT32:
       case PROTOBUF_C_TYPE_FIXED32:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
@@ -241,6 +240,7 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
               STRUCT_MEMBER(uint32_t, m, f[i].offset));
         }
         break;
+      case PROTOBUF_C_TYPE_INT32:
       case PROTOBUF_C_TYPE_SINT32:
       case PROTOBUF_C_TYPE_SFIXED32:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
@@ -259,7 +259,6 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
               STRUCT_MEMBER(int32_t, m, f[i].offset));
         }
         break;
-      case PROTOBUF_C_TYPE_INT64:
       case PROTOBUF_C_TYPE_UINT64:
       case PROTOBUF_C_TYPE_FIXED64:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
@@ -278,6 +277,7 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
               STRUCT_MEMBER(uint64_t, m, f[i].offset));
         }
         break;
+      case PROTOBUF_C_TYPE_INT64:
       case PROTOBUF_C_TYPE_SINT64:
       case PROTOBUF_C_TYPE_SFIXED64:
         if (f[i].label == PROTOBUF_C_LABEL_REPEATED) {
