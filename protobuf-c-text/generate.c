@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <protobuf-c/protobuf-c.h>
 #include "protobuf-c-text.h"
 #include "protobuf-c-util.h"
@@ -228,14 +229,14 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
           for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
-                "%*s%s: %u\n",
+                "%*s%s: %" PRIu32 "\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(uint32_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
               allocator,
-              "%*s%s: %u\n",
+              "%*s%s: %" PRIu32 "\n",
               level, "", f[i].name,
               STRUCT_MEMBER(uint32_t, m, f[i].offset));
         }
@@ -247,14 +248,14 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
           for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
-                "%*s%s: %d\n",
+                "%*s%s: %" PRId32 "\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(int32_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
               allocator,
-              "%*s%s: %d\n",
+              "%*s%s: %" PRId32 "\n",
               level, "", f[i].name,
               STRUCT_MEMBER(int32_t, m, f[i].offset));
         }
@@ -265,14 +266,14 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
           for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
-                "%*s%s: %lu\n",
+                "%*s%s: %" PRIu64 "\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(uint64_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
               allocator,
-              "%*s%s: %lu\n",
+              "%*s%s: %" PRIu64 "\n",
               level, "", f[i].name,
               STRUCT_MEMBER(uint64_t, m, f[i].offset));
         }
@@ -284,14 +285,14 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
           for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
-                "%*s%s: %ld\n",
+                "%*s%s: %" PRId64 "\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(int64_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
               allocator,
-              "%*s%s: %ld\n",
+              "%*s%s: %" PRId64 "\n",
               level, "", f[i].name,
               STRUCT_MEMBER(int64_t, m, f[i].offset));
         }
