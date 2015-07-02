@@ -166,6 +166,7 @@ token_free(Token *t, ProtobufCAllocator *allocator)
       break;
     case TOK_QUOTED:
       PBC_FREE(t->qs->data);
+      PBC_FREE(t->qs);
       break;
     case TOK_NUMBER:
       PBC_FREE(t->number);
