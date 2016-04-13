@@ -148,7 +148,7 @@ esc_str(char *src, int len, ProtobufCAllocator *allocator)
       /* Escape with octal if !isprint. */
       default:
         if (!isprint(src[i])) {
-          dst_len += sprintf(dst + dst_len, "\\%03o", src[i]);
+          dst_len += sprintf(dst + dst_len, "\\%03o", (unsigned char)src[i]);
         } else {
           dst[dst_len++] = src[i];
         }
